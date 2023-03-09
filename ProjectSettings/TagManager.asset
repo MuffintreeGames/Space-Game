@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Solid
+  - Destructible
   layers:
   - Default
   - TransparentFX
@@ -11,15 +13,15 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - DestructibleSize1
+  - DestructibleSize2
+  - DestructibleSize3
+  - Solid
+  - Goliath
+  - HumanShip
+  - HumanConstruct
+  - AlienShip
+  - AlienConstruct
   - 
   - 
   - 
