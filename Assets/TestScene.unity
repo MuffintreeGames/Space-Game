@@ -371,7 +371,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 151217200}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.9460683, y: 0.8692019, z: 0.017710786}
+  m_LocalPosition: {x: 145878, y: 0.8692019, z: 0.017710786}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -878,7 +878,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1196576773}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 100.9, y: 99.3, z: 0.017710786}
+  m_LocalPosition: {x: 145975.95, y: 99.3, z: 0.017710786}
   m_LocalScale: {x: 4.7688, y: 4.7457, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1124,6 +1124,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SmallPlanet: {fileID: 6088609408505885020, guid: 0b6b28eaab127f54fb0af28066649c04, type: 3}
+  MediumPlanet: {fileID: 6088609408505885020, guid: 1fcb72e39960e624ebc14fe6d353ff62, type: 3}
+  LargePlanet: {fileID: 6088609408505885020, guid: 3cec17196965d6b4fbf314ac57109493, type: 3}
+  MassivePlanet: {fileID: 6088609408505885020, guid: bc81ddde4a14e49498526a705761da2b, type: 3}
 --- !u!1 &1623208123
 GameObject:
   m_ObjectHideFlags: 0
