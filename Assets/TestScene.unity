@@ -542,7 +542,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1036,7 +1036,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -512.28235, y: -49.4743}
+  m_AnchoredPosition: {x: -384.8, y: -9.6}
   m_SizeDelta: {x: 19.4354, y: 295.0513}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1220281201
@@ -1281,7 +1281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -1340,6 +1340,7 @@ GameObject:
   - component: {fileID: 2066654985}
   - component: {fileID: 2066654987}
   - component: {fileID: 2066654986}
+  - component: {fileID: 2066654988}
   m_Layer: 10
   m_Name: Goliath
   m_TagString: Untagged
@@ -1377,6 +1378,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goliathCamera: {fileID: 519420033}
+  Action1: {fileID: 2066654988}
 --- !u!212 &2066654984
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1482,3 +1484,19 @@ CapsuleCollider2D:
   m_Offset: {x: 0.000046938658, y: 0.14465898}
   m_Size: {x: 0.4666981, y: 0.85452807}
   m_Direction: 0
+--- !u!114 &2066654988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2066654981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea6720324869286428463878d3711226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 6
+  dashSpeed: 15
+  dashDuration: 0.4
+  exitSpeed: 6

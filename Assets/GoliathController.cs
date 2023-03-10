@@ -7,6 +7,7 @@ public class GoliathController : MonoBehaviour
     private GameObject goliath; //the goliath that this script is attached to
     private Transform goliathTransform; //the transform of the goliath
     private GameObject goliathArm;  //the arm of the goliath, used for basic attacks. Should be the first child of the goliath object
+    private AttackObject goliathArmScript;  //script attached to the goliath arm
 
     private float maxSpeed = 7.5f;  //top speed goliath can achieve; maintained separately for horizontal and vertical
     private float acceleration = 1.5f;  //rate of acceleration; maintained separately for horizontal and vertical
@@ -14,6 +15,7 @@ public class GoliathController : MonoBehaviour
     private float deceleration = 2f;    //rate of slowing down when not moving in the direction of motion
     private float currentHorSpeed = 0f; //current horizontal speed
     private float currentVertSpeed = 0f;    //current vertical speed
+    private bool movementLocked = false;    //used when something is going on to prevent goliath movement
 
     private float rotationSpeed = 0.2f; //speed that sprite will spin to face the chosen direction
 
@@ -29,6 +31,9 @@ public class GoliathController : MonoBehaviour
     private bool inBasicAttackCooldown = false; //determines if basic attack cooldown is ticking
 
     private int smallPlanetExp = 5;    //exp reward for eating small planet
+    private int mediumPlanetExp = 20;    //exp reward for eating small planet
+    private int largePlanetExp = 80;    //exp reward for eating small planet
+    private int massivePlanetExp = 500;    //exp reward for eating small planet
 
     private int currentExp = 0; //current exp of the goliath
     private int neededExp = 100;    //needed exp to level up; initial value is amount needed to reach level 2
@@ -40,6 +45,7 @@ public class GoliathController : MonoBehaviour
     private int level = 1;  //size of creature, max out at 5
 
     public GoliathCameraController goliathCamera;
+    public AbilityTemplate Action1; //ability tied to the action1 button
 
     // Start is called before the first frame update
     void Start()
@@ -47,12 +53,26 @@ public class GoliathController : MonoBehaviour
         goliath = this.gameObject;
         goliathTransform = goliath.transform;
         goliathArm = goliathTransform.GetChild(0).gameObject;
+        goliathArmScript = goliathArm.transform.GetChild(0).GetComponent<AttackObject>();
 
         Planet.GoliathSmallPlanetKilled.AddListener(EatSmallPlanet);
+        Planet.GoliathMediumPlanetKilled.AddListener(EatMediumPlanet);
+        Planet.GoliathLargePlanetKilled.AddListener(EatLargePlanet);
+        Planet.GoliathMassivePlanetKilled.AddListener(EatMassivePlanet);
     }
 
     void SetGoliathRotation()
     {
+        if (performingBasicAttack)  //lock rotation while attacking
+        {
+            return;
+        }
+
+        if (movementLocked)
+        {
+            return;
+        }
+
         float targetRotation = goliathTransform.eulerAngles.z;
         float horizontalDirection = Input.GetAxisRaw("Horizontal");
         float verticalDirection = Input.GetAxisRaw("Vertical");
@@ -114,6 +134,10 @@ public class GoliathController : MonoBehaviour
 
     void SetGoliathSpeed()  //apply acceleration/deceleration based on input
     {
+        if (movementLocked)
+        {
+            return;
+        }
         float horizontalDirection = Input.GetAxisRaw("Horizontal");
         float verticalDirection = Input.GetAxisRaw("Vertical");
         float adjustedAccel = acceleration * Time.deltaTime;
@@ -199,7 +223,6 @@ public class GoliathController : MonoBehaviour
             Debug.Log("can't attack right now");
             return;
         }
-        Debug.Log("starting basic attack sequence");
 
         goliathArm.SetActive(true);
         currentSwingTime = 0f;
@@ -230,9 +253,22 @@ public class GoliathController : MonoBehaviour
         performingBasicAttack = false;
     }
 
+    void CheckAbilityUsage()
+    {
+        if (Input.GetButtonDown("Action1") && Action1 != null)
+        {
+            if (Action1.IsOffCooldown())
+            {
+                //Debug.Log("attempting to use ability");
+                Action1.UseAbility();
+            }
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
+        CheckAbilityUsage();
         SetGoliathSpeed();
         SetGoliathRotation();
         MoveGoliath();
@@ -264,6 +300,24 @@ public class GoliathController : MonoBehaviour
         GainExp(smallPlanetExp);
     }
 
+    void EatMediumPlanet()
+    {
+        Debug.Log("Killed a medium planet!");
+        GainExp(mediumPlanetExp);
+    }
+
+    void EatLargePlanet()
+    {
+        Debug.Log("Killed a large planet!");
+        GainExp(largePlanetExp);
+    }
+
+    void EatMassivePlanet()
+    {
+        Debug.Log("Killed a massive planet!");
+        GainExp(massivePlanetExp);
+    }
+
     void GainExp(int exp)   //get exp, check for level up
     {
         if (level > 4)  //no need for exp at max level
@@ -271,10 +325,6 @@ public class GoliathController : MonoBehaviour
             return;
         }
         currentExp += exp;
-        /*if (currentExp >= neededExp)
-        {
-            LevelUp();
-        }*/
     }
 
     public void LevelUp()  //grow bigger, set up parameters for next level. Called from the HUDManager class to sync up with exp bar animation
@@ -293,21 +343,66 @@ public class GoliathController : MonoBehaviour
             case 2:
                 neededExp = level3Exp;
                 goliathTransform.localScale = new Vector3(2f, 2f, 2f);
+                goliathArmScript.Damage = 20;
                 break;
             case 3:
                 neededExp = level4Exp;
                 goliathTransform.localScale = new Vector3(3f, 3f, 3f);
+                goliathArmScript.Damage = 30;
                 break;
             case 4:
                 neededExp = level5Exp;
                 goliathTransform.localScale = new Vector3(4f, 4f, 4f);
+                goliathArmScript.Damage = 40;
                 break;
             case 5:
                 neededExp = 1;
                 currentExp = 0;
                 goliathTransform.localScale = new Vector3(5f, 5f, 5f);
+                goliathArmScript.Damage = 50;
                 break;
         }
+        SetCameraZoom();
+    }
+
+    public void SetCameraZoom()
+    {
+        float sizeZoom = 8f; //zoom level is determined by goliath size
+        switch (level)
+        {
+            case 1:
+                sizeZoom = 8f;
+                break;
+            case 2:
+                sizeZoom = 10f;
+                break;
+            case 3:
+                sizeZoom = 12f;
+                break;
+            case 4:
+                sizeZoom = 14f;
+                break;
+            case 5:
+                sizeZoom = 16f;
+                break;
+        }
+        goliathCamera.SetZoom(sizeZoom);
+    }
+
+    public void LockMovement()
+    {
+        movementLocked = true;
+    }
+
+    public void UnlockMovement()
+    {
+        movementLocked = false;
+    }
+
+    public void SetSpeedExternally(float xSpeed, float ySpeed)    //use when something other than the goliath is setting the goliath's speed
+    {
+        currentHorSpeed = xSpeed;
+        currentVertSpeed = ySpeed;
     }
 
     public int GetExp()

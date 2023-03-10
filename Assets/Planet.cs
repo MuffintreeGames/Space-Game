@@ -22,6 +22,18 @@ public class Planet : MonoBehaviour
         {
             GoliathSmallPlanetKilled = new UnityEvent();
         }
+        if (GoliathMediumPlanetKilled == null)
+        {
+            GoliathMediumPlanetKilled = new UnityEvent();
+        }
+        if (GoliathLargePlanetKilled == null)
+        {
+            GoliathLargePlanetKilled = new UnityEvent();
+        }
+        if (GoliathMassivePlanetKilled == null)
+        {
+            GoliathMassivePlanetKilled = new UnityEvent();
+        }
         if (size < 1 || size > 4)
         {
             size = 1;
@@ -36,10 +48,20 @@ public class Planet : MonoBehaviour
 
     void OnDestroy()
     {
-        Debug.Log("destroying planet!");
-        if (size == 1)
+        switch (size)
         {
-            GoliathSmallPlanetKilled.Invoke();
+            case 1:
+                GoliathSmallPlanetKilled.Invoke();
+                break;
+            case 2:
+                GoliathMediumPlanetKilled.Invoke();
+                break;
+            case 3:
+                GoliathLargePlanetKilled.Invoke();
+                break;
+            case 4:
+                GoliathMassivePlanetKilled.Invoke();
+                break;
         }
     }
 }

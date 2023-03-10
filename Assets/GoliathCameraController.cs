@@ -4,17 +4,28 @@ using UnityEngine;
 
 public class GoliathCameraController : MonoBehaviour
 {
-    public Transform target;
-    public float smoothSpeed = 0.005f;
+    public Transform target;    //goliath transform, point that camera tries to stay locked onto
+    public float smoothSpeed = 0.25f;  //speed that camera should go at while target is within smooth follow distance
 
-    public float smoothFollowHorDistance = 6f;
-    public float hardFollowHorDistance = 8f;
+    public float smoothFollowHorDistance = 4f;  //if goliath is more than this distance away horizontally, slowly pan towards them
+    public float hardFollowHorDistance = 8f;    //if goliath is more than this distance away, hard lock-on to them
 
-    public float smoothFollowVertDistance = 3f;
+    public float smoothFollowVertDistance = 2f; //as above, but vertical
     public float hardFollowVertDistance = 4f;
+
+    private float targetZoom = 8f;  //zoom distance on the camera. Increases as goliath grows
+    private float zoomSpeed = 0.5f;   //speed at which camera zooms out
+
+    private Camera thisCamera;
+
+    public void Start()
+    {
+        thisCamera = GetComponent<Camera>();
+    }
 
     public void updateCamera()
     {
+        thisCamera.orthographicSize = Mathf.Lerp(thisCamera.orthographicSize, targetZoom, zoomSpeed * Time.deltaTime);
         Vector3 distanceToTarget = target.position - transform.position;
         Vector3 smoothTarget = new Vector3(target.position.x, target.position.y, 0);
         float newXPosition = transform.position.x;
@@ -60,5 +71,10 @@ public class GoliathCameraController : MonoBehaviour
 
         transform.position = new Vector3(newXPosition, newYPosition, transform.position.z);
         distanceToTarget = target.position - transform.position;
+    }
+
+    public void SetZoom(float zoomLevel)
+    {
+        targetZoom = zoomLevel;
     }
 }
