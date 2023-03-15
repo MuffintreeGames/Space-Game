@@ -8,13 +8,13 @@ public class AttackObject : MonoBehaviour
     public LayerMask TargetLayers;  //layers that should receive damage from attack
     public bool DestroyOnHit;   //should this object be removed on hitting something or persist
     public bool RepeatedDamage;   //if true, targets will take damage as long as they are in contact with attack; otherwise, they can only be hit once
+    public bool BelongsToGoliath = false;   //if true, give Goliath exp when this kills something
 
     private Dictionary<GameObject, bool> hitTargets = new Dictionary<GameObject, bool>();
 
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -50,9 +50,15 @@ public class AttackObject : MonoBehaviour
             if (!targetKillable)
             {
                 Debug.Log("hit object is not killable!");
-                return;
             }
-            targetKillable.TakeDamage(Damage);
+            else
+            {
+                targetKillable.TakeDamage(Damage, BelongsToGoliath);
+            }
+            if (DestroyOnHit)
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 

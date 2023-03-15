@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class AbilityTemplate : MonoBehaviour
 {
     public float cooldown;  //time between ability uses
+    public Sprite icon;  //symbol for the ability
 
     protected GoliathController parentGoliath;
     protected float tickingCooldown;
@@ -50,5 +51,10 @@ public abstract class AbilityTemplate : MonoBehaviour
     public bool IsOffCooldown()
     {
         return offCooldown;
+    }
+
+    public float GetCooldown()
+    {
+        return tickingCooldown;
     }
 }
