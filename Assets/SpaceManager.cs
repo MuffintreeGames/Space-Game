@@ -21,6 +21,7 @@ public class SpaceManager : MonoBehaviour
 
     private float chunkSize = 10f; //dimensions of 1 chunk
     private int sectorDimensions = 10; //dimensions of 1 sector in terms of the number of chunks
+    private float sectorSize;
 
     private CircleCollider2D smallPlanetCollider;
 
@@ -32,34 +33,41 @@ public class SpaceManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()    //divide space up into several sectors, which are then broken up into smaller chunks which can each contain a max of 1 object
     {
+        sectorSize = chunkSize * sectorDimensions;
         smallPlanetCollider = SmallPlanet.GetComponent<CircleCollider2D>();
         Debug.Log("building sector 1");
-        BuildSector1();
+        sector1Map = BuildSector(10,15,7,10,0,0,0,0);
+        BuildSector(10, 15, 7, 10, 0, 0, -1, 0);
+        BuildSector(10, 15, 7, 10, 0, 0, 0, -1);
+        BuildSector(10, 15, 7, 10, 0, 0, -1, -1);
     }
 
-    void BuildSector1()  //area the goliath spawns in, mostly small planets
+    GameObject[][] BuildSector(int MediumMin, int MediumMax, int LargeMin, int LargeMax, int MassiveMin, int MassiveMax, int sectorX, int sectorY)
     {
-        sector1Map = new GameObject[sectorDimensions][];
+        GameObject[][] sectorMap = new GameObject[sectorDimensions][];
         for (int x = 0; x < sectorDimensions; x++)
         {
-            sector1Map[x] = new GameObject[sectorDimensions];
+            sectorMap[x] = new GameObject[sectorDimensions];
         }
 
-        SpawnRandomPlanets(10, 15, MediumPlanet, sector1Map);
-        SpawnRandomPlanets(7, 10, LargePlanet, sector1Map);
+        SpawnRandomPlanets(MediumMin, MediumMax, MediumPlanet, sectorMap, sectorX, sectorY);
+        SpawnRandomPlanets(LargeMin, LargeMax, LargePlanet, sectorMap, sectorX, sectorY);
+        SpawnRandomPlanets(MassiveMin, MassiveMax, MassivePlanet, sectorMap, sectorX, sectorY);
+
         for (int x = 0; x < sectorDimensions; x++)
         {
             for (int y = 0; y < sectorDimensions; y++)
             {
-                if (sector1Map[x][y] == null)
+                if (sectorMap[x][y] == null)
                 {
-                    PlacePlanetInChunk(x, y, SmallPlanet, smallPlanetCollider, sector1Map);
+                    PlacePlanetInChunk(x, y, SmallPlanet, smallPlanetCollider, sectorMap, sectorX, sectorY);
                 }
             }
         }
+        return sectorMap;
     }
 
-    void SpawnRandomPlanets(int min, int max, GameObject planetTemplate, GameObject[][] sectorMap)
+    void SpawnRandomPlanets(int min, int max, GameObject planetTemplate, GameObject[][] sectorMap, int sectorX, int sectorY)
     {
         int finalNumber = Random.Range(min, max);
         CircleCollider2D templateCollider = planetTemplate.GetComponent<CircleCollider2D>();
@@ -71,14 +79,14 @@ public class SpaceManager : MonoBehaviour
                 int randY = Random.Range(0, sectorDimensions);
                 if (sectorMap[randX][randY] == null)
                 {
-                    PlacePlanetInChunk(randX, randY, planetTemplate, templateCollider, sectorMap);
+                    PlacePlanetInChunk(randX, randY, planetTemplate, templateCollider, sectorMap, sectorX, sectorY);
                     planetPlaced = true;
                 }
             }
         }
     }
 
-    void PlacePlanetInChunk(int chunkX, int chunkY, GameObject planetTemplate, CircleCollider2D templateCollider, GameObject[][] sectorMap)
+    void PlacePlanetInChunk(int chunkX, int chunkY, GameObject planetTemplate, CircleCollider2D templateCollider, GameObject[][] sectorMap, int sectorX, int sectorY)
     {
             float planetRadius = templateCollider.radius * planetTemplate.transform.localScale.x;
             float leftChunkLimit = (chunkX * chunkSize) + planetRadius;   //get coords for furthest left possible place we could put planet in chunk
@@ -87,9 +95,9 @@ public class SpaceManager : MonoBehaviour
             float topChunkLimit = ((chunkY + 1f) * chunkSize) - planetRadius;
             float planetXCoords = Random.Range(leftChunkLimit, rightChunkLimit);
             float planetYCoords = Random.Range(bottomChunkLimit, topChunkLimit);
-            Vector3 planetCoords = new Vector3(planetXCoords, planetYCoords, 0);
+            Vector3 planetCoords = new Vector3(planetXCoords + (sectorSize*sectorX), planetYCoords + (sectorSize*sectorY), 0);
             GameObject newPlanet = Instantiate(planetTemplate, planetCoords, Quaternion.identity);
-        newPlanet.GetComponent<SpriteRenderer>().color = PickRandomPlanetColor();
+            newPlanet.GetComponent<SpriteRenderer>().color = PickRandomPlanetColor();
             sectorMap[chunkX][chunkY] = newPlanet;
     }
 

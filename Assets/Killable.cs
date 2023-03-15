@@ -20,6 +20,11 @@ public class Killable : MonoBehaviour
         
     }
 
+    public float GetHealth()
+    {
+        return currentHealth;
+    }
+
     public void TakeDamage(float damage, bool fromGoliath)
     {
         currentHealth -= damage;

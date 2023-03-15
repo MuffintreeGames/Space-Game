@@ -7,6 +7,9 @@ public class GoliathController : MonoBehaviour
     private GameObject goliath; //the goliath that this script is attached to
     private Transform goliathTransform; //the transform of the goliath
     private GameObject goliathArm;  //the arm of the goliath, used for basic attacks. Should be the first child of the goliath object
+
+    private Killable goliathHealth;
+
     private AttackObject goliathArmScript;  //script attached to the goliath arm
 
     private float maxSpeed = 7.5f;  //top speed goliath can achieve; maintained separately for horizontal and vertical
@@ -53,6 +56,8 @@ public class GoliathController : MonoBehaviour
         goliathTransform = goliath.transform;
         goliathArm = goliathTransform.GetChild(0).gameObject;
         goliathArmScript = goliathArm.transform.GetChild(0).GetComponent<AttackObject>();
+
+        goliathHealth = goliath.GetComponent<Killable>();
 
         EXPSource.GoliathGainExp.AddListener(GainExp);
     }
@@ -415,7 +420,17 @@ public class GoliathController : MonoBehaviour
             return level;
         }
 
-        void OnCollisionEnter2D(Collision2D col)
+        public float GetHealth()
+    {
+        return goliathHealth.GetHealth();
+    }
+
+    public float GetMaxHealth()
+    {
+        return goliathHealth.MaxHealth;
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
         {
             if (col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize1") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize2") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize3") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize4") || col.gameObject.layer == LayerMask.NameToLayer("Solid"))
             {

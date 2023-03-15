@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    public enum directionChoices
+    {
+        right,
+        up
+    };
+
     public float Speed; //speed of projectile
     public float LifeTime;  //max time that projectile can be active
+    public directionChoices direction = directionChoices.right; //whether this projectile should fly right or up relative to its parent. Use whichever one gives correct behaviour pretty much
 
     private float angle = 90f; //angle of projectile
     private float currentTime = 0f; //length of time that projectile has been active
@@ -23,7 +30,15 @@ public class Projectile : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        transform.position += transform.up * Speed * Time.deltaTime;
+
+        if (direction == directionChoices.right)
+        {
+            transform.position += transform.right * Speed * Time.deltaTime;
+        } else
+        {
+            transform.position += transform.up * Speed * Time.deltaTime;
+        }
+
         currentTime += Time.deltaTime;
     }
 
