@@ -66,7 +66,10 @@ MonoBehaviour:
   Damage: 10
   TargetLayers:
     serializedVersion: 2
-    m_Bits: 65472
+    m_Bits: 524224
+  DamagedLayers:
+    serializedVersion: 2
+    m_Bits: 1024
   DestroyOnHit: 1
   RepeatedDamage: 0
   BelongsToGoliath: 0

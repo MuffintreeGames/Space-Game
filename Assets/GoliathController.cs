@@ -1,6 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
+public class GoliathLevelupEvent : UnityEvent<int>
+{
+
+}
 
 public class GoliathController : MonoBehaviour
 {
@@ -49,6 +55,8 @@ public class GoliathController : MonoBehaviour
     public AbilityTemplate Action3; //ability tied to the action3 button
     public AbilityTemplate Action4; //ability tied to the action4 button
 
+    public static GoliathLevelupEvent GoliathLevelup;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,6 +68,8 @@ public class GoliathController : MonoBehaviour
         goliathHealth = goliath.GetComponent<Killable>();
 
         EXPSource.GoliathGainExp.AddListener(GainExp);
+
+        GoliathLevelup = new GoliathLevelupEvent();
     }
 
         void SetGoliathRotation()
@@ -344,25 +354,32 @@ public class GoliathController : MonoBehaviour
                     neededExp = level3Exp;
                     goliathTransform.localScale = new Vector3(2f, 2f, 2f);
                     goliathArmScript.Damage = 20;
+                    goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
                     break;
                 case 3:
                     neededExp = level4Exp;
                     goliathTransform.localScale = new Vector3(3f, 3f, 3f);
                     goliathArmScript.Damage = 30;
-                    break;
+                goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
+                goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
+                break;
                 case 4:
                     neededExp = level5Exp;
                     goliathTransform.localScale = new Vector3(4f, 4f, 4f);
                     goliathArmScript.Damage = 40;
-                    break;
+                goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
+                goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
+                break;
                 case 5:
                     neededExp = 1;
                     currentExp = 0;
                     goliathTransform.localScale = new Vector3(5f, 5f, 5f);
                     goliathArmScript.Damage = 50;
-                    break;
+                goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
+                break;
             }
             SetCameraZoom();
+        GoliathLevelup.Invoke(level);
         }
 
         public void SetCameraZoom()
@@ -432,7 +449,7 @@ public class GoliathController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
         {
-            if (col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize1") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize2") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize3") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize4") || col.gameObject.layer == LayerMask.NameToLayer("Solid"))
+            if (col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize1") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize2") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize3") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize4") || col.gameObject.layer == LayerMask.NameToLayer("Solid") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel1") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel2") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel3"))
             {
                 ContactPoint2D contact = col.GetContact(0);
                 if (currentHorSpeed * contact.normal.x < 0)

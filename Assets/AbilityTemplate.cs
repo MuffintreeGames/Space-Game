@@ -14,6 +14,7 @@ public abstract class AbilityTemplate : MonoBehaviour
     protected void InitializeAbility()
     {
         parentGoliath = GetComponent<GoliathController>();
+        GoliathController.GoliathLevelup.AddListener(UpgradeSelf);
     }
 
     // Update is called once per frame
@@ -44,6 +45,11 @@ public abstract class AbilityTemplate : MonoBehaviour
     }
 
     public virtual void CancelAbility()
+    {
+
+    }
+
+    public virtual void UpgradeSelf(int goliathLevel)
     {
 
     }
