@@ -36,11 +36,8 @@ public class GrantAbility : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(GrantedAbility != null);
-        //Debug.Log(childSprite);
         if (childSprite && GrantedAbility != null && !spriteSet)
         {
-            Debug.Log("updating sprite!");
             childSprite.sprite = GrantedAbility.icon;
             spriteSet = true;
         }

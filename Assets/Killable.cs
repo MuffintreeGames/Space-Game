@@ -6,6 +6,7 @@ public class Killable : MonoBehaviour
 {
     public float MaxHealth;    //starting amount of health object has
     public bool DamageTo1 = false;  //if true, object only takes 1 damage from any valid hits
+    public bool DamageFlashToggle = true;
     public Color DamageFlash = Color.red;
 
     private float flashDuration = 0.1f;

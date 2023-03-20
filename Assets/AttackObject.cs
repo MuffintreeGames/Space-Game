@@ -24,28 +24,52 @@ public class AttackObject : MonoBehaviour
         
     }
 
-    /*void OnCollisionEnter2D(Collision2D col)  //uncomment this if you want to use a collider rather than a trigger for a hitbox at some point
+    void OnCollisionEnter2D(Collision2D col)  //uncomment this if you want to use a collider rather than a trigger for a hitbox at some point
     {
-        if ((TargetLayers & (1 << col.gameObject.layer)) != 0)
+        GameObject hitGameObject = col.gameObject;
+        if ((TargetLayers & (1 << hitGameObject.layer)) != 0)
         {
-            Debug.Log("hit a valid layer!");
-        } else
-        {
-            Debug.Log("hit an invalid layer");
+            if (!RepeatedDamage)
+            {
+                if (hitTargets.ContainsKey(hitGameObject))
+                {
+                    Debug.Log("have already hit this object before");
+                    return;
+                }
+                hitTargets.Add(hitGameObject, true);
+            }
+
+            Killable targetKillable = hitGameObject.GetComponent<Killable>();
+            if (!targetKillable)
+            {
+                Debug.Log("hit object is not killable!");
+            }
+            else if ((DamagedLayers & (1 << hitGameObject.layer)) != 0)
+            {
+                targetKillable.TakeDamage(Damage, BelongsToGoliath);
+            }
+            if (DestroyOnHit)
+            {
+                Destroy(this.gameObject);
+            }
         }
-    }*/
+    }
 
     void OnTriggerEnter2D(Collider2D col)
     {
         GameObject hitGameObject = col.gameObject;
         if ((TargetLayers & (1 << hitGameObject.layer)) != 0)
         {
-            if (hitTargets.ContainsKey(hitGameObject))
+            if (!RepeatedDamage)
             {
-                Debug.Log("have already hit this object before");
-                return;
+                if (hitTargets.ContainsKey(hitGameObject))
+                {
+                    Debug.Log("have already hit this object before");
+                    return;
+                }
+                hitTargets.Add(hitGameObject, true);
             }
-            hitTargets.Add(hitGameObject, true);
+
             Killable targetKillable = hitGameObject.GetComponent<Killable>();
             if (!targetKillable)
             {
