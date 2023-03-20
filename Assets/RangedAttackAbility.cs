@@ -14,7 +14,6 @@ public class RangedAttackAbility : AbilityTemplate  //fire a projectile
     void Start()
     {
         base.InitializeAbility();
-        UpgradeSelf(1);
     }
 
     // Update is called once per frame

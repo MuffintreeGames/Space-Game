@@ -68,6 +68,7 @@ public class GoliathController : MonoBehaviour
         goliathHealth = goliath.GetComponent<Killable>();
 
         EXPSource.GoliathGainExp.AddListener(GainExp);
+        GrantAbility.GoliathGainAbility.AddListener(GainAbility);
 
         GoliathLevelup = new GoliathLevelupEvent();
     }
@@ -125,7 +126,7 @@ public class GoliathController : MonoBehaviour
             } else {    //moving vertically
                 if (verticalDirection > 0f)
                 {
-                    targetRotation = 0f;
+                    targetRotation = 360f;
                 }
                 else if (verticalDirection < 0f)
                 {
@@ -381,6 +382,24 @@ public class GoliathController : MonoBehaviour
             SetCameraZoom();
         GoliathLevelup.Invoke(level);
         }
+
+    public void GainAbility(AbilityTemplate newAbility)
+    {
+        if (Action1 == null)
+        {
+            Action1 = newAbility;
+        } else if (Action2 == null)
+        {
+            Action2 = newAbility;
+        } else if (Action3 == null)
+        {
+            Action3 = newAbility;
+        } else if (Action4 == null)
+        {
+            Action4 = newAbility;
+        }
+        newAbility.enabled = true;
+    }
 
         public void SetCameraZoom()
         {

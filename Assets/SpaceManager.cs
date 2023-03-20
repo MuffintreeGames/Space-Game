@@ -15,6 +15,7 @@ public class SpaceManager : MonoBehaviour
     public GameObject MediumPlanet;
     public GameObject LargePlanet;
     public GameObject MassivePlanet;
+    public GameObject AbilityPlanet;
 
     public GameObject Level1Barrier;
     public GameObject Level2Barrier;
@@ -22,6 +23,9 @@ public class SpaceManager : MonoBehaviour
 
     public GameObject BigBang;
     public float bigBangTime = 60f; //time at which big bang should begin
+
+    public List<AbilityTemplate> AbilityPool;
+    private List<AbilityTemplate> ModifiedAbilityPool;
 
     private float chunkSize = 10f; //dimensions of 1 chunk
     private int sectorDimensions = 10; //dimensions of 1 sector in terms of the number of chunks
@@ -38,6 +42,7 @@ public class SpaceManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()    //divide space up into several sectors, which are then broken up into smaller chunks which can each contain a max of 1 object
     {
+        ModifiedAbilityPool = new List<AbilityTemplate>(AbilityPool);
         sectorSize = chunkSize * sectorDimensions;
         smallPlanetCollider = SmallPlanet.GetComponent<CircleCollider2D>();
         WorldMap = new GameObject[worldSize][][][];
@@ -90,13 +95,6 @@ public class SpaceManager : MonoBehaviour
             }
         }
         SectorWall.UnlockSector.AddListener(ActivateSector);
-        for (int x = 0; x < sectorDimensions; x++)
-        {
-            for (int y = 0; y < sectorDimensions; y++)
-            {
-                Debug.Log("contents of chunk " + x + ", " + y + " at start: " + WorldMap[4][5][x][y]);
-            }
-        }
         
     }
 
@@ -107,6 +105,8 @@ public class SpaceManager : MonoBehaviour
         {
             sectorMap[x] = new GameObject[sectorDimensions];
         }
+
+        SpawnAbilityPlanet(sectorMap, sectorX, sectorY);
 
         SpawnRandomPlanets(MediumMin, MediumMax, MediumPlanet, sectorMap, sectorX, sectorY);
         SpawnRandomPlanets(LargeMin, LargeMax, LargePlanet, sectorMap, sectorX, sectorY);
@@ -151,6 +151,24 @@ public class SpaceManager : MonoBehaviour
         }
     }
 
+    void SpawnAbilityPlanet(GameObject[][] sectorMap, int sectorX, int sectorY) //always place in the middle of a chunk in the middle of a sector
+    {
+        int randX = Random.Range(Mathf.RoundToInt((float)(sectorDimensions * 0.4)), Mathf.RoundToInt((float)(sectorDimensions * 0.7)));
+        int randY = Random.Range(Mathf.RoundToInt((float)(sectorDimensions * 0.4)), Mathf.RoundToInt((float)(sectorDimensions * 0.7)));
+        Vector3 planetCoords = new Vector3(randX * chunkSize + chunkSize/2 + (sectorSize * sectorX), randY * chunkSize + chunkSize/2 + (sectorSize * sectorY), 0);
+        GameObject newPlanet = Instantiate(AbilityPlanet, planetCoords, Quaternion.identity);
+        newPlanet.GetComponent<GrantAbility>().GrantedAbility = SelectAbility();
+        sectorMap[randX][randY] = newPlanet;
+    }
+
+    AbilityTemplate SelectAbility()
+    {
+        int abilityIndex = Random.Range(0, ModifiedAbilityPool.Count - 1);
+        AbilityTemplate chosenAbility = ModifiedAbilityPool[abilityIndex];
+        ModifiedAbilityPool.RemoveAt(abilityIndex);
+        return chosenAbility;
+    }
+
     void SpawnRandomPlanets(int min, int max, GameObject planetTemplate, GameObject[][] sectorMap, int sectorX, int sectorY)
     {
         int finalNumber = Random.Range(min, max);
@@ -158,13 +176,38 @@ public class SpaceManager : MonoBehaviour
         for (int n = 0; n < finalNumber; n++)
         {
             bool planetPlaced = false;
+            int attempts = 0;
             while (!planetPlaced) {
-                int randX = Random.Range(0, sectorDimensions);
-                int randY = Random.Range(0, sectorDimensions);
+                int randX = Random.Range(0, sectorDimensions - 1);
+                int randY = Random.Range(0, sectorDimensions - 1);
                 if (sectorMap[randX][randY] == null)
                 {
                     PlacePlanetInChunk(randX, randY, planetTemplate, templateCollider, sectorMap, sectorX, sectorY);
                     planetPlaced = true;
+                } else {
+                    attempts += 1;
+                    if (attempts >= 1)
+                    {
+                        Debug.Log("too many tries to place planet, cheating placement");
+                        while (!planetPlaced)   //just increment randX and randY until we find an empty spot. Not a great first choice for RNG, but provides a guaranteed escape
+                        {
+                            randY += 1;
+                            if (randY >= sectorDimensions)
+                            {
+                                randY = 0;
+                                randX += 1;
+                                if (randX >= sectorDimensions)
+                                {
+                                    randX = 0;
+                                }
+                            }
+                            if (sectorMap[randX][randY] == null)
+                            {
+                                PlacePlanetInChunk(randX, randY, planetTemplate, templateCollider, sectorMap, sectorX, sectorY);
+                                planetPlaced = true;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -187,9 +230,7 @@ public class SpaceManager : MonoBehaviour
 
     void SpawnBarrier(GameObject barrier, int sectorX, int sectorY)
     {
-        Debug.Log("spawning barrier in sector " + sectorX + ", " + sectorY);
         Vector3 barrierCoords = new Vector3(sectorSize / 2 + (sectorSize * sectorX), sectorSize / 2 + (sectorSize * sectorY), 0);
-        Debug.Log("barrier coords: " + barrierCoords);
         GameObject newBarrier = Instantiate(barrier, barrierCoords, Quaternion.identity);
         newBarrier.GetComponent<SectorWall>().SetParameters(sectorX, sectorY);
     }

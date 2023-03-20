@@ -26,9 +26,9 @@ TagManager:
   - BarrierLevel1
   - BarrierLevel2
   - BarrierLevel3
-  - 
-  - 
-  - 
+  - Intangible
+  - GoliathProjectile
+  - GoliathDestructible
   - 
   - 
   - 
