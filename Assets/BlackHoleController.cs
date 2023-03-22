@@ -15,7 +15,6 @@ public class BlackHoleController : MonoBehaviour
     void Start()
     {
         suckRange = GetComponent<CircleCollider2D>().radius * transform.localScale.x;
-        Debug.Log("black hole suck range = " + suckRange);
     }
 
     // Update is called once per frame

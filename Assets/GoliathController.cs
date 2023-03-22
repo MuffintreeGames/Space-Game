@@ -19,9 +19,9 @@ public class GoliathController : MonoBehaviour
     private AttackObject goliathArmScript;  //script attached to the goliath arm
 
     private float maxSpeed = 7.5f;  //top speed goliath can achieve; maintained separately for horizontal and vertical
-    private float acceleration = 1.5f;  //rate of acceleration; maintained separately for horizontal and vertical
-    private float reversingAcceleration = 4f;   //alt acceleration used when trying to go in the opposite direction
-    private float deceleration = 2f;    //rate of slowing down when not moving in the direction of motion
+    private float acceleration = 3f;  //rate of acceleration; maintained separately for horizontal and vertical
+    private float reversingAcceleration = 8f;   //alt acceleration used when trying to go in the opposite direction
+    private float deceleration = 4f;    //rate of slowing down when not moving in the direction of motion
     private float currentHorSpeed = 0f; //current horizontal speed
     private float currentVertSpeed = 0f;    //current vertical speed
     private bool movementLocked = false;    //used when something is going on to prevent goliath movement

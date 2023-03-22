@@ -2,11 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*private class Sector : MonoBehaviour
+public struct SectorCoordinates
 {
-    public GameObject contents;
+    public int x;
+    public int y;
 
-}*/
+    public SectorCoordinates(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+}
 
 public class SpaceManager : MonoBehaviour
 {
@@ -27,17 +33,18 @@ public class SpaceManager : MonoBehaviour
     public List<AbilityTemplate> AbilityPool;
     private List<AbilityTemplate> ModifiedAbilityPool;
 
-    private float chunkSize = 10f; //dimensions of 1 chunk
-    private int sectorDimensions = 10; //dimensions of 1 sector in terms of the number of chunks
-    private float sectorSize;
-    private int worldSize = 8; //number of sectors in x and y directions
+    private static float chunkSize = 10f; //dimensions of 1 chunk
+    private static int sectorDimensions = 10; //dimensions of 1 sector in terms of the number of chunks
+    private static float sectorSize;
+    private static int worldSize = 8; //number of sectors in x and y directions
 
-    private CircleCollider2D smallPlanetCollider;
+    private static CircleCollider2D smallPlanetCollider;
 
-    private GameObject[][][][] WorldMap;   //map of all the sectors
+    private static GameObject[][][][] WorldMap;   //map of all the sectors
+    private static GameObject[][] AbilityMap;  //map of all the ability planets contained in the sectors
 
-    private float timeElapsed = 0f;
-    private bool bigBangSpawned = false;
+    private static float timeElapsed = 0f;
+    private static bool bigBangSpawned = false;
 
     // Start is called before the first frame update
     void Start()    //divide space up into several sectors, which are then broken up into smaller chunks which can each contain a max of 1 object
@@ -45,12 +52,19 @@ public class SpaceManager : MonoBehaviour
         ModifiedAbilityPool = new List<AbilityTemplate>(AbilityPool);
         sectorSize = chunkSize * sectorDimensions;
         smallPlanetCollider = SmallPlanet.GetComponent<CircleCollider2D>();
-        WorldMap = new GameObject[worldSize][][][];
 
+        WorldMap = new GameObject[worldSize][][][];
         for (int x = 0; x < worldSize; x++)
         {
             WorldMap[x] = new GameObject[worldSize][][];
         }
+
+        AbilityMap = new GameObject[worldSize][];
+        for (int x = 0; x < worldSize; x++)
+        {
+            AbilityMap[x] = new GameObject[worldSize];
+        }
+
         int centerIndex = worldSize / 2;
 
         for (int x = 0; x < worldSize; x++)
@@ -59,7 +73,7 @@ public class SpaceManager : MonoBehaviour
             {
                 int sectorX = x - centerIndex;  //convert x and y into sector coordinates by basing them around the center of the universe; negative = left/below center, positive = right/above center
                 int sectorY = y - centerIndex;
-                int distanceX;  //calculate distance away from world center we are to figure out contents of sector; have to add 1 to positive numbers to keep balanced with negative
+                int distanceX;  //calculate the distance away from world center we are at to figure out contents of sector; have to add 1 to positive numbers to keep balanced with negative
                 int distanceY;
                 if (sectorX >= 0)
                 {
@@ -81,16 +95,16 @@ public class SpaceManager : MonoBehaviour
                 int totalDistance = distanceX + distanceY;
                 if (totalDistance <= 2) //starting sectors
                 {
-                    WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, null);
+                    WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, null);
                 } else if (totalDistance <= 4)
                 {
-                    WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, Level1Barrier);
+                    WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, Level1Barrier);
                 } else if (totalDistance <= 6)
                 {
-                    WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, Level2Barrier);
+                    WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, Level2Barrier);
                 } else
                 {
-                    WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, Level3Barrier);
+                    WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, Level3Barrier);
                 }
             }
         }
@@ -98,7 +112,7 @@ public class SpaceManager : MonoBehaviour
         
     }
 
-    GameObject[][] BuildSector(int MediumMin, int MediumMax, int LargeMin, int LargeMax, int MassiveMin, int MassiveMax, int sectorX, int sectorY, GameObject barrier)
+    GameObject[][] BuildSector(int MediumMin, int MediumMax, int LargeMin, int LargeMax, int MassiveMin, int MassiveMax, int sectorX, int sectorY, int arrayX, int arrayY, GameObject barrier)
     {
         GameObject[][] sectorMap = new GameObject[sectorDimensions][];
         for (int x = 0; x < sectorDimensions; x++)
@@ -106,7 +120,7 @@ public class SpaceManager : MonoBehaviour
             sectorMap[x] = new GameObject[sectorDimensions];
         }
 
-        SpawnAbilityPlanet(sectorMap, sectorX, sectorY);
+        AbilityMap[arrayX][arrayY] = SpawnAbilityPlanet(sectorMap, sectorX, sectorY);
 
         SpawnRandomPlanets(MediumMin, MediumMax, MediumPlanet, sectorMap, sectorX, sectorY);
         SpawnRandomPlanets(LargeMin, LargeMax, LargePlanet, sectorMap, sectorX, sectorY);
@@ -120,7 +134,7 @@ public class SpaceManager : MonoBehaviour
                 {
                     PlacePlanetInChunk(x, y, SmallPlanet, smallPlanetCollider, sectorMap, sectorX, sectorY);
                 }
-                if (barrier != null)
+                if (barrier != null && sectorMap[x][y] != AbilityMap[arrayX][arrayY])
                 {
                     sectorMap[x][y].SetActive(false);   //disable any object that spawns behind a barrier
                 }
@@ -151,7 +165,7 @@ public class SpaceManager : MonoBehaviour
         }
     }
 
-    void SpawnAbilityPlanet(GameObject[][] sectorMap, int sectorX, int sectorY) //always place in the middle of a chunk in the middle of a sector
+    GameObject SpawnAbilityPlanet(GameObject[][] sectorMap, int sectorX, int sectorY) //always place in the middle of a chunk in the middle of a sector
     {
         int randX = Random.Range(Mathf.RoundToInt((float)(sectorDimensions * 0.4)), Mathf.RoundToInt((float)(sectorDimensions * 0.7)));
         int randY = Random.Range(Mathf.RoundToInt((float)(sectorDimensions * 0.4)), Mathf.RoundToInt((float)(sectorDimensions * 0.7)));
@@ -159,6 +173,7 @@ public class SpaceManager : MonoBehaviour
         GameObject newPlanet = Instantiate(AbilityPlanet, planetCoords, Quaternion.identity);
         newPlanet.GetComponent<GrantAbility>().GrantedAbility = SelectAbility();
         sectorMap[randX][randY] = newPlanet;
+        return newPlanet;
     }
 
     AbilityTemplate SelectAbility()
@@ -186,9 +201,8 @@ public class SpaceManager : MonoBehaviour
                     planetPlaced = true;
                 } else {
                     attempts += 1;
-                    if (attempts >= 1)
+                    if (attempts >= 3)
                     {
-                        Debug.Log("too many tries to place planet, cheating placement");
                         while (!planetPlaced)   //just increment randX and randY until we find an empty spot. Not a great first choice for RNG, but provides a guaranteed escape
                         {
                             randY += 1;
@@ -271,5 +285,70 @@ public class SpaceManager : MonoBehaviour
 
         timeElapsed += Time.deltaTime;
         //Debug.Log("time elapsed: " + timeElapsed);
+    }
+
+    public static SectorCoordinates GetSectorAtCoords(float xCoords, float yCoords)  //used to convert x,y coords into sector values
+    {
+        int sectorX = (int) Mathf.Floor(xCoords / sectorSize) + (worldSize / 2);
+        int sectorY = (int) Mathf.Floor(yCoords / sectorSize) + (worldSize / 2);
+        return new SectorCoordinates(sectorX, sectorY);
+    }
+
+    public static List<GameObject> GetAbilitiesInAdjacentSectors(int sectorX, int sectorY)  //used by goliath radar to get all the ability planets in adjacent sectors
+    {
+        List<GameObject> returnList = new List<GameObject>();
+        GameObject targetPlanet;
+        if (sectorX > 0)
+        {
+            targetPlanet = AbilityMap[sectorX - 1][sectorY];
+            if (targetPlanet != null)
+            {
+                returnList.Add(targetPlanet);
+            } else
+            {
+                Debug.Log("sector " + sectorX + ", " + sectorY + " has nothing?");
+            }
+        }
+
+        if (sectorX < (worldSize - 1))
+        {
+            targetPlanet = AbilityMap[sectorX + 1][sectorY];
+            if (targetPlanet != null)
+            {
+                returnList.Add(targetPlanet);
+            }
+            else
+            {
+                Debug.Log("sector " + sectorX + ", " + sectorY + " has nothing?");
+            }
+        }
+
+        if (sectorY > 0)
+        {
+            targetPlanet = AbilityMap[sectorX][sectorY - 1];
+            if (targetPlanet != null)
+            {
+                returnList.Add(targetPlanet);
+            }
+            else
+            {
+                Debug.Log("sector " + sectorX + ", " + sectorY + " has nothing?");
+            }
+        }
+
+        if (sectorY < (worldSize - 1))
+        {
+            targetPlanet = AbilityMap[sectorX][sectorY + 1];
+            if (targetPlanet != null)
+            {
+                returnList.Add(targetPlanet);
+            }
+            else
+            {
+                Debug.Log("sector " + sectorX + ", " + sectorY + " has nothing?");
+            }
+        }
+
+        return returnList;
     }
 }

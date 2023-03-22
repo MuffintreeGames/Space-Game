@@ -29,7 +29,6 @@ public class GrantAbility : MonoBehaviour
         if (childImage)
         {
             childSprite = childImage.GetComponent<SpriteRenderer>();
-            Debug.Log(childSprite);
         }
     }
 
