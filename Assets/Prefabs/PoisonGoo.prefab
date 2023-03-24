@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5333707974461333185}
   - component: {fileID: 6734802541037809805}
   m_Layer: 20
-  m_Name: GoliathShot
+  m_Name: PoisonGoo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0, g: 0.85851765, b: 1, a: 1}
+  m_Color: {r: 0.19958171, g: 0.6132076, b: 0.28296143, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -104,7 +104,7 @@ MonoBehaviour:
   LifeTime: 0
   direction: 1
   Acceleration: 0
-  CanStop: 0
+  CanStop: 1
 --- !u!114 &7838426537178242089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 335b45a523558b544b9419aa5b171c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 50
+  Damage: 10
   TargetLayers:
     serializedVersion: 2
     m_Bits: 2620352

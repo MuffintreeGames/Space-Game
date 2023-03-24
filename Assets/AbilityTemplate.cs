@@ -11,13 +11,12 @@ public abstract class AbilityTemplate : MonoBehaviour
     protected float tickingCooldown;
     protected bool offCooldown = true;
 
+    protected bool listenersAttached = false;
+
     protected void InitializeAbility()
     {
+        Debug.Log(this);
         parentGoliath = GetComponent<GoliathController>();
-        if (parentGoliath)
-        {
-            GoliathController.GoliathLevelup.AddListener(UpgradeSelf);
-        }
         UpgradeSelf(1);
         enabled = false;
     }
@@ -25,6 +24,15 @@ public abstract class AbilityTemplate : MonoBehaviour
     // Update is called once per frame
     protected void ManageCooldown()
     {
+        if (!listenersAttached)
+        {
+            if (parentGoliath)
+            {
+                GoliathController.GoliathLevelup.AddListener(UpgradeSelf);
+                listenersAttached = true;
+            }
+        }
+
         if (!offCooldown) {
             tickingCooldown -= Time.deltaTime;
             if (tickingCooldown <= 0f)
@@ -36,6 +44,10 @@ public abstract class AbilityTemplate : MonoBehaviour
 
     protected void StartCooldown()
     {
+        if (!enabled) {   //if for whatever reason the ability has been used without being activated properly, just activate it
+            enabled = true;
+        }
+
         if (!IsOffCooldown())
         {
             return;

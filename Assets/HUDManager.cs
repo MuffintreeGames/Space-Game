@@ -213,7 +213,7 @@ public class HUDManager : MonoBehaviour
         {
             abilityIcon2.enabled = true;
             abilityTimer2.enabled = true;
-            abilityIcon2.sprite = playerGoliath.Action1.icon;
+            abilityIcon2.sprite = playerGoliath.Action2.icon;
             if (!playerGoliath.Action2.IsOffCooldown())
             {
                 abilityIcon2.color = Color.grey;

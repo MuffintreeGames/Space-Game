@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5333707974461333185}
   - component: {fileID: 3846245684141882531}
   - component: {fileID: 9023866774906467180}
-  m_Layer: 0
+  m_Layer: 23
   m_Name: PlanetShot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,6 +51,8 @@ MonoBehaviour:
   Speed: 0
   LifeTime: 0
   direction: 0
+  Acceleration: 0
+  CanStop: 0
 --- !u!114 &7838426537178242089
 MonoBehaviour:
   m_ObjectHideFlags: 0

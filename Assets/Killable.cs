@@ -17,6 +17,8 @@ public class Killable : MonoBehaviour
     private EXPSource expScript;
     private GrantAbility abilityScript;
     private SpriteRenderer parentSprite;
+
+    private float damageMultiplier = 1f;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +42,16 @@ public class Killable : MonoBehaviour
         }
     }
 
+    public void ApplyDamageMultiplier(float multiplier)
+    {
+        damageMultiplier = damageMultiplier * multiplier;
+    }
+
+    public void RemoveDamageMultiplier(float multiplier)
+    {
+        damageMultiplier = damageMultiplier / multiplier;
+    }
+
     public float GetHealth()
     {
         return currentHealth;
@@ -53,7 +65,7 @@ public class Killable : MonoBehaviour
         }
         else
         {
-            currentHealth -= damage;
+            currentHealth -= damage * damageMultiplier;
         }
 
         if (currentHealth <= 0)

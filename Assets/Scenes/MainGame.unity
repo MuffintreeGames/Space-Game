@@ -2728,6 +2728,10 @@ GameObject:
   - component: {fileID: 2066654988}
   - component: {fileID: 2066654989}
   - component: {fileID: 2066654990}
+  - component: {fileID: 2066654991}
+  - component: {fileID: 2066654992}
+  - component: {fileID: 2066654993}
+  - component: {fileID: 2066654994}
   m_Layer: 10
   m_Name: Goliath
   m_TagString: Untagged
@@ -2766,8 +2770,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goliathCamera: {fileID: 519420033}
-  Action1: {fileID: 0}
-  Action2: {fileID: 0}
+  Action1: {fileID: 2066654992}
+  Action2: {fileID: 2066654993}
   Action3: {fileID: 0}
   Action4: {fileID: 0}
 --- !u!212 &2066654984
@@ -2927,3 +2931,84 @@ MonoBehaviour:
   DamageTo1: 0
   DamageFlashToggle: 1
   DamageFlash: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &2066654991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2066654981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfbb2ccc467b64848b39e446de6fbc14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 10
+  icon: {fileID: 21300000, guid: aad9f1cb27a06f149bbd3db8a2a8c714, type: 3}
+  speedMultiplier: 2
+  effectDuration: 4
+  damageMultiplier: 1.2
+--- !u!114 &2066654992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2066654981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd16d62957cccdc4888eb86aa8a41090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 10
+  icon: {fileID: 21300000, guid: 227c147d40291d2438e5e6d21b277d28, type: 3}
+  projectileSpeed: 20
+  projectileDuration: 3
+  baseProjectileDamage: 2
+  damagePerLevel: 1
+  GoliathShot: {fileID: 7045386937356173623, guid: 316f431e90128fe4ca92a1d1a7cf40cd, type: 3}
+  projectileCount: 5
+  deceleration: 30
+  decelVariance: 2
+  spread: 3
+--- !u!114 &2066654993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2066654981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7febf77ce18edac4ab40c2da5354696e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 15
+  icon: {fileID: 0}
+  dashSpeed: 15
+  dashDuration: 0.4
+  exitSpeed: 6
+  baseDamage: 30
+  damagePerLevel: 5
+--- !u!114 &2066654994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2066654981}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 335b45a523558b544b9419aa5b171c17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damage: 0
+  TargetLayers:
+    serializedVersion: 2
+    m_Bits: 6814656
+  DamagedLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  DestroyOnHit: 0
+  RepeatedDamage: 0
+  BelongsToGoliath: 1

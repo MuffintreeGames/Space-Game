@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,8 @@ public class GoliathController : MonoBehaviour
     private GameObject goliathArm;  //the arm of the goliath, used for basic attacks. Should be the first child of the goliath object
 
     private Killable goliathHealth;
+
+    private AttackObject ramHitboxScript; //script that controls the goliath's damage-on-touch hitbox
 
     private AttackObject goliathArmScript;  //script attached to the goliath arm
 
@@ -50,6 +53,11 @@ public class GoliathController : MonoBehaviour
 
     public GoliathCameraController goliathCamera;
 
+    private float originalMaxSpeed;
+    private float originalAcceleration;
+    private float originalReversingAcceleration;
+    private float originalDeceleration;
+
     public AbilityTemplate Action1; //ability tied to the action1 button
     public AbilityTemplate Action2; //ability tied to the action2 button
     public AbilityTemplate Action3; //ability tied to the action3 button
@@ -65,12 +73,19 @@ public class GoliathController : MonoBehaviour
         goliathArm = goliathTransform.GetChild(0).gameObject;
         goliathArmScript = goliathArm.transform.GetChild(0).GetComponent<AttackObject>();
 
+        ramHitboxScript = goliath.GetComponent<AttackObject>();
+
         goliathHealth = goliath.GetComponent<Killable>();
 
         EXPSource.GoliathGainExp.AddListener(GainExp);
         GrantAbility.GoliathGainAbility.AddListener(GainAbility);
 
         GoliathLevelup = new GoliathLevelupEvent();
+
+        originalMaxSpeed = maxSpeed;
+        originalAcceleration = acceleration;
+        originalReversingAcceleration = reversingAcceleration;
+        originalDeceleration = deceleration;
     }
 
         void SetGoliathRotation()
@@ -466,27 +481,84 @@ public class GoliathController : MonoBehaviour
         return goliathHealth.MaxHealth;
     }
 
+    public void ApplySpeedMultiplier(float speedMultiplier)
+    {
+        maxSpeed = maxSpeed * speedMultiplier;
+        acceleration = acceleration * speedMultiplier;
+        reversingAcceleration = reversingAcceleration * speedMultiplier;
+        deceleration = deceleration * speedMultiplier;
+    }
+
+    public void ResetSpeed()
+    {
+        maxSpeed = originalMaxSpeed;
+        acceleration = originalAcceleration;
+        reversingAcceleration = originalReversingAcceleration;
+        deceleration = originalDeceleration;
+    }
+
+    public void ApplyDamageMultiplier(float damageMultiplier)
+    {
+        goliathHealth.ApplyDamageMultiplier(damageMultiplier);
+    }
+
+    public void RemoveDamageMultiplier(float damageMultiplier)
+    {
+        goliathHealth.RemoveDamageMultiplier(damageMultiplier);
+    }
+
+    public void ActivateRamHitbox(int damage)
+    {
+        ramHitboxScript.enabled = true;
+        ramHitboxScript.Damage = damage;
+    }
+
+    public void DisableRamHitbox()
+    {
+        ramHitboxScript.enabled = false;
+        ramHitboxScript.Damage = 0;
+    }
+
     void OnCollisionEnter2D(Collision2D col)
         {
-            if (col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize1") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize2") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize3") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize4") || col.gameObject.layer == LayerMask.NameToLayer("Solid") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel1") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel2") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel3"))
-            {
-                ContactPoint2D contact = col.GetContact(0);
-                if (currentHorSpeed * contact.normal.x < 0)
-                {
-                    currentHorSpeed = contact.normal.x * oppositeReboundForce;
-                } else
-                {
-                    currentHorSpeed += contact.normal.x * reboundForce;
-                }
+        StartCoroutine(HandleCollision(col));
+            
+        }
 
-                if (currentVertSpeed * contact.normal.y < 0)
-                {
-                    currentVertSpeed = contact.normal.y * oppositeReboundForce;
-                }
-                else
-                {
-                    currentVertSpeed += contact.normal.y * reboundForce;
-                }
+    IEnumerator HandleCollision(Collision2D col)
+    {
+        yield return 0; //wait 1 frame, then check if gameObject still exists. If it doesn't, then it was destroyed on impact and we shouldn't care
+        try
+        {
+            if (col.gameObject == null)
+            {
+                yield break;
+            }
+        } catch (Exception e)
+        {
+            yield break;
+        }
+
+        if (col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize1") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize2") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize3") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize4") || col.gameObject.layer == LayerMask.NameToLayer("Solid") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel1") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel2") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel3"))
+        {
+            ContactPoint2D contact = col.GetContact(0);
+            if (currentHorSpeed * contact.normal.x < 0)
+            {
+                currentHorSpeed = contact.normal.x * oppositeReboundForce;
+            }
+            else
+            {
+                currentHorSpeed += contact.normal.x * reboundForce;
+            }
+
+            if (currentVertSpeed * contact.normal.y < 0)
+            {
+                currentVertSpeed = contact.normal.y * oppositeReboundForce;
+            }
+            else
+            {
+                currentVertSpeed += contact.normal.y * reboundForce;
             }
         }
+    }
     }
