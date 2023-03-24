@@ -13,7 +13,7 @@ public class RangedAttackAbility : AbilityTemplate  //fire a projectile
     // Start is called before the first frame update
     void Start()
     {
-        base.InitializeAbility();
+        base.InitializeAbility(AbilityCategory.Projectile);
     }
 
     // Update is called once per frame
@@ -24,8 +24,10 @@ public class RangedAttackAbility : AbilityTemplate  //fire a projectile
 
     public override void UseAbility()
     {
-        Debug.Log("trying to shoot");
-        base.StartCooldown();
+        if (!PrepareToUseAbility())
+        {
+            return;
+        }
 
         GameObject firedShot = Instantiate(GoliathShot, parentGoliath.transform.position, Quaternion.identity);
         Debug.Log("checking shot damage: " + firedShot.GetComponent<AttackObject>().Damage);

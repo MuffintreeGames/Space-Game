@@ -14,7 +14,7 @@ public class ShedSkinAbility : AbilityTemplate  //dash a short distance, maintai
     // Start is called before the first frame update
     void Start()
     {
-        base.InitializeAbility();
+        base.InitializeAbility(AbilityCategory.Buff);
     }
 
     // Update is called once per frame
@@ -33,7 +33,10 @@ public class ShedSkinAbility : AbilityTemplate  //dash a short distance, maintai
 
     public override void UseAbility()
     {
-        base.StartCooldown();
+        if (!PrepareToUseAbility())
+        {
+            return;
+        }
 
         parentGoliath.ApplySpeedMultiplier(speedMultiplier);
         parentGoliath.ApplyDamageMultiplier(damageMultiplier);
@@ -43,6 +46,7 @@ public class ShedSkinAbility : AbilityTemplate  //dash a short distance, maintai
 
     public override void CancelAbility()
     {
+        PrepareToEndAbility();
         currentlyDashing = false;
         parentGoliath.ResetSpeed();
         parentGoliath.RemoveDamageMultiplier(damageMultiplier);

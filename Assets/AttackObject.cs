@@ -9,6 +9,7 @@ public class AttackObject : MonoBehaviour
     public LayerMask DamagedLayers; //layers that should take damage from attack
     public bool DestroyOnHit;   //should this object be removed on hitting something or persist
     public bool RepeatedDamage;   //if true, targets will take damage as long as they are in contact with attack; otherwise, they can only be hit once
+    public float InvincibilityDuration = 0f;    //length of invincibility granted
     public bool BelongsToGoliath = false;   //if true, give Goliath exp when this kills something
 
     private Dictionary<GameObject, bool> hitTargets = new Dictionary<GameObject, bool>();
@@ -35,6 +36,17 @@ public class AttackObject : MonoBehaviour
         GameObject hitGameObject = col.gameObject;
         if ((TargetLayers & (1 << hitGameObject.layer)) != 0)
         {
+            Killable targetKillable = hitGameObject.GetComponent<Killable>();
+            if (targetKillable == null)
+            {
+                return;
+            }
+
+            if (targetKillable.IsInvincible())
+            {
+                return;
+            }
+
             if (!RepeatedDamage)
             {
                 if (hitTargets.ContainsKey(hitGameObject))
@@ -45,14 +57,9 @@ public class AttackObject : MonoBehaviour
                 hitTargets.Add(hitGameObject, true);
             }
 
-            Killable targetKillable = hitGameObject.GetComponent<Killable>();
-            if (!targetKillable)
+            if ((DamagedLayers & (1 << hitGameObject.layer)) != 0)
             {
-                Debug.Log("hit object is not killable!");
-            }
-            else if ((DamagedLayers & (1 << hitGameObject.layer)) != 0)
-            {
-                targetKillable.TakeDamage(Damage, BelongsToGoliath);
+                targetKillable.TakeDamage(Damage, BelongsToGoliath, InvincibilityDuration);
             }
             if (DestroyOnHit)
             {
@@ -69,8 +76,20 @@ public class AttackObject : MonoBehaviour
         }
 
         GameObject hitGameObject = col.gameObject;
+
         if ((TargetLayers & (1 << hitGameObject.layer)) != 0)
         {
+            Killable targetKillable = hitGameObject.GetComponent<Killable>();
+            if (targetKillable == null)
+            {
+                return;
+            }
+
+            if (targetKillable.IsInvincible())
+            {
+                return;
+            }
+
             if (!RepeatedDamage)
             {
                 if (hitTargets.ContainsKey(hitGameObject))
@@ -81,14 +100,9 @@ public class AttackObject : MonoBehaviour
                 hitTargets.Add(hitGameObject, true);
             }
 
-            Killable targetKillable = hitGameObject.GetComponent<Killable>();
-            if (!targetKillable)
+            if ((DamagedLayers & (1 << hitGameObject.layer)) != 0)
             {
-                Debug.Log("hit object is not killable!");
-            }
-            else if ((DamagedLayers & (1 << hitGameObject.layer)) != 0)
-            {
-                targetKillable.TakeDamage(Damage, BelongsToGoliath);
+                targetKillable.TakeDamage(Damage, BelongsToGoliath, InvincibilityDuration);
             }
             if (DestroyOnHit)
             {

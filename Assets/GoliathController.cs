@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,12 +15,14 @@ public class GoliathController : MonoBehaviour
     private GameObject goliath; //the goliath that this script is attached to
     private Transform goliathTransform; //the transform of the goliath
     private GameObject goliathArm;  //the arm of the goliath, used for basic attacks. Should be the first child of the goliath object
+    private GameObject goliathTongue;   //tongue of the goliath, used for stab attacks.
 
     private Killable goliathHealth;
 
     private AttackObject ramHitboxScript; //script that controls the goliath's damage-on-touch hitbox
 
     private AttackObject goliathArmScript;  //script attached to the goliath arm
+    private AttackObject goliathTongueScript;  //script attached to the goliath tongue
 
     private float maxSpeed = 7.5f;  //top speed goliath can achieve; maintained separately for horizontal and vertical
     private float acceleration = 3f;  //rate of acceleration; maintained separately for horizontal and vertical
@@ -38,9 +41,17 @@ public class GoliathController : MonoBehaviour
     private float basicAttackCooldown = 0.5f; //required time that must elapse after a swing is finished before another swing can start
     private float currentSwingTime = 0f; //time elapsed in swing so far
     private float currentBasicAttackCooldown = 0f; //time elapsed after swing so far
-    private bool canBasicAttack = true; //determines if basic attack is legal
+    private bool canMeleeAttack = true; //determines if melee attack is legal
     private bool performingBasicAttack = false; //determines if basic attack is underway
     private bool inBasicAttackCooldown = false; //determines if basic attack cooldown is ticking
+
+    public Color chargedColor = Color.yellow;
+    private float stabChargeTime = 0.7f;    //time to hold down basic attack button to prepare stab
+    private float tongueMaxLength = 2f; //max tongue extension distance
+    private float tongueExtendTime = 0.1f;  //time to reach max extension on tongue
+    private float tongueHoldTime = 0.1f;  //time to hold out tongue after extending
+    private bool performingStabAttack = false;  //determines if stab attack is underway
+    private float currentStabTime = 0f; //time elapsed in stab so far
 
     private int currentExp = 0; //current exp of the goliath
     private int neededExp = 100;    //needed exp to level up; initial value is amount needed to reach level 2
@@ -63,15 +74,20 @@ public class GoliathController : MonoBehaviour
     public AbilityTemplate Action3; //ability tied to the action3 button
     public AbilityTemplate Action4; //ability tied to the action4 button
 
+    private AbilityTemplate activeAbility = null;  //if a dash-type ability is active, put here. Should be cancelled on collision with something solid
+
     public static GoliathLevelupEvent GoliathLevelup;
 
     // Start is called before the first frame update
+
     void Start()
     {
         goliath = this.gameObject;
         goliathTransform = goliath.transform;
         goliathArm = goliathTransform.GetChild(0).gameObject;
         goliathArmScript = goliathArm.transform.GetChild(0).GetComponent<AttackObject>();
+        goliathTongue = goliathTransform.GetChild(3).gameObject;
+        goliathTongueScript = goliathTongue.transform.GetChild(0).GetComponent<AttackObject>();
 
         ramHitboxScript = goliath.GetComponent<AttackObject>();
 
@@ -245,7 +261,7 @@ public class GoliathController : MonoBehaviour
 
         void StartBasicAttack() //activate arm, disable ability to perform further attacks
         {
-            if (!canBasicAttack)
+            if (!canMeleeAttack)
             {
                 Debug.Log("can't attack right now");
                 return;
@@ -253,7 +269,7 @@ public class GoliathController : MonoBehaviour
 
             goliathArm.SetActive(true);
             currentSwingTime = 0f;
-            canBasicAttack = false;
+            canMeleeAttack = false;
             performingBasicAttack = true;
         }
 
@@ -280,7 +296,53 @@ public class GoliathController : MonoBehaviour
             performingBasicAttack = false;
         }
 
-        void CheckAbilityUsage()
+    void StartStabAttack()
+    {
+        if (!canMeleeAttack)
+        {
+            Debug.Log("can't attack right now");
+            return;
+        }
+
+        goliathTongue.SetActive(true);
+        currentStabTime = 0f;
+        canMeleeAttack = false;
+        performingStabAttack = true;
+    }
+
+    void ContinueStabAttack()  //extend tongue until reach max length, then hold
+    {
+        currentStabTime += Time.deltaTime;
+
+        if (currentStabTime >= tongueExtendTime)
+        {
+            float totalStabTime = tongueExtendTime + tongueHoldTime;
+            Debug.Log("current: " + currentStabTime + ", max: " + totalStabTime);
+            if (currentStabTime >= totalStabTime)
+            {
+                EndStabAttack();
+                return;
+            }
+        } else
+        {
+            float tongueExtension = tongueMaxLength * (currentStabTime/tongueExtendTime);
+            goliathTongue.transform.localScale = new Vector3(goliathTongue.transform.localScale.x, tongueExtension, goliathTongue.transform.localScale.z);
+            //Debug.Log("current arm angle: " + goliathArm.transform.eulerAngles);
+        }
+        
+    }
+
+    void EndStabAttack()   //disable tongue, start cooldown
+    {
+        Debug.Log("ending stab sequence");
+        goliathTongue.transform.GetChild(0).gameObject.GetComponent<AttackObject>().ClearHitTargets();
+        goliathTongue.SetActive(false);
+        currentBasicAttackCooldown = basicAttackCooldown;
+        inBasicAttackCooldown = true;
+        performingStabAttack = false;
+    }
+
+    void CheckAbilityUsage()
         {
             if (Input.GetButtonDown("Action1") && Action1 != null)
             {
@@ -315,29 +377,63 @@ public class GoliathController : MonoBehaviour
             }
         }
 
-        // Update is called once per frame
-        void Update()
-        {
+    private float basicAttackHeldTimer = 0f;
+    private bool holdingBasicAttack = false;
+
+    //private bool midBlink = false;
+    //private Color originalColor = Color.white;
+
+    // Update is called once per frame
+    void Update()
+    {
             CheckAbilityUsage();
             SetGoliathSpeed();
             SetGoliathRotation();
             MoveGoliath();
             goliathCamera.updateCamera();   //now that we've moved, set new camera position
 
-            if (Input.GetButtonDown("Basic Attack")) {
-                StartBasicAttack();
+        if (holdingBasicAttack)
+        {
+            basicAttackHeldTimer += Time.deltaTime;
+        }
+
+        if (Input.GetButtonDown("Basic Attack"))
+        {
+            StartBasicAttack();
+            holdingBasicAttack = true;
+            if (basicAttackHeldTimer >= stabChargeTime)
+            {
+
+                //Blink(chargedColor);  //should do a sound effect here probably instead of visual thing
             }
+        }
+
+            if (Input.GetButtonUp("Basic Attack"))
+        {
+            if (basicAttackHeldTimer >= stabChargeTime)
+            {
+                StartStabAttack();
+            }
+
+            holdingBasicAttack = false;
+            basicAttackHeldTimer = 0f;
+        }
             if (performingBasicAttack)
             {
                 ContinueBasicAttack();
             }
+
+            if (performingStabAttack)
+        {
+            ContinueStabAttack();
+        }
             if (inBasicAttackCooldown)
             {
                 currentBasicAttackCooldown -= Time.deltaTime;
                 if (currentBasicAttackCooldown <= 0f)
                 {
                     inBasicAttackCooldown = false;
-                    canBasicAttack = true;
+                    canMeleeAttack = true;
                     Debug.Log("cooldown finished");
                 }
             }
@@ -352,6 +448,22 @@ public class GoliathController : MonoBehaviour
             }
             currentExp += exp;
         }
+
+
+    /*void Blink(Color blinkColor)
+    {
+        SpriteRenderer goliathSprite = goliath.GetComponent<SpriteRenderer>();
+        if (!midBlink)
+        {
+            midBlink = true;
+            originalColor = goliathSprite.color;
+            goliathSprite.color = blinkColor;
+        } else
+        {
+            midBlink = false;
+            goliathSprite.color = originalColor;
+        }
+    }*/
 
         public void LevelUp()  //grow bigger, set up parameters for next level. Called from the HUDManager class to sync up with exp bar animation
         {
@@ -371,6 +483,8 @@ public class GoliathController : MonoBehaviour
                     goliathTransform.localScale = new Vector3(2f, 2f, 2f);
                     goliathArmScript.Damage = 20;
                     goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
+                    goliathTongueScript.Damage = 40;
+                    goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
                     break;
                 case 3:
                     neededExp = level4Exp;
@@ -378,21 +492,29 @@ public class GoliathController : MonoBehaviour
                     goliathArmScript.Damage = 30;
                 goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
                 goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
-                break;
+                    goliathTongueScript.Damage = 60;
+                    goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
+                    goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
+                    break;
                 case 4:
                     neededExp = level5Exp;
                     goliathTransform.localScale = new Vector3(4f, 4f, 4f);
                     goliathArmScript.Damage = 40;
                 goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
                 goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
-                break;
+                    goliathTongueScript.Damage = 80;
+                    goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
+                    goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
+                    break;
                 case 5:
                     neededExp = 1;
                     currentExp = 0;
                     goliathTransform.localScale = new Vector3(5f, 5f, 5f);
                     goliathArmScript.Damage = 50;
                 goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
-                break;
+                    goliathTongueScript.Damage = 100;
+                    goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
+                    break;
             }
             SetCameraZoom();
         GoliathLevelup.Invoke(level);
@@ -525,9 +647,46 @@ public class GoliathController : MonoBehaviour
             
         }
 
+    public bool StartAbility(AbilityTemplate ability)   //check if we can do an ability, then register it as being active if it's an ongoing type
+    {
+        if (activeAbility != null)
+        {
+            return false;
+        }
+        AbilityTemplate.AbilityCategory abilityType = ability.GetAbilityType();
+        if (abilityType == AbilityTemplate.AbilityCategory.Attack || abilityType == AbilityTemplate.AbilityCategory.Dash)
+        {
+            activeAbility = ability;
+        }
+        return true;
+    }
+
+    public void EndAbility(AbilityTemplate ability)
+    {
+        if (activeAbility == ability)
+        {
+            activeAbility = null;
+        }
+    }
+
+    public void StopDashAbility()
+    {
+        if (activeAbility == null)
+        {
+            return;
+        }
+
+        if (activeAbility.GetAbilityType() == AbilityTemplate.AbilityCategory.Dash)
+        {
+            activeAbility.CancelAbility();
+            activeAbility = null;
+        }
+    }
+
+    private float reboundMultiplier = 0.25f;    //how much of our speed should be reversed when ramming into something
     IEnumerator HandleCollision(Collision2D col)
     {
-        yield return 0; //wait 1 frame, then check if gameObject still exists. If it doesn't, then it was destroyed on impact and we shouldn't care
+        //yield return 0; //wait 1 frame, then check if gameObject still exists. If it doesn't, then it was destroyed on impact and we shouldn't care
         try
         {
             if (col.gameObject == null)
@@ -539,12 +698,13 @@ public class GoliathController : MonoBehaviour
             yield break;
         }
 
-        if (col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize1") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize2") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize3") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize4") || col.gameObject.layer == LayerMask.NameToLayer("Solid") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel1") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel2") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel3"))
+        if (col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize1") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize2") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize3") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize4") || col.gameObject.layer == LayerMask.NameToLayer("Solid") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel1") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel2") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel3") || col.gameObject.layer == LayerMask.NameToLayer("Solid"))
         {
+            Debug.Log("handling collision with something solid");
             ContactPoint2D contact = col.GetContact(0);
             if (currentHorSpeed * contact.normal.x < 0)
             {
-                currentHorSpeed = contact.normal.x * oppositeReboundForce;
+                currentHorSpeed = contact.normal.x * oppositeReboundForce - (currentHorSpeed * reboundMultiplier);
             }
             else
             {
@@ -553,12 +713,13 @@ public class GoliathController : MonoBehaviour
 
             if (currentVertSpeed * contact.normal.y < 0)
             {
-                currentVertSpeed = contact.normal.y * oppositeReboundForce;
+                currentVertSpeed = contact.normal.y * oppositeReboundForce - (currentVertSpeed * reboundMultiplier);
             }
             else
             {
                 currentVertSpeed += contact.normal.y * reboundForce;
             }
+            StopDashAbility();
         }
     }
     }

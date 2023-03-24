@@ -19,7 +19,7 @@ public class PoisonSprayAbility : AbilityTemplate  //fire several pellets which 
     // Start is called before the first frame update
     void Start()
     {
-        base.InitializeAbility();
+        base.InitializeAbility(AbilityCategory.Projectile);
     }
 
     // Update is called once per frame
@@ -30,7 +30,10 @@ public class PoisonSprayAbility : AbilityTemplate  //fire several pellets which 
 
     public override void UseAbility()
     {
-        base.StartCooldown();
+        if (!PrepareToUseAbility())
+        {
+            return;
+        }
 
         for (int n = 0; n < projectileCount; n++)
         {

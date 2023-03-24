@@ -145,4 +145,5 @@ MonoBehaviour:
     m_Bits: 64960
   DestroyOnHit: 0
   RepeatedDamage: 1
+  InvincibilityDuration: 0.8
   BelongsToGoliath: 0

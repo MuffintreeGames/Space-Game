@@ -8,11 +8,17 @@ public class Killable : MonoBehaviour
     public bool DamageTo1 = false;  //if true, object only takes 1 damage from any valid hits
     public bool DamageFlashToggle = true;
     public Color DamageFlash = Color.red;
+    public float InvincibilityOpacity = 0.5f;
 
     private float flashDuration = 0.1f;
     private bool flashing = false;
     private float currentFlashTime = 0f;
     private Color previousColor = Color.white;
+
+    private bool invincible = false;
+    private float invincibilityTime = 0f;   //how long we can remain invincible total
+    private float currentInvincibilityTime = 0f;    //how long we have been invincible already
+
     private float currentHealth;    //current health of object. When this becomes 0, object dies
     private EXPSource expScript;
     private GrantAbility abilityScript;
@@ -40,6 +46,19 @@ public class Killable : MonoBehaviour
                 parentSprite.color = previousColor;
             }
         }
+
+        if (invincible)
+        {
+            currentInvincibilityTime += Time.deltaTime;
+            if (currentInvincibilityTime >= invincibilityTime)
+            {
+                invincible = false;
+                parentSprite.color = new Color(parentSprite.color.r, parentSprite.color.g, parentSprite.color.b);
+            } else
+            {
+                parentSprite.color = new Color(parentSprite.color.r, parentSprite.color.g, parentSprite.color.b, InvincibilityOpacity);
+            }
+        }
     }
 
     public void ApplyDamageMultiplier(float multiplier)
@@ -57,8 +76,18 @@ public class Killable : MonoBehaviour
         return currentHealth;
     }
 
-    public void TakeDamage(float damage, bool fromGoliath)
+    public bool IsInvincible()
     {
+        return invincible;
+    }
+
+    public void TakeDamage(float damage, bool fromGoliath, float invincibilityDuration)
+    {
+        if (invincible)
+        {
+            return;
+        }
+
         if (DamageTo1)
         {
             currentHealth -= 1;
@@ -89,5 +118,12 @@ public class Killable : MonoBehaviour
 
         currentFlashTime = 0f;
         flashing = true;
+
+        if (invincibilityDuration > 0f)
+        {
+            invincibilityTime = invincibilityDuration;
+            currentInvincibilityTime = 0f;
+            invincible = true;
+        }
     }
 }

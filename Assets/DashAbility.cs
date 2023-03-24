@@ -17,7 +17,7 @@ public class DashAbility : AbilityTemplate  //dash a short distance, maintaining
     // Start is called before the first frame update
     void Start()
     {
-        base.InitializeAbility();
+        base.InitializeAbility(AbilityCategory.Dash);
     }
 
     // Update is called once per frame
@@ -37,7 +37,11 @@ public class DashAbility : AbilityTemplate  //dash a short distance, maintaining
 
     public override void UseAbility()
     {
-        base.StartCooldown();
+        if (!PrepareToUseAbility())
+        {
+            return;
+        }
+
         parentGoliath.LockMovement();   //need to prevent goliath from doing manual movement
         dashDirectionX = Input.GetAxisRaw("Horizontal");
         dashDirectionY = Input.GetAxisRaw("Vertical");
@@ -68,6 +72,7 @@ public class DashAbility : AbilityTemplate  //dash a short distance, maintaining
 
     public override void CancelAbility()
     {
+        PrepareToEndAbility();
         currentlyDashing = false;
         parentGoliath.UnlockMovement();
         float exitX = 0f;
