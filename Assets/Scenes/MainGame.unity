@@ -1481,6 +1481,88 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &956146408
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 956146409}
+  - component: {fileID: 956146411}
+  - component: {fileID: 956146410}
+  m_Layer: 10
+  m_Name: RamHitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &956146409
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 956146408}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.17, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2066654982}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &956146410
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 956146408}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.01, y: 1.01}
+  m_EdgeRadius: 0
+--- !u!114 &956146411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 956146408}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 335b45a523558b544b9419aa5b171c17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damage: 0
+  TargetLayers:
+    serializedVersion: 2
+    m_Bits: 6814656
+  DamagedLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  DestroyOnHit: 0
+  RepeatedDamage: 0
+  InvincibilityDuration: 0
+  BelongsToGoliath: 1
 --- !u!4 &1020538139 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5125687541653416771, guid: c837f666eb7847b44a7ac0457e9a93be, type: 3}
@@ -2901,7 +2983,6 @@ GameObject:
   - component: {fileID: 2066654991}
   - component: {fileID: 2066654992}
   - component: {fileID: 2066654993}
-  - component: {fileID: 2066654994}
   m_Layer: 10
   m_Name: Goliath
   m_TagString: Untagged
@@ -2925,6 +3006,7 @@ Transform:
   - {fileID: 206335926}
   - {fileID: 1055098883}
   - {fileID: 224548971}
+  - {fileID: 956146409}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3011,14 +3093,14 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDrag: 1
+  m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!70 &2066654986
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -3065,7 +3147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldown: 6
   icon: {fileID: 21300000, guid: aad9f1cb27a06f149bbd3db8a2a8c714, type: 3}
-  dashSpeed: 15
+  dashSpeed: 25
   dashDuration: 0.4
   exitSpeed: 6
 --- !u!114 &2066654989
@@ -3133,7 +3215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd16d62957cccdc4888eb86aa8a41090, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 10
+  cooldown: 1
   icon: {fileID: 21300000, guid: 227c147d40291d2438e5e6d21b277d28, type: 3}
   projectileSpeed: 20
   projectileDuration: 3
@@ -3158,31 +3240,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldown: 12
   icon: {fileID: 21300000, guid: aad9f1cb27a06f149bbd3db8a2a8c714, type: 3}
-  dashSpeed: 15
+  dashSpeed: 25
   dashDuration: 0.4
   exitSpeed: 6
   baseDamage: 30
   damagePerLevel: 5
---- !u!114 &2066654994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2066654981}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 335b45a523558b544b9419aa5b171c17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Damage: 0
-  TargetLayers:
-    serializedVersion: 2
-    m_Bits: 6814656
-  DamagedLayers:
-    serializedVersion: 2
-    m_Bits: 64
-  DestroyOnHit: 0
-  RepeatedDamage: 0
-  InvincibilityDuration: 0
-  BelongsToGoliath: 1

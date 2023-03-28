@@ -25,17 +25,14 @@ public class GoliathController : MonoBehaviour
     private AttackObject goliathTongueScript;  //script attached to the goliath tongue
 
     private float maxSpeed = 7.5f;  //top speed goliath can achieve; maintained separately for horizontal and vertical
+    private float currentHorAcceleration = 0f; //acceleration value that we're currently using
+    private float currentVertAcceleration = 0f; //acceleration value that we're currently using
     private float acceleration = 3f;  //rate of acceleration; maintained separately for horizontal and vertical
     private float reversingAcceleration = 8f;   //alt acceleration used when trying to go in the opposite direction
     private float deceleration = 4f;    //rate of slowing down when not moving in the direction of motion
-    private float currentHorSpeed = 0f; //current horizontal speed
-    private float currentVertSpeed = 0f;    //current vertical speed
     private bool movementLocked = false;    //used when something is going on to prevent goliath movement
 
-    private float rotationSpeed = 0.2f; //speed that sprite will spin to face the chosen direction
-
-    private float reboundForce = 2f;    //force applied when bumping into something that doesn't reverse the goliath's direction
-    private float oppositeReboundForce = 1f;    //force applied when bumping into something that reverses the goliath's direction
+    private float rotationSpeed = 840f; //speed that sprite will spin to face the chosen direction
 
     private float armSwingTime = 0.2f; //total time that arm should take to complete swing
     private float basicAttackCooldown = 0.5f; //required time that must elapse after a swing is finished before another swing can start
@@ -78,18 +75,21 @@ public class GoliathController : MonoBehaviour
 
     public static GoliathLevelupEvent GoliathLevelup;
 
+    private Rigidbody2D goliathRigid;
+
     // Start is called before the first frame update
 
     void Start()
     {
         goliath = this.gameObject;
         goliathTransform = goliath.transform;
+        goliathRigid = GetComponent<Rigidbody2D>();
         goliathArm = goliathTransform.GetChild(0).gameObject;
         goliathArmScript = goliathArm.transform.GetChild(0).GetComponent<AttackObject>();
         goliathTongue = goliathTransform.GetChild(3).gameObject;
         goliathTongueScript = goliathTongue.transform.GetChild(0).GetComponent<AttackObject>();
 
-        ramHitboxScript = goliath.GetComponent<AttackObject>();
+        ramHitboxScript = goliathTransform.GetChild(4).gameObject.GetComponent<AttackObject>();
 
         goliathHealth = goliath.GetComponent<Killable>();
 
@@ -106,7 +106,7 @@ public class GoliathController : MonoBehaviour
 
         void SetGoliathRotation()
         {
-            if (performingBasicAttack)  //lock rotation while attacking
+            if (performingBasicAttack || performingStabAttack)  //lock rotation while attacking
             {
                 return;
             }
@@ -116,14 +116,13 @@ public class GoliathController : MonoBehaviour
                 return;
             }
 
-            float targetRotation = goliathTransform.eulerAngles.z;
+
+
             float horizontalDirection = Input.GetAxisRaw("Horizontal");
             float verticalDirection = Input.GetAxisRaw("Vertical");
 
-            if (horizontalDirection == 0f && verticalDirection == 0f)   //not pressing anything, leave rotation alone
-            {
-                return;
-            }
+        float targetRotation = goliathRigid.rotation;
+        float currentRotation = goliathRigid.rotation;
 
             if (horizontalDirection > 0f)   //moving right
             {
@@ -137,14 +136,14 @@ public class GoliathController : MonoBehaviour
                 }
                 else
                 {
-                    targetRotation = 270f;
+                targetRotation = 270f;
                 }
             }
             else if (horizontalDirection < 0f)  //moving left
             {
                 if (verticalDirection > 0f)
                 {
-                    targetRotation = 45f;
+                targetRotation = 45f;
                 }
                 else if (verticalDirection < 0f)
                 {
@@ -165,99 +164,114 @@ public class GoliathController : MonoBehaviour
                 }
             }
 
-            if (targetRotation - goliathTransform.eulerAngles.z > 180f) //ensure we're rotating in the fastest direction
+        if (currentRotation < 0f)
+        {
+            currentRotation += 360f;
+        } else if (currentRotation >= 360f)
+        {
+            currentRotation -= 360f;
+        }
+
+        float gapBetweenRotations = targetRotation - currentRotation;
+        if (Mathf.Abs(gapBetweenRotations) > 180f)
+        {
+            if (currentRotation > 180f)
+            {
+                currentRotation = -(360f - currentRotation);
+            }
+            else
             {
                 targetRotation = -(360f - targetRotation);
             }
-
-            float smoothedRotation = Mathf.Lerp(goliathTransform.eulerAngles.z, targetRotation, rotationSpeed);
-            transform.eulerAngles = new Vector3(goliathTransform.eulerAngles.x, goliathTransform.eulerAngles.y, smoothedRotation);
-            //Debug.Log("current angle: " + goliathTransform.eulerAngles);    //saw issue where rotation was acting funky when rebounding, left this here in case it can help with debugging
         }
 
-        void SetGoliathSpeed()  //apply acceleration/deceleration based on input
+        if (currentRotation != targetRotation)
+        {
+            float smoothRotation = currentRotation;
+            if (currentRotation > targetRotation)
+            {
+                smoothRotation -= rotationSpeed * Time.deltaTime;
+                smoothRotation = Mathf.Max(smoothRotation, targetRotation);
+            } else
+            {
+                smoothRotation += rotationSpeed * Time.deltaTime;
+                smoothRotation = Mathf.Min(smoothRotation, targetRotation);
+            }
+            goliathRigid.SetRotation(smoothRotation);
+        }
+        }
+
+        void SetGoliathSpeed()  //set acceleration based on goliath state
         {
             if (movementLocked)
             {
-                return;
+            currentHorAcceleration = 0f;
+            currentVertAcceleration = 0f;
+            return;
             }
             float horizontalDirection = Input.GetAxisRaw("Horizontal");
             float verticalDirection = Input.GetAxisRaw("Vertical");
-            float adjustedAccel = acceleration * Time.deltaTime;
-            float adjustedDecel = deceleration * Time.deltaTime;
-            float adjustedReversingAccel = reversingAcceleration * Time.deltaTime;
 
-            if (horizontalDirection > 0f)   //set horizontal speed
+            if (horizontalDirection != 0f)   //set horizontal accel
             {
-                if (currentHorSpeed < 0f)   //accelerate faster when going the opposite direction to reach a standstill sooner
-                {
-                    currentHorSpeed += adjustedReversingAccel;
-                }
-                else
-                {
-                    currentHorSpeed += adjustedAccel;
-                }
-                currentHorSpeed = Mathf.Min(maxSpeed, currentHorSpeed);
+            if (goliathRigid.velocity.x * horizontalDirection < 0f)   //accelerate faster when going the opposite direction to reach a standstill sooner
+            {
+                currentHorAcceleration = reversingAcceleration;
             }
-            else if (horizontalDirection < 0f)
+            else
             {
-                if (currentHorSpeed > 0f)
-                {
-                    currentHorSpeed -= adjustedReversingAccel;
-                } else
-                {
-                    currentHorSpeed -= adjustedAccel;
-                }
-                currentHorSpeed = Mathf.Max(-maxSpeed, currentHorSpeed);
+                currentHorAcceleration = acceleration;
             }
-            else if (currentHorSpeed > 0f)
-            {
-                currentHorSpeed -= adjustedDecel;
-                currentHorSpeed = Mathf.Max(0f, currentHorSpeed);
-            }
-            else if (currentHorSpeed < 0f)
-            {
-                currentHorSpeed += adjustedDecel;
-                currentHorSpeed = Mathf.Min(0f, currentHorSpeed);
             }
 
 
-            if (verticalDirection > 0f) //set vertical speed
+        if (verticalDirection != 0f)   //set horizontal accel
+        {
+            if (goliathRigid.velocity.y*verticalDirection < 0f)   //accelerate faster when going the opposite direction to reach a standstill sooner
             {
-                if (currentVertSpeed < 0f) {
-                    currentVertSpeed += adjustedReversingAccel;
-                } else
-                {
-                    currentVertSpeed += adjustedAccel;
-                }
-                currentVertSpeed = Mathf.Min(maxSpeed, currentVertSpeed);
+                currentVertAcceleration = reversingAcceleration;
             }
-            else if (verticalDirection < 0f)
+            else
             {
-                if (currentVertSpeed > 0f) {
-                    currentVertSpeed -= adjustedReversingAccel;
-                } else
-                {
-                    currentVertSpeed -= adjustedAccel;
-                }
-                currentVertSpeed = Mathf.Max(-maxSpeed, currentVertSpeed);
-            }
-            else if (currentVertSpeed > 0f)
-            {
-                currentVertSpeed -= adjustedDecel;
-                currentVertSpeed = Mathf.Max(0f, currentVertSpeed);
-            }
-            else if (currentVertSpeed < 0f)
-            {
-                currentVertSpeed += adjustedDecel;
-                currentVertSpeed = Mathf.Min(0f, currentVertSpeed);
+                currentVertAcceleration = acceleration;
             }
         }
+    }
 
         void MoveGoliath()  //apply movement based off of current speed settings
         {
-            goliathTransform.position = goliathTransform.position + new Vector3(currentHorSpeed * Time.deltaTime, currentVertSpeed * Time.deltaTime, 0);
+        if (movementLocked)
+        {
+            return;
         }
+
+        float horizontalDirection = Input.GetAxisRaw("Horizontal");
+        float verticalDirection = Input.GetAxisRaw("Vertical");
+
+
+        goliathRigid.AddForce(new Vector2(1, 0) * horizontalDirection * currentHorAcceleration);
+        goliathRigid.AddForce(new Vector2(0, 1) * verticalDirection * currentVertAcceleration);
+
+        Vector2 finalVelocity = goliathRigid.velocity;
+        if (finalVelocity.x > (maxSpeed))
+        {
+            finalVelocity.x = (maxSpeed);
+        } else if (finalVelocity.x < -(maxSpeed))
+        {
+            finalVelocity.x = -(maxSpeed);
+        }
+
+        if (finalVelocity.y > (maxSpeed))
+        {
+            finalVelocity.y = (maxSpeed);
+        }
+        else if (finalVelocity.y < -(maxSpeed))
+        {
+            finalVelocity.y = -(maxSpeed);
+        }
+
+        goliathRigid.velocity = finalVelocity;
+    }
 
         void StartBasicAttack() //activate arm, disable ability to perform further attacks
         {
@@ -383,12 +397,15 @@ public class GoliathController : MonoBehaviour
     //private bool midBlink = false;
     //private Color originalColor = Color.white;
 
+    private void FixedUpdate()  //set rotation here to avoid updating rotation faster than physics engine allows
+    {
+        SetGoliathRotation();
+    }
     // Update is called once per frame
     void Update()
     {
             CheckAbilityUsage();
             SetGoliathSpeed();
-            SetGoliathRotation();
             MoveGoliath();
             goliathCamera.updateCamera();   //now that we've moved, set new camera position
 
@@ -485,7 +502,8 @@ public class GoliathController : MonoBehaviour
                     goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
                     goliathTongueScript.Damage = 40;
                     goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
-                    break;
+                ramHitboxScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
+                break;
                 case 3:
                     neededExp = level4Exp;
                     goliathTransform.localScale = new Vector3(3f, 3f, 3f);
@@ -495,7 +513,9 @@ public class GoliathController : MonoBehaviour
                     goliathTongueScript.Damage = 60;
                     goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
                     goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
-                    break;
+                ramHitboxScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
+                ramHitboxScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
+                break;
                 case 4:
                     neededExp = level5Exp;
                     goliathTransform.localScale = new Vector3(4f, 4f, 4f);
@@ -505,7 +525,9 @@ public class GoliathController : MonoBehaviour
                     goliathTongueScript.Damage = 80;
                     goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
                     goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
-                    break;
+                ramHitboxScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
+                ramHitboxScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
+                break;
                 case 5:
                     neededExp = 1;
                     currentExp = 0;
@@ -514,7 +536,8 @@ public class GoliathController : MonoBehaviour
                 goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
                     goliathTongueScript.Damage = 100;
                     goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
-                    break;
+                ramHitboxScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
+                break;
             }
             SetCameraZoom();
         GoliathLevelup.Invoke(level);
@@ -574,9 +597,11 @@ public class GoliathController : MonoBehaviour
 
         public void SetSpeedExternally(float xSpeed, float ySpeed)    //use when something other than the goliath is setting the goliath's speed
         {
-            currentHorSpeed = xSpeed;
-            currentVertSpeed = ySpeed;
-        }
+        Debug.Log("setting speed with " + xSpeed + ", " +  ySpeed);
+        goliathRigid.velocity = new Vector2(xSpeed, ySpeed);
+        goliathRigid.AddForce(new Vector2(1, 0)  * xSpeed);
+        goliathRigid.AddForce(new Vector2(0, 1) * ySpeed);
+    }
 
         public int GetExp()
         {
@@ -682,11 +707,9 @@ public class GoliathController : MonoBehaviour
             activeAbility = null;
         }
     }
-
-    private float reboundMultiplier = 0.25f;    //how much of our speed should be reversed when ramming into something
     IEnumerator HandleCollision(Collision2D col)
     {
-        //yield return 0; //wait 1 frame, then check if gameObject still exists. If it doesn't, then it was destroyed on impact and we shouldn't care
+        yield return 0; //wait 1 frame, then check if gameObject still exists. If it doesn't, then it was destroyed on impact and we shouldn't care
         try
         {
             if (col.gameObject == null)
@@ -701,24 +724,6 @@ public class GoliathController : MonoBehaviour
         if (col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize1") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize2") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize3") || col.gameObject.layer == LayerMask.NameToLayer("DestructibleSize4") || col.gameObject.layer == LayerMask.NameToLayer("Solid") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel1") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel2") || col.gameObject.layer == LayerMask.NameToLayer("BarrierLevel3") || col.gameObject.layer == LayerMask.NameToLayer("Solid"))
         {
             Debug.Log("handling collision with something solid");
-            ContactPoint2D contact = col.GetContact(0);
-            if (currentHorSpeed * contact.normal.x < 0)
-            {
-                currentHorSpeed = contact.normal.x * oppositeReboundForce - (currentHorSpeed * reboundMultiplier);
-            }
-            else
-            {
-                currentHorSpeed += contact.normal.x * reboundForce;
-            }
-
-            if (currentVertSpeed * contact.normal.y < 0)
-            {
-                currentVertSpeed = contact.normal.y * oppositeReboundForce - (currentVertSpeed * reboundMultiplier);
-            }
-            else
-            {
-                currentVertSpeed += contact.normal.y * reboundForce;
-            }
             StopDashAbility();
         }
     }
