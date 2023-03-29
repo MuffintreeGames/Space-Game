@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class PoisonSprayAbility : AbilityTemplate  //fire several pellets which hover in place
 {
-    public float projectileSpeed = 15f;
+    public float baseProjectileSpeed = 15f;
     public float projectileDuration = 3f;
     public int baseProjectileDamage = 10;    //base damage of attack
     public int damagePerLevel = 5;   //extra damage per goliath level
     public GameObject GoliathShot;  //game object to be used as projectile
 
     public float projectileCount = 11f;  //number of shots to fire
-    public float deceleration = 10f;    //how quickly the projectiles should stop
-    public float decelVariance = 2f;    //how much deceleration could vary
+    public float baseDeceleration = 10f;    //how quickly the projectiles should stop
+    public float baseDecelVariance = 2f;    //how much deceleration could vary
     public float spread = 10f;  //how many degrees the projectiles will be spread across
+
+    private float projectileSpeed;
+    private float deceleration;
+    private float decelVariance;
     
 
     // Start is called before the first frame update
@@ -28,12 +32,8 @@ public class PoisonSprayAbility : AbilityTemplate  //fire several pellets which 
         base.ManageCooldown();
     }
 
-    public override void UseAbility()
+    public override void UseNormalAbility()
     {
-        if (!PrepareToUseAbility())
-        {
-            return;
-        }
 
         for (int n = 0; n < projectileCount; n++)
         {
@@ -48,22 +48,6 @@ public class PoisonSprayAbility : AbilityTemplate  //fire several pellets which 
     {
         AttackObject attackScript = GoliathShot.GetComponent<AttackObject>();
         attackScript.Damage = baseProjectileDamage + (goliathLevel * damagePerLevel);
-        switch (goliathLevel)
-        {
-            case 2:
-                attackScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
-                break;
-            case 3:
-                attackScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
-                attackScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
-                break;
-            case 4:
-                attackScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
-                attackScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
-                break;
-            case 5:
-                attackScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
-                break;
-        }
+        attackScript.DamagedLayers = parentGoliath.damagableLayers;
     }
 }

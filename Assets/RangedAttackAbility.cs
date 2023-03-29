@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class RangedAttackAbility : AbilityTemplate  //fire a projectile
 {
-    public float projectileSpeed = 20f;
+    public float baseProjectileSpeed = 20f;
     public float projectileDuration = 3f;
     public int baseProjectileDamage = 10;    //base damage of attack
     public int damagePerLevel = 5;   //extra damage per goliath level
     public GameObject GoliathShot;  //game object to be used as projectile
+
+    private float projectileSpeed;
 
     // Start is called before the first frame update
     void Start()
@@ -22,13 +24,8 @@ public class RangedAttackAbility : AbilityTemplate  //fire a projectile
         base.ManageCooldown();
     }
 
-    public override void UseAbility()
+    public override void UseNormalAbility()
     {
-        if (!PrepareToUseAbility())
-        {
-            return;
-        }
-
         GameObject firedShot = Instantiate(GoliathShot, parentGoliath.transform.position, Quaternion.identity);
         Debug.Log("checking shot damage: " + firedShot.GetComponent<AttackObject>().Damage);
         firedShot.GetComponent<Projectile>().SetProjectileParameters(projectileSpeed, parentGoliath.transform.eulerAngles.z, projectileDuration);
@@ -38,21 +35,24 @@ public class RangedAttackAbility : AbilityTemplate  //fire a projectile
     {
         AttackObject attackScript = GoliathShot.GetComponent<AttackObject>();
         attackScript.Damage = baseProjectileDamage + (goliathLevel * damagePerLevel);
+        attackScript.DamagedLayers = parentGoliath.damagableLayers;
+        projectileSpeed = baseProjectileSpeed + (1f * goliathLevel);
         switch (goliathLevel)
         {
+            case 1:
+                GoliathShot.transform.localScale = new Vector3(1f, 1f, 1f);
+                break;
             case 2:
-                attackScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
+                GoliathShot.transform.localScale = new Vector3(2f, 2f, 2f);
                 break;
             case 3:
-                attackScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
-                attackScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
+                GoliathShot.transform.localScale = new Vector3(3f, 3f, 3f);
                 break;
             case 4:
-                attackScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
-                attackScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
+                GoliathShot.transform.localScale = new Vector3(4f, 4f, 4f);
                 break;
             case 5:
-                attackScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
+                GoliathShot.transform.localScale = new Vector3(5f, 5f, 5f);
                 break;
         }
     }

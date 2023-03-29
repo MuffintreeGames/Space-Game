@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +19,8 @@ public class HUDManager : MonoBehaviour
     private Text abilityTimer3;
     private Image abilityIcon4;
     private Text abilityTimer4;
+    private Image newIcon;
+    private GameObject abilitySelectionDisplay;
 
 
     private float timeSinceExpChange = 0f;  //how much time has passed since player exp has changed
@@ -98,6 +101,18 @@ public class HUDManager : MonoBehaviour
         if (!abilityTimer4)
         {
             Debug.LogError("Couldn't find ability timer 4!");
+        }
+
+        newIcon = GameObject.Find("NewIcon").GetComponent<Image>();
+        if (!newIcon)
+        {
+            Debug.LogError("Couldn't find new icon!");
+        }
+
+        abilitySelectionDisplay = GameObject.Find("AbilitySelection");
+        if (!abilitySelectionDisplay)
+        {
+            Debug.LogError("Couldn't find ability display!");
         }
     }
 
@@ -271,6 +286,22 @@ public class HUDManager : MonoBehaviour
         {
             abilityIcon4.enabled = false;
             abilityTimer4.enabled = false;
+        }
+
+        if (playerGoliath.InAbilitySelection()) {
+            AbilityTemplate newAbility = playerGoliath.GetSelectionOption();
+            if (newAbility == null)
+            {
+                Debug.LogError("goliath is in selection mode, but the ability is null!");
+            } else
+            {
+                newIcon.sprite = newAbility.icon;
+            }
+
+            abilitySelectionDisplay.SetActive(true);
+        } else
+        {
+            abilitySelectionDisplay.SetActive(false);
         }
     }
 }

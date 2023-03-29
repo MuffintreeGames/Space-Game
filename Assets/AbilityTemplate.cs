@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 public abstract class AbilityTemplate : MonoBehaviour
 {
 
@@ -17,9 +18,10 @@ public abstract class AbilityTemplate : MonoBehaviour
 
     protected AbilityCategory abilityType;    //should be chosen by the class that inherits this
 
+    public int numOfCopies = 0;
+
     protected void InitializeAbility(AbilityCategory abilityType)
     {
-        Debug.Log(this);
         parentGoliath = GetComponent<GoliathController>();
         UpgradeSelf(1);
         enabled = false;
@@ -39,6 +41,7 @@ public abstract class AbilityTemplate : MonoBehaviour
             if (parentGoliath)
             {
                 GoliathController.GoliathLevelup.AddListener(UpgradeSelf);
+                GoliathController.GoliathFinishAttack.AddListener(ContinueCombo);
                 listenersAttached = true;
             }
         }
@@ -80,12 +83,51 @@ public abstract class AbilityTemplate : MonoBehaviour
         parentGoliath.EndAbility(this);
     }
 
-    public virtual void UseAbility()
+    public void UseAbility()
+    {
+        if (!PrepareToUseAbility())
+        {
+            return;
+        }
+
+        if (numOfCopies > 1)
+        {
+            UseEvolvedAbility();
+        } else
+        {
+            UseNormalAbility();
+        }
+    }
+
+    public virtual void UseNormalAbility()
     {
         
     }
 
+    public void UseEvolvedAbility() //by default, halve the cooldown
+    {
+        UseNormalAbility();
+        tickingCooldown = tickingCooldown / 2;
+    }
+
+    public void DisableAbility()
+    {
+        CancelAbility();
+        tickingCooldown = 0f;
+        enabled = false;
+    }
+
+    public void IsEvolved() //abilities are evolved if you have more than one copy of them
+    {
+
+    }
+
     public virtual void CancelAbility()
+    {
+
+    }
+
+    protected virtual void ContinueCombo()
     {
 
     }

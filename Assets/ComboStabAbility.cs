@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ComboAttackAbility : AbilityTemplate //do 3 basic attacks in rapid succession
+public class ComboStabAbility : AbilityTemplate //do 3 stab attacks in rapid succession, each one getting longer
 {
-    public float swingTime = 0.1f;
+    //public float stabTime = 0.1f;
+    public float minStabLength = 2f;
+    public float maxStabLength = 4f;
 
     private bool currentlyAttacking = false;
+    private int totalAttacks = 3;
     private int attacksLeft = 0;
 
     // Start is called before the first frame update
@@ -34,14 +37,10 @@ public class ComboAttackAbility : AbilityTemplate //do 3 basic attacks in rapid 
             }
             else
             {
-                if (attacksLeft % 2 == 0)
-                {
-                    parentGoliath.StartBasicAttack(swingTime, true);
-                } else
-                {
-                    parentGoliath.StartBasicAttack(swingTime, false);
-                }
                 attacksLeft -= 1;
+                float attackLength = minStabLength + ((maxStabLength - minStabLength) / totalAttacks * (totalAttacks - attacksLeft));
+                Debug.Log(attackLength);
+                parentGoliath.StartStabAttack(attackLength);
             }
         }
     }
@@ -50,8 +49,8 @@ public class ComboAttackAbility : AbilityTemplate //do 3 basic attacks in rapid 
     {
         parentGoliath.StartComboAttack();
         currentlyAttacking = true;
-        parentGoliath.StartBasicAttack(swingTime, false);
-        attacksLeft = 2;
+        parentGoliath.StartStabAttack(minStabLength);
+        attacksLeft = totalAttacks - 1;
     }
 
     public override void CancelAbility()

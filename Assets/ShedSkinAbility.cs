@@ -31,13 +31,8 @@ public class ShedSkinAbility : AbilityTemplate  //dash a short distance, maintai
         }
     }
 
-    public override void UseAbility()
+    public override void UseNormalAbility()
     {
-        if (!PrepareToUseAbility())
-        {
-            return;
-        }
-
         parentGoliath.ApplySpeedMultiplier(speedMultiplier);
         parentGoliath.ApplyDamageMultiplier(damageMultiplier);
         currentDuration = 0f;

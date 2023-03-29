@@ -31,7 +31,7 @@ public class Projectile : MonoBehaviour
     {
         if (currentTime >= LifeTime)
         {
-            Destroy(this.gameObject);
+            ProjectileExpire();
         }
 
         if (direction == directionChoices.right)
@@ -49,6 +49,11 @@ public class Projectile : MonoBehaviour
         {
             Speed = 0f;
         }
+    }
+
+    protected virtual void ProjectileExpire()
+    {
+        Destroy(this.gameObject);
     }
 
     public void SetProjectileParameters(float targetSpeed, float targetAngle, float targetTime, float acceleration = 0f, bool canStop = false)

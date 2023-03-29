@@ -35,13 +35,8 @@ public class DashAbility : AbilityTemplate  //dash a short distance, maintaining
         }
     }
 
-    public override void UseAbility()
+    public override void UseNormalAbility()
     {
-        if (!PrepareToUseAbility())
-        {
-            return;
-        }
-
         parentGoliath.LockMovement();   //need to prevent goliath from doing manual movement
         dashDirectionX = Input.GetAxisRaw("Horizontal");
         dashDirectionY = Input.GetAxisRaw("Vertical");

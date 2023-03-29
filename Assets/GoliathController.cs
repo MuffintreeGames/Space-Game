@@ -10,6 +10,16 @@ public class GoliathLevelupEvent : UnityEvent<int>
 
 }
 
+public class GoliathFinishAttackEvent : UnityEvent
+{
+
+}
+
+public class GoliathEquipAbilityEvent : UnityEvent<AbilityTemplate>
+{
+
+}
+
 public class GoliathController : MonoBehaviour
 {
     private GameObject goliath; //the goliath that this script is attached to
@@ -37,18 +47,22 @@ public class GoliathController : MonoBehaviour
     private float armSwingTime = 0.2f; //total time that arm should take to complete swing
     private float basicAttackCooldown = 0.5f; //required time that must elapse after a swing is finished before another swing can start
     private float currentSwingTime = 0f; //time elapsed in swing so far
+    private float currentFullSwingTime = 0f;    //time that basic swing should take
     private float currentBasicAttackCooldown = 0f; //time elapsed after swing so far
     private bool canMeleeAttack = true; //determines if melee attack is legal
     private bool performingBasicAttack = false; //determines if basic attack is underway
+    private bool performingComboAttack = false; //if true, keep doing basic attacks until finished
+    private bool mirroredAttack = false;    //if true, attack in opposite direction
     private bool inBasicAttackCooldown = false; //determines if basic attack cooldown is ticking
 
     public Color chargedColor = Color.yellow;
     private float stabChargeTime = 0.7f;    //time to hold down basic attack button to prepare stab
-    private float tongueMaxLength = 2f; //max tongue extension distance
+    private float tongueMaxLength = 2f; //max default tongue extension distance
     private float tongueExtendTime = 0.1f;  //time to reach max extension on tongue
     private float tongueHoldTime = 0.1f;  //time to hold out tongue after extending
     private bool performingStabAttack = false;  //determines if stab attack is underway
     private float currentStabTime = 0f; //time elapsed in stab so far
+    private float currentMaxLength = 2f;
 
     private int currentExp = 0; //current exp of the goliath
     private int neededExp = 100;    //needed exp to level up; initial value is amount needed to reach level 2
@@ -71,11 +85,18 @@ public class GoliathController : MonoBehaviour
     public AbilityTemplate Action3; //ability tied to the action3 button
     public AbilityTemplate Action4; //ability tied to the action4 button
 
+    private bool abilitySelectionMode = false;   //if true, player is choosing which ability to replace if any
+    private AbilityTemplate abilitySelectionOption = null;  //ability that is being considered during ability selection
+
     private AbilityTemplate activeAbility = null;  //if a dash-type ability is active, put here. Should be cancelled on collision with something solid
 
     public static GoliathLevelupEvent GoliathLevelup;
+    public static GoliathFinishAttackEvent GoliathFinishAttack; //used for telling attack abilities when an attack is done
+    public static GoliathEquipAbilityEvent GoliathEquipAbility; //can be used for some visual/audio effect after an ability has been equipped
 
     private Rigidbody2D goliathRigid;
+
+    public LayerMask damagableLayers;
 
     // Start is called before the first frame update
 
@@ -97,11 +118,16 @@ public class GoliathController : MonoBehaviour
         GrantAbility.GoliathGainAbility.AddListener(GainAbility);
 
         GoliathLevelup = new GoliathLevelupEvent();
+        GoliathFinishAttack = new GoliathFinishAttackEvent();
+        GoliathEquipAbility = new GoliathEquipAbilityEvent();
 
         originalMaxSpeed = maxSpeed;
         originalAcceleration = acceleration;
         originalReversingAcceleration = reversingAcceleration;
         originalDeceleration = deceleration;
+
+        damagableLayers = (1 << LayerMask.NameToLayer("DestructibleSize1"));
+        damagableLayers |= (1 << LayerMask.NameToLayer("GoliathDestructible"));
     }
 
         void SetGoliathRotation()
@@ -273,9 +299,9 @@ public class GoliathController : MonoBehaviour
         goliathRigid.velocity = finalVelocity;
     }
 
-        void StartBasicAttack() //activate arm, disable ability to perform further attacks
+        public void StartBasicAttack(float timeToFinish, bool mirrored = false) //activate arm, disable ability to perform further attacks
         {
-            if (!canMeleeAttack)
+            if (!canMeleeAttack && !performingComboAttack)  //skip normal cooldown if in combo attack
             {
                 Debug.Log("can't attack right now");
                 return;
@@ -283,18 +309,39 @@ public class GoliathController : MonoBehaviour
 
             goliathArm.SetActive(true);
             currentSwingTime = 0f;
+        currentFullSwingTime = timeToFinish;
             canMeleeAttack = false;
+        mirroredAttack = mirrored;
             performingBasicAttack = true;
         }
 
-        void ContinueBasicAttack()  //swing arm along attack arc
+    public void StartComboAttack()
+    {
+        performingComboAttack = true;
+    }
+
+    public void StopComboAttack()
+    {
+        performingComboAttack = false;
+
+    }
+
+    void ContinueBasicAttack()  //swing arm along attack arc
         {
-            if (currentSwingTime >= armSwingTime)
+            if (currentSwingTime >= currentFullSwingTime)
             {
                 EndBasicAttack();
                 return;
             }
-            float targetArmAngle = -90f + (180f * (currentSwingTime / armSwingTime));   //arm should start at -90f and end at 90f
+        float targetArmAngle;
+            
+        if (mirroredAttack)
+        {
+            targetArmAngle = 90f - (180f * (currentSwingTime / currentFullSwingTime));   //arm should start at 90f and end at -90f
+        } else
+        {
+            targetArmAngle = -90f + (180f * (currentSwingTime / currentFullSwingTime));   //arm should start at -90f and end at 90f
+        }
             goliathArm.transform.localEulerAngles = new Vector3(goliathArm.transform.eulerAngles.x, goliathArm.transform.eulerAngles.y, targetArmAngle);
             //Debug.Log("current arm angle: " + goliathArm.transform.eulerAngles);
             currentSwingTime += Time.deltaTime;
@@ -308,11 +355,12 @@ public class GoliathController : MonoBehaviour
             currentBasicAttackCooldown = basicAttackCooldown;
             inBasicAttackCooldown = true;
             performingBasicAttack = false;
+        GoliathFinishAttack.Invoke();
         }
 
-    void StartStabAttack()
+    public void StartStabAttack(float maxLength)
     {
-        if (!canMeleeAttack)
+        if (!canMeleeAttack && !performingComboAttack)
         {
             Debug.Log("can't attack right now");
             return;
@@ -322,6 +370,7 @@ public class GoliathController : MonoBehaviour
         currentStabTime = 0f;
         canMeleeAttack = false;
         performingStabAttack = true;
+        currentMaxLength = maxLength;
     }
 
     void ContinueStabAttack()  //extend tongue until reach max length, then hold
@@ -339,7 +388,7 @@ public class GoliathController : MonoBehaviour
             }
         } else
         {
-            float tongueExtension = tongueMaxLength * (currentStabTime/tongueExtendTime);
+            float tongueExtension = currentMaxLength * (currentStabTime/tongueExtendTime);
             goliathTongue.transform.localScale = new Vector3(goliathTongue.transform.localScale.x, tongueExtension, goliathTongue.transform.localScale.z);
             //Debug.Log("current arm angle: " + goliathArm.transform.eulerAngles);
         }
@@ -354,6 +403,7 @@ public class GoliathController : MonoBehaviour
         currentBasicAttackCooldown = basicAttackCooldown;
         inBasicAttackCooldown = true;
         performingStabAttack = false;
+        GoliathFinishAttack.Invoke();
     }
 
     void CheckAbilityUsage()
@@ -391,6 +441,43 @@ public class GoliathController : MonoBehaviour
             }
         }
 
+    void CheckAbilityReplacement()  //if player presses an ability key, assign the new ability to that
+    {
+        if (Input.GetButtonDown("Action1"))
+        {
+            Action1.numOfCopies -= 1;
+            Action1.DisableAbility();
+            Action1 = abilitySelectionOption;
+            abilitySelectionOption.numOfCopies += 1;
+            abilitySelectionMode = false;
+        } else if (Input.GetButtonDown("Action2"))
+        {
+            Action2.numOfCopies -= 1;
+            Action2.DisableAbility();
+            Action2 = abilitySelectionOption;
+            abilitySelectionOption.numOfCopies += 1;
+            abilitySelectionMode = false;
+        } else if (Input.GetButtonDown("Action3"))
+        {
+            Action3.numOfCopies -= 1;
+            Action3.DisableAbility();
+            Action3 = abilitySelectionOption;
+            abilitySelectionOption.numOfCopies += 1;
+            abilitySelectionMode = false;
+        } else if (Input.GetButtonDown("Action4"))
+        {
+            Action4.numOfCopies -= 1;
+            Action4.DisableAbility();
+            Action4 = abilitySelectionOption;
+            abilitySelectionOption.numOfCopies += 1;
+            abilitySelectionMode = false;
+        } else if (Input.GetButtonDown("Cancel"))
+        {
+            abilitySelectionOption = null;
+            abilitySelectionMode = false;
+        }
+    }
+
     private float basicAttackHeldTimer = 0f;
     private bool holdingBasicAttack = false;
 
@@ -404,7 +491,14 @@ public class GoliathController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!abilitySelectionMode)
+        {
             CheckAbilityUsage();
+        } else  //player choosing which ability to replace, so ability keys are mapped to that instead
+        {
+            CheckAbilityReplacement();
+        }
+            
             SetGoliathSpeed();
             MoveGoliath();
             goliathCamera.updateCamera();   //now that we've moved, set new camera position
@@ -414,9 +508,9 @@ public class GoliathController : MonoBehaviour
             basicAttackHeldTimer += Time.deltaTime;
         }
 
-        if (Input.GetButtonDown("Basic Attack"))
+        if (Input.GetButtonDown("Basic Attack") && !performingComboAttack)
         {
-            StartBasicAttack();
+            StartBasicAttack(armSwingTime);
             holdingBasicAttack = true;
             if (basicAttackHeldTimer >= stabChargeTime)
             {
@@ -425,16 +519,17 @@ public class GoliathController : MonoBehaviour
             }
         }
 
-            if (Input.GetButtonUp("Basic Attack"))
+            if (Input.GetButtonUp("Basic Attack") && !performingComboAttack)
         {
             if (basicAttackHeldTimer >= stabChargeTime)
             {
-                StartStabAttack();
+                StartStabAttack(tongueMaxLength);
             }
 
             holdingBasicAttack = false;
             basicAttackHeldTimer = 0f;
         }
+
             if (performingBasicAttack)
             {
                 ContinueBasicAttack();
@@ -444,6 +539,7 @@ public class GoliathController : MonoBehaviour
         {
             ContinueStabAttack();
         }
+
             if (inBasicAttackCooldown)
             {
                 currentBasicAttackCooldown -= Time.deltaTime;
@@ -451,7 +547,6 @@ public class GoliathController : MonoBehaviour
                 {
                     inBasicAttackCooldown = false;
                     canMeleeAttack = true;
-                    Debug.Log("cooldown finished");
                 }
             }
 
@@ -499,46 +594,37 @@ public class GoliathController : MonoBehaviour
                     neededExp = level3Exp;
                     goliathTransform.localScale = new Vector3(2f, 2f, 2f);
                     goliathArmScript.Damage = 20;
-                    goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
+                    damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
                     goliathTongueScript.Damage = 40;
-                    goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
-                ramHitboxScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
                 break;
                 case 3:
                     neededExp = level4Exp;
                     goliathTransform.localScale = new Vector3(3f, 3f, 3f);
                     goliathArmScript.Damage = 30;
-                goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
-                goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
+                damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
+                damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
                     goliathTongueScript.Damage = 60;
-                    goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
-                    goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
-                ramHitboxScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
-                ramHitboxScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
                 break;
                 case 4:
                     neededExp = level5Exp;
                     goliathTransform.localScale = new Vector3(4f, 4f, 4f);
                     goliathArmScript.Damage = 40;
-                goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
-                goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
+                damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
+                damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
                     goliathTongueScript.Damage = 80;
-                    goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
-                    goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
-                ramHitboxScript.DamagedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
-                ramHitboxScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
                 break;
                 case 5:
                     neededExp = 1;
                     currentExp = 0;
                     goliathTransform.localScale = new Vector3(5f, 5f, 5f);
                     goliathArmScript.Damage = 50;
-                goliathArmScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
+                damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
                     goliathTongueScript.Damage = 100;
-                    goliathTongueScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
-                ramHitboxScript.DamagedLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
                 break;
             }
+        goliathArmScript.DamagedLayers = damagableLayers;
+        goliathTongueScript.DamagedLayers = damagableLayers;
+        ramHitboxScript.DamagedLayers = damagableLayers;
             SetCameraZoom();
         GoliathLevelup.Invoke(level);
         }
@@ -548,18 +634,34 @@ public class GoliathController : MonoBehaviour
         if (Action1 == null)
         {
             Action1 = newAbility;
+            newAbility.enabled = true;
+            newAbility.numOfCopies += 1;
+            GoliathEquipAbility.Invoke(newAbility);
         } else if (Action2 == null)
         {
             Action2 = newAbility;
+            newAbility.enabled = true;
+            newAbility.numOfCopies += 1;
+            GoliathEquipAbility.Invoke(newAbility);
         } else if (Action3 == null)
         {
             Action3 = newAbility;
+            newAbility.enabled = true;
+            newAbility.numOfCopies += 1;
+            GoliathEquipAbility.Invoke(newAbility);
         } else if (Action4 == null)
         {
             Action4 = newAbility;
+            newAbility.enabled = true;
+            newAbility.numOfCopies += 1;
+            GoliathEquipAbility.Invoke(newAbility);
+        } else
+        {
+            abilitySelectionMode = true;
+            abilitySelectionOption = newAbility;
         }
-        newAbility.enabled = true;
     }
+
 
         public void SetCameraZoom()
         {
@@ -628,6 +730,16 @@ public class GoliathController : MonoBehaviour
         return goliathHealth.MaxHealth;
     }
 
+    public bool InAbilitySelection()
+    {
+        return abilitySelectionMode;
+    }
+
+    public AbilityTemplate GetSelectionOption()
+    {
+        return abilitySelectionOption;
+    }
+
     public void ApplySpeedMultiplier(float speedMultiplier)
     {
         maxSpeed = maxSpeed * speedMultiplier;
@@ -679,7 +791,7 @@ public class GoliathController : MonoBehaviour
             return false;
         }
         AbilityTemplate.AbilityCategory abilityType = ability.GetAbilityType();
-        if (abilityType == AbilityTemplate.AbilityCategory.Attack || abilityType == AbilityTemplate.AbilityCategory.Dash)
+        if (abilityType == AbilityTemplate.AbilityCategory.Dash || abilityType == AbilityTemplate.AbilityCategory.Attack)
         {
             activeAbility = ability;
         }
@@ -709,7 +821,7 @@ public class GoliathController : MonoBehaviour
     }
     IEnumerator HandleCollision(Collision2D col)
     {
-        yield return 0; //wait 1 frame, then check if gameObject still exists. If it doesn't, then it was destroyed on impact and we shouldn't care
+        //yield return 0; //wait 1 frame, then check if gameObject still exists. If it doesn't, then it was destroyed on impact and we shouldn't care
         try
         {
             if (col.gameObject == null)

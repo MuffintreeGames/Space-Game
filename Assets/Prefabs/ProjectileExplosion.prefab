@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5333707974461333185}
   - component: {fileID: 6734802541037809805}
   m_Layer: 22
-  m_Name: Explosion
+  m_Name: ProjectileExplosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 7045386937356173623}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7, y: 7, z: 1}
+  m_LocalScale: {x: 3.5, y: 3.5, z: 3.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -117,17 +117,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 335b45a523558b544b9419aa5b171c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 50
+  Damage: 30
   TargetLayers:
     serializedVersion: 2
     m_Bits: 2621376
   DamagedLayers:
     serializedVersion: 2
-    m_Bits: 2162112
+    m_Bits: 2097216
   DestroyOnHit: 0
   RepeatedDamage: 0
-  InvincibilityDuration: 0.8
-  BelongsToGoliath: 0
+  InvincibilityDuration: 0
+  BelongsToGoliath: 1
 --- !u!50 &5333707974461333185
 Rigidbody2D:
   serializedVersion: 4

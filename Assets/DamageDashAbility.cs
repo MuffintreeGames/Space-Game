@@ -31,9 +31,9 @@ public class DamageDashAbility : DashAbility
         }
     }
 
-    public override void UseAbility()
+    public override void UseNormalAbility()
     {
-        base.UseAbility();
+        base.UseNormalAbility();
         if (currentlyDashing)   //used to check for success in activating ability
         {
             parentGoliath.ActivateRamHitbox(damage);
