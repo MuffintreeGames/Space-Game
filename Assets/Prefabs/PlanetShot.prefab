@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5333707974461333185}
   - component: {fileID: 3846245684141882531}
   - component: {fileID: 9023866774906467180}
+  - component: {fileID: 6689333086043523588}
   m_Layer: 23
   m_Name: PlanetShot
   m_TagString: Untagged
@@ -74,6 +75,7 @@ MonoBehaviour:
     m_Bits: 1024
   DestroyOnHit: 1
   RepeatedDamage: 0
+  InvincibilityDuration: 0
   BelongsToGoliath: 0
 --- !u!50 &5333707974461333185
 Rigidbody2D:
@@ -174,3 +176,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &6689333086043523588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7045386937356173623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a337aa95415324194de6c024ed838d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 1
+  DamageTo1: 0
+  DamageFlashToggle: 0
+  DamageFlash: {r: 1, g: 0, b: 0, a: 1}
+  InvincibilityOpacity: 0.5

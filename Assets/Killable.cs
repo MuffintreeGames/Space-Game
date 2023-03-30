@@ -25,6 +25,9 @@ public class Killable : MonoBehaviour
     private SpriteRenderer parentSprite;
 
     private float damageMultiplier = 1f;
+
+    public int blockableHits = 0;   //how many hits this unit can block before taking damage
+
     // Start is called before the first frame update
     void Start()
     {
@@ -81,10 +84,26 @@ public class Killable : MonoBehaviour
         return invincible;
     }
 
+    public void AddBlock(int numHits)
+    {
+        blockableHits += numHits;
+    }
+
+    public int CheckBlock()
+    {
+        return blockableHits;
+    }
+
     public void TakeDamage(float damage, bool fromGoliath, float invincibilityDuration)
     {
         if (invincible)
         {
+            return;
+        }
+
+        if (blockableHits > 0)
+        {
+            blockableHits -= 1;
             return;
         }
 

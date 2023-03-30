@@ -5,7 +5,7 @@ using UnityEngine.Events;
 public abstract class AbilityTemplate : MonoBehaviour
 {
 
-    public enum AbilityCategory { Attack, Dash, Projectile, Buff};
+    public enum AbilityCategory { Attack, Dash, Projectile, Buff, Defense};
 
     public float cooldown;  //time between ability uses
     public Sprite icon;  //symbol for the ability

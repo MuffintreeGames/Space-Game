@@ -592,14 +592,14 @@ public class GoliathController : MonoBehaviour
             {
                 case 2:
                     neededExp = level3Exp;
-                    goliathTransform.localScale = new Vector3(2f, 2f, 2f);
+                    goliathTransform.localScale = new Vector3(2f, 2f, 1f);
                     goliathArmScript.Damage = 20;
                     damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
                     goliathTongueScript.Damage = 40;
                 break;
                 case 3:
                     neededExp = level4Exp;
-                    goliathTransform.localScale = new Vector3(3f, 3f, 3f);
+                    goliathTransform.localScale = new Vector3(3f, 3f, 1f);
                     goliathArmScript.Damage = 30;
                 damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
                 damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
@@ -607,7 +607,7 @@ public class GoliathController : MonoBehaviour
                 break;
                 case 4:
                     neededExp = level5Exp;
-                    goliathTransform.localScale = new Vector3(4f, 4f, 4f);
+                    goliathTransform.localScale = new Vector3(4f, 4f, 1f);
                     goliathArmScript.Damage = 40;
                 damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
                 damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
@@ -616,7 +616,7 @@ public class GoliathController : MonoBehaviour
                 case 5:
                     neededExp = 1;
                     currentExp = 0;
-                    goliathTransform.localScale = new Vector3(5f, 5f, 5f);
+                    goliathTransform.localScale = new Vector3(5f, 5f, 1f);
                     goliathArmScript.Damage = 50;
                 damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
                     goliathTongueScript.Damage = 100;
