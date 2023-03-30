@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShedSkinAbility : AbilityTemplate  //dash a short distance, maintaining some speed afterwards
+public class ShedSkinAbility : BuffAbility  //dash a short distance, maintaining some speed afterwards
 {
     public float speedMultiplier = 2f;   //multiplier applied to goliath max speed, acceleration, and deceleration
-    public float effectDuration = 4f;   //length of dash in seconds
     public float damageMultiplier = 1.2f;   //multiplier applied to damage taken by goliath
 
     private float currentDuration = 0f;
@@ -34,7 +33,7 @@ public class ShedSkinAbility : AbilityTemplate  //dash a short distance, maintai
     public override void UseNormalAbility()
     {
         parentGoliath.ApplySpeedMultiplier(speedMultiplier);
-        parentGoliath.ApplyDamageMultiplier(damageMultiplier);
+        parentGoliath.ApplyDamageTakenMultiplier(damageMultiplier);
         currentDuration = 0f;
         currentlyDashing = true;
     }
@@ -44,6 +43,6 @@ public class ShedSkinAbility : AbilityTemplate  //dash a short distance, maintai
         PrepareToEndAbility();
         currentlyDashing = false;
         parentGoliath.ResetSpeed();
-        parentGoliath.RemoveDamageMultiplier(damageMultiplier);
+        parentGoliath.RemoveDamageTakenMultiplier(damageMultiplier);
     }
 }

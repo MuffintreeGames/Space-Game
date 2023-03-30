@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FrontalShieldAbility : AbilityTemplate   //destroy incoming projectiles from the front; physical attacks go through
+public class FrontalShieldAbility : BuffAbility   //destroy incoming projectiles from the front; physical attacks go through
 {
-    public float shieldDuration = 1.5f;
-
     public GameObject shield;
     private float currentShieldTime = 0f;
     private bool shieldActive = false;
@@ -34,6 +32,6 @@ public class FrontalShieldAbility : AbilityTemplate   //destroy incoming project
     {
         shield.SetActive(true);
         shieldActive = true;
-        currentShieldTime = shieldDuration;
+        currentShieldTime = effectDuration;
     }
 }

@@ -12,6 +12,8 @@ public class AttackObject : MonoBehaviour
     public float InvincibilityDuration = 0f;    //length of invincibility granted
     public bool BelongsToGoliath = false;   //if true, give Goliath exp when this kills something
 
+    private float damageMultiplier = 1f;    //multiplier to apply to damage
+
     private Dictionary<GameObject, bool> hitTargets = new Dictionary<GameObject, bool>();
 
     // Start is called before the first frame update
@@ -59,7 +61,7 @@ public class AttackObject : MonoBehaviour
 
             if ((DamagedLayers & (1 << hitGameObject.layer)) != 0)
             {
-                targetKillable.TakeDamage(Damage, BelongsToGoliath, InvincibilityDuration);
+                targetKillable.TakeDamage(Damage * damageMultiplier, BelongsToGoliath, InvincibilityDuration);
             }
             if (DestroyOnHit)
             {
@@ -114,5 +116,15 @@ public class AttackObject : MonoBehaviour
     public void ClearHitTargets()   //call to empty out the hit targets list. Useful when an attack has finished to signal a new attack can happen
     {
         hitTargets.Clear();
+    }
+
+    public void ApplyDamageMultiplier(float multiplier)
+    {
+        damageMultiplier *= multiplier;
+    }
+
+    public void RemoveDamageMultiplier(float multiplier)
+    {
+        damageMultiplier /= multiplier;
     }
 }

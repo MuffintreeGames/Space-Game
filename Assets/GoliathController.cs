@@ -98,6 +98,10 @@ public class GoliathController : MonoBehaviour
 
     public LayerMask damagableLayers;
 
+    private StatusController statusController;
+
+    private bool abilitiesLocked = false;   //used when some effect prevents goliath from using abilities
+
     // Start is called before the first frame update
 
     void Start()
@@ -128,6 +132,8 @@ public class GoliathController : MonoBehaviour
 
         damagableLayers = (1 << LayerMask.NameToLayer("DestructibleSize1"));
         damagableLayers |= (1 << LayerMask.NameToLayer("GoliathDestructible"));
+
+        statusController = GameObject.Find("StatusContainer").GetComponent<StatusController>();
     }
 
         void SetGoliathRotation()
@@ -408,6 +414,11 @@ public class GoliathController : MonoBehaviour
 
     void CheckAbilityUsage()
         {
+        if (abilitiesLocked)
+        {
+            return;
+        }
+
             if (Input.GetButtonDown("Action1") && Action1 != null)
             {
                 if (Action1.IsOffCooldown())
@@ -756,14 +767,36 @@ public class GoliathController : MonoBehaviour
         deceleration = originalDeceleration;
     }
 
-    public void ApplyDamageMultiplier(float damageMultiplier)
+    public void ApplyDamageTakenMultiplier(float damageMultiplier)
     {
         goliathHealth.ApplyDamageMultiplier(damageMultiplier);
     }
 
-    public void RemoveDamageMultiplier(float damageMultiplier)
+    public void RemoveDamageTakenMultiplier(float damageMultiplier)
     {
         goliathHealth.RemoveDamageMultiplier(damageMultiplier);
+    }
+
+    public void ApplyDamageDoneMultiplier(float damageMultiplier)
+    {
+        goliathArmScript.ApplyDamageMultiplier(damageMultiplier);
+        goliathTongueScript.ApplyDamageMultiplier(damageMultiplier);
+    }
+
+    public void RemoveDamageDoneMultiplier(float damageMultiplier)
+    {
+        goliathArmScript.RemoveDamageMultiplier(damageMultiplier);
+        goliathTongueScript.RemoveDamageMultiplier(damageMultiplier);
+    }
+
+    public void LockAbilities()
+    {
+        abilitiesLocked = true;
+    }
+
+    public void UnlockAbilities()
+    {
+        abilitiesLocked = false;
     }
 
     public void ActivateRamHitbox(int damage)
@@ -794,6 +827,10 @@ public class GoliathController : MonoBehaviour
         if (abilityType == AbilityTemplate.AbilityCategory.Dash || abilityType == AbilityTemplate.AbilityCategory.Attack)
         {
             activeAbility = ability;
+        } else if (abilityType == AbilityTemplate.AbilityCategory.Buff)
+        {
+            BuffAbility buff = ability as BuffAbility;
+            statusController.AddStatus(buff.icon, buff.effectDuration);
         }
         return true;
     }
