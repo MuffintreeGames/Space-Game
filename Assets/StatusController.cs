@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
-/*struct StatusStruct
+public class ClearStatusEvent : UnityEvent<Sprite>
 {
-    public Sprite icon
-}*/
+
+}
 
 public class StatusController : MonoBehaviour
 {
+    public static ClearStatusEvent ClearStatus;
     private float[] statusTimers;
     private float[] maxTimers;
     private Transform goliathTransform;
@@ -30,7 +32,12 @@ public class StatusController : MonoBehaviour
             statusTimers[i] = 0f;
             maxTimers[i] = 0f;
         }
-        
+
+        if (ClearStatus == null)
+        {
+            ClearStatus = new ClearStatusEvent();
+        }
+        ClearStatus.AddListener(RemoveStatusIcon);
     }
 
     // Update is called once per frame
@@ -60,7 +67,7 @@ public class StatusController : MonoBehaviour
         }
     }
 
-    public void AddStatus(Sprite icon, float duration)
+    public int AddStatus(Sprite icon, float duration)
     {
         for (int i = 0; i < iconArray.Length; i++) { 
             if (!iconInUse[i]) {
@@ -70,9 +77,25 @@ public class StatusController : MonoBehaviour
                 iconSprite.enabled = true;
                 statusTimers[i] = duration;
                 maxTimers[i] = duration;
-                return;
+                return i;
             }
         }
         Debug.LogError("Too many status effects to display at once!");
+        return -1;
+    }
+
+    void RemoveStatusIcon(Sprite icon)  //used for when a status is removed through a method other than timing out
+    {
+        for (int i = 0; i < iconArray.Length; i++)
+        {
+            Sprite statusIcon = iconArray[i].GetComponent<Image>().sprite;
+            if (statusIcon == icon ) {
+                iconArray[i].GetComponent<Image>().enabled = false;
+                iconInUse[i] = false;
+                Transform iconOverlay = iconArray[i].transform.GetChild(0);
+                iconOverlay.localScale = new Vector3(iconOverlay.localScale.x, 0f, iconOverlay.localScale.z);
+                return;
+            }
+        }
     }
 }

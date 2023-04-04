@@ -9,6 +9,8 @@ public class BubbleShieldController : MonoBehaviour
 
     private SpriteRenderer shieldSprite;
 
+    private Sprite statusIcon;
+
     private float lifeTime = 0f;
 
     // Start is called before the first frame update
@@ -34,6 +36,7 @@ public class BubbleShieldController : MonoBehaviour
             if (blockLeft == 0)
             {
                 shieldSprite.enabled = false;
+                StatusController.ClearStatus.Invoke(statusIcon);
                 return;
             }
 
@@ -41,9 +44,10 @@ public class BubbleShieldController : MonoBehaviour
         }
     }
 
-    public void ActivateShield(float lifetime, int numHits)
+    public void ActivateShield(float lifetime, int numHits, Sprite icon)
     {
         this.lifeTime = lifetime;
         protectedObject.blockableHits = numHits;
+        statusIcon = icon;
     }
 }

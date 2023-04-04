@@ -20,6 +20,6 @@ public class BubbleShieldAbility : BuffAbility   //negates one hit before disapp
 
     public override void UseNormalAbility()
     {
-        shield.ActivateShield(effectDuration, 1);
+        shield.ActivateShield(effectDuration, 1, icon);
     }
 }
