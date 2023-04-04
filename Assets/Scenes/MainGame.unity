@@ -3170,11 +3170,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1452367178 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5125687541653416771, guid: 30267e1a3fdf4604485bfc3745cb521a, type: 3}
-  m_PrefabInstance: {fileID: 1923583901}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1463818546
 GameObject:
   m_ObjectHideFlags: 0
@@ -3353,7 +3348,6 @@ Transform:
   - {fileID: 462747098}
   - {fileID: 1317244354}
   - {fileID: 1776160456}
-  - {fileID: 1452367178}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4061,63 +4055,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerGoliath: {fileID: 2066654983}
---- !u!1001 &1923583901
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1497565863}
-    m_Modifications:
-    - target: {fileID: 5125687541653416771, guid: 30267e1a3fdf4604485bfc3745cb521a, type: 3}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 30267e1a3fdf4604485bfc3745cb521a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -13.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 30267e1a3fdf4604485bfc3745cb521a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -4.55
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 30267e1a3fdf4604485bfc3745cb521a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 30267e1a3fdf4604485bfc3745cb521a, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 30267e1a3fdf4604485bfc3745cb521a, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 30267e1a3fdf4604485bfc3745cb521a, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 30267e1a3fdf4604485bfc3745cb521a, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 30267e1a3fdf4604485bfc3745cb521a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 30267e1a3fdf4604485bfc3745cb521a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 30267e1a3fdf4604485bfc3745cb521a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6088609408505885020, guid: 30267e1a3fdf4604485bfc3745cb521a, type: 3}
-      propertyPath: m_Name
-      value: HostilePlanet
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 30267e1a3fdf4604485bfc3745cb521a, type: 3}
 --- !u!224 &2027755139 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1967173293648914625, guid: 32732668a6cafcb47944bb44ded1b317, type: 3}
