@@ -13,7 +13,7 @@ public class GoliathCameraController : MonoBehaviour
     public float smoothFollowVertDistance = 2f; //as above, but vertical
     public float hardFollowVertDistance = 4f;
 
-    private float targetZoom = 8f;  //zoom distance on the camera. Increases as goliath grows
+    private float targetZoom = 12f;  //zoom distance on the camera. Increases as goliath grows
     private float zoomSpeed = 0.5f;   //speed at which camera zooms out
 
     private Camera thisCamera;

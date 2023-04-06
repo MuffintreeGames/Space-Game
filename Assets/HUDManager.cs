@@ -7,10 +7,12 @@ using UnityEngine.UI;
 public class HUDManager : MonoBehaviour
 {
     public GoliathController playerGoliath;
+    public GodController playerGod;
 
     private Transform expBar;
     private Transform hpBar;
-    private GameObject abilityBar;
+    private Transform mpBar;
+
     private Image abilityIcon1;
     private Text abilityTimer1;
     private Image abilityIcon2;
@@ -19,6 +21,29 @@ public class HUDManager : MonoBehaviour
     private Text abilityTimer3;
     private Image abilityIcon4;
     private Text abilityTimer4;
+
+    private Image godAbilityIcon1;
+    private Text godAbilityTimer1;
+    private Text godAbilityCost1;
+    private Image godAbilityIcon2;
+    private Text godAbilityTimer2;
+    private Text godAbilityCost2;
+    private Image godAbilityIcon3;
+    private Text godAbilityTimer3;
+    private Text godAbilityCost3;
+    private Image godAbilityIcon4;
+    private Text godAbilityTimer4;
+    private Text godAbilityCost4;
+    private Image godAbilityIcon5;
+    private Text godAbilityTimer5;
+    private Text godAbilityCost5;
+    private Image godAbilityIcon6;
+    private Text godAbilityTimer6;
+    private Text godAbilityCost6;
+    private Image godAbilityIcon7;
+    private Text godAbilityTimer7;
+    private Text godAbilityCost7;
+
     private Image newIcon;
     private GameObject abilitySelectionDisplay;
 
@@ -28,12 +53,23 @@ public class HUDManager : MonoBehaviour
     private float lastReadExpCount = 0f;    //last exp value gotten from player; used to check if it has changed
     private float oldExpScale = 0f;         //last value that exp bar stopped at
     private bool levelUpProcedure = false;  //currently putting normal exp bar behaviour on hold to level up properly
+    private Text expMaxText;
+    private Text expCurrentText;
 
     private float timeSinceHpChange = 0f;  
     private float timeToChangeHp = 0.2f;   
     private float lastReadHpCount = 0f;
     private float lastReadMaxHpCount = 0f;
-    private float oldHpScale = 0f;         
+    private float oldHpScale = 0f;
+    private Text hpMaxText;
+    private Text hpCurrentText;
+
+    private Text mpText;
+    private float timeSinceMpChange = 0f;
+    private float timeToChangeMp = 0.2f;
+    private float lastReadMpCount = 0f;
+    private float mpCountBeforeSpending = 0f;   //mp value before it was spent on an ability
+    private float oldMpScale = 0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,17 +79,49 @@ public class HUDManager : MonoBehaviour
             Debug.LogError("Couldn't find exp bar!");
         }
 
+        expMaxText = GameObject.Find("ExpMax").GetComponent<Text>();
+        if (!expMaxText)
+        {
+            Debug.LogError("Couldn't find exp max!");
+        }
+
+        expCurrentText = GameObject.Find("ExpCurrent").GetComponent<Text>();
+        if (!expCurrentText)
+        {
+            Debug.LogError("Couldn't find exp current!");
+        }
+
         hpBar = GameObject.Find("HpBarFillContainer").transform;
         if (!hpBar)
         {
             Debug.LogError("Couldn't find hp bar!");
         }
 
-        abilityBar = GameObject.Find("AbilityBar");
-        if (!abilityBar)
+        hpMaxText = GameObject.Find("HpMax").GetComponent<Text>();
+        if (!hpMaxText)
         {
-            Debug.LogError("Couldn't find ability bar!");
+            Debug.LogError("Couldn't find hp max!");
         }
+
+        hpCurrentText = GameObject.Find("HpCurrent").GetComponent<Text>();
+        if (!hpCurrentText)
+        {
+            Debug.LogError("Couldn't find hp current!");
+        }
+
+
+        mpBar = GameObject.Find("MpBarFillContainer").transform;
+        if (!mpBar)
+        {
+            Debug.LogError("Couldn't find mp bar!");
+        }
+
+        mpText = GameObject.Find("MpText").GetComponent<Text>();
+        if (!mpText)
+        {
+            Debug.LogError("Couldn't find mp text!");
+        }
+
 
         abilityIcon1 = GameObject.Find("Ability1Icon").GetComponent<Image>();
         if (!abilityIcon1)
@@ -114,6 +182,132 @@ public class HUDManager : MonoBehaviour
         {
             Debug.LogError("Couldn't find ability display!");
         }
+
+        godAbilityIcon1 = GameObject.Find("GodAbility1Icon").GetComponent<Image>();
+        if (!godAbilityIcon1)
+        {
+            Debug.LogError("Couldn't find god ability icon 1!");
+        }
+
+        godAbilityTimer1 = GameObject.Find("GodAbility1Timer").GetComponent<Text>();
+        if (!godAbilityTimer1)
+        {
+            Debug.LogError("Couldn't find god ability timer 1!");
+        }
+
+        godAbilityCost1 = GameObject.Find("GodAbility1Cost").GetComponent<Text>();
+        if (!godAbilityCost1)
+        {
+            Debug.LogError("Couldn't find god ability cost 1!");
+        }
+
+        godAbilityIcon2 = GameObject.Find("GodAbility2Icon").GetComponent<Image>();
+        if (!godAbilityIcon2)
+        {
+            Debug.LogError("Couldn't find god ability icon 2!");
+        }
+
+        godAbilityTimer2 = GameObject.Find("GodAbility2Timer").GetComponent<Text>();
+        if (!godAbilityTimer2)
+        {
+            Debug.LogError("Couldn't find god ability timer 2!");
+        }
+
+        godAbilityCost2 = GameObject.Find("GodAbility2Cost").GetComponent<Text>();
+        if (!godAbilityCost2)
+        {
+            Debug.LogError("Couldn't find god ability cost 2!");
+        }
+
+        godAbilityIcon3 = GameObject.Find("GodAbility3Icon").GetComponent<Image>();
+        if (!godAbilityIcon3)
+        {
+            Debug.LogError("Couldn't find god ability icon 3!");
+        }
+
+        godAbilityTimer3 = GameObject.Find("GodAbility3Timer").GetComponent<Text>();
+        if (!godAbilityTimer3)
+        {
+            Debug.LogError("Couldn't find god ability timer 3!");
+        }
+
+        godAbilityCost3 = GameObject.Find("GodAbility3Cost").GetComponent<Text>();
+        if (!godAbilityCost3)
+        {
+            Debug.LogError("Couldn't find god ability cost 3!");
+        }
+
+        godAbilityIcon4 = GameObject.Find("GodAbility4Icon").GetComponent<Image>();
+        if (!godAbilityIcon4)
+        {
+            Debug.LogError("Couldn't find god ability icon 4!");
+        }
+
+        godAbilityTimer4 = GameObject.Find("GodAbility4Timer").GetComponent<Text>();
+        if (!godAbilityTimer4)
+        {
+            Debug.LogError("Couldn't find god ability timer 4!");
+        }
+
+        godAbilityCost4 = GameObject.Find("GodAbility4Cost").GetComponent<Text>();
+        if (!godAbilityCost4)
+        {
+            Debug.LogError("Couldn't find god ability cost 4!");
+        }
+
+        godAbilityIcon5 = GameObject.Find("GodAbility5Icon").GetComponent<Image>();
+        if (!godAbilityIcon5)
+        {
+            Debug.LogError("Couldn't find god ability icon 5!");
+        }
+
+        godAbilityTimer5 = GameObject.Find("GodAbility5Timer").GetComponent<Text>();
+        if (!godAbilityTimer5)
+        {
+            Debug.LogError("Couldn't find god ability timer 5!");
+        }
+
+        godAbilityCost5 = GameObject.Find("GodAbility5Cost").GetComponent<Text>();
+        if (!godAbilityCost5)
+        {
+            Debug.LogError("Couldn't find god ability cost 5!");
+        }
+
+        godAbilityIcon6 = GameObject.Find("GodAbility6Icon").GetComponent<Image>();
+        if (!godAbilityIcon6)
+        {
+            Debug.LogError("Couldn't find god ability icon 6!");
+        }
+
+        godAbilityTimer6 = GameObject.Find("GodAbility6Timer").GetComponent<Text>();
+        if (!godAbilityTimer6)
+        {
+            Debug.LogError("Couldn't find god ability timer 6!");
+        }
+
+        godAbilityCost6 = GameObject.Find("GodAbility6Cost").GetComponent<Text>();
+        if (!godAbilityCost6)
+        {
+            Debug.LogError("Couldn't find god ability cost 6!");
+        }
+
+        godAbilityIcon7 = GameObject.Find("GodAbility7Icon").GetComponent<Image>();
+        if (!godAbilityIcon7)
+        {
+            Debug.LogError("Couldn't find god ability icon 7!");
+        }
+
+        godAbilityTimer7 = GameObject.Find("GodAbility7Timer").GetComponent<Text>();
+        if (!godAbilityTimer7)
+        {
+            Debug.LogError("Couldn't find god ability timer 7!");
+        }
+
+        godAbilityCost7 = GameObject.Find("GodAbility7Cost").GetComponent<Text>();
+        if (!godAbilityCost7)
+        {
+            Debug.LogError("Couldn't find god ability cost 7!");
+        }
     }
 
     // Update is called once per frame
@@ -121,7 +315,9 @@ public class HUDManager : MonoBehaviour
     {
         UpdateExpBar();
         UpdateHpBar();
+        UpdateMpBar();
         UpdateAbilityBar();
+        UpdateGodAbilityBar();
     }
 
     void UpdateExpBar()
@@ -151,6 +347,10 @@ public class HUDManager : MonoBehaviour
                 expPercentage = 1;
             }
             float expScale = Mathf.Lerp(oldExpScale, expPercentage, timeSinceExpChange / timeToChangeExp);
+            if (expScale < 0f)
+            {
+                expScale = 1f;
+            }
             expBar.localScale = new Vector3(expBar.localScale.x, expScale, expBar.localScale.z);
             timeSinceExpChange += Time.deltaTime;
         } else if (levelUpProcedure)
@@ -160,6 +360,16 @@ public class HUDManager : MonoBehaviour
             expBar.localScale = new Vector3(expBar.localScale.x, 0f, expBar.localScale.z);
             oldExpScale = 0f;
             lastReadExpCount = 0f;
+        }
+        if (currentExp == -1)   //special value used to mark max level
+        {
+            expCurrentText.text = "Max";
+            expMaxText.text = "Max";
+        }
+        else
+        {
+            expCurrentText.text = currentExp.ToString("F0");
+            expMaxText.text = neededExp.ToString("F0");
         }
     }
 
@@ -185,19 +395,70 @@ public class HUDManager : MonoBehaviour
             lastReadHpCount = currentHp;
             lastReadMaxHpCount = maxHp;
         }
+        float hpPercentage = currentHp / maxHp;
+        if (hpPercentage < 0)
+        {
+            hpPercentage = 0;
+        }
+        float hpScale;
 
         if (timeSinceHpChange < timeToChangeHp)
         {
-            float hpPercentage = currentHp / maxHp;
-            
-            if (hpPercentage < 0)
-            {
-                hpPercentage = 0;
-            }
-            float hpScale = Mathf.Lerp(oldHpScale, hpPercentage, timeSinceHpChange / timeToChangeHp);
-            hpBar.localScale = new Vector3(hpBar.localScale.x, hpScale, hpBar.localScale.z);
+            hpScale = Mathf.Lerp(oldHpScale, hpPercentage, timeSinceHpChange / timeToChangeHp);            
             timeSinceHpChange += Time.deltaTime;
+        } else
+        {
+            hpScale = hpPercentage;
         }
+
+        hpBar.localScale = new Vector3(hpBar.localScale.x, hpScale, hpBar.localScale.z);
+        hpCurrentText.text = currentHp.ToString("F0");
+        hpMaxText.text = maxHp.ToString("F0");
+    }
+
+    void UpdateMpBar()
+    {
+        float currentMp;
+        float maxMp;
+
+        if (playerGod != null)
+        {
+            currentMp = playerGod.GetMP();
+            maxMp = playerGod.GetMaxMP();
+        }
+        else
+        {
+            currentMp = 0;
+            maxMp = 1;
+        }
+
+        if (currentMp < lastReadMpCount) //god spent mp on ability
+        {
+            timeSinceMpChange = 0f;
+            oldMpScale = mpBar.localScale.y;
+            mpCountBeforeSpending = lastReadMpCount;
+        }
+
+        lastReadMpCount = currentMp;
+
+        float mpPercentage = currentMp / maxMp;
+
+        if (mpPercentage < 0)
+        {
+            mpPercentage = 0;
+        }
+
+        float mpScale;
+        if (timeSinceMpChange < timeToChangeMp)
+        {
+            mpScale = Mathf.Lerp(oldMpScale, mpPercentage, timeSinceMpChange / timeToChangeMp);
+            timeSinceMpChange += Time.deltaTime;
+        } else
+        {
+            mpScale = mpPercentage;
+        }
+        mpBar.localScale = new Vector3(mpBar.localScale.x, mpScale, mpBar.localScale.z);
+        mpText.text = currentMp.ToString("F0") + "/" + maxMp.ToString("F0");
     }
 
     void UpdateAbilityBar() //set ability icons, gray them out if they're on cooldown and set timer
@@ -302,6 +563,198 @@ public class HUDManager : MonoBehaviour
         } else
         {
             abilitySelectionDisplay.SetActive(false);
+        }
+    }
+
+    void UpdateGodAbilityBar()
+    {
+        if (playerGod.Action1 != null)
+        {
+            godAbilityIcon1.enabled = true;
+            godAbilityTimer1.enabled = true;
+            godAbilityIcon1.sprite = playerGod.Action1.icon;
+            godAbilityCost1.text = playerGod.Action1.manaCost.ToString();
+            godAbilityCost1.enabled = true;
+
+
+            if (!playerGod.Action1.IsOffCooldown())
+            {
+                godAbilityIcon1.color = Color.grey;
+                godAbilityTimer1.text = playerGod.Action1.GetCooldown().ToString();
+            }
+            else
+            {
+                godAbilityIcon1.color = Color.white;
+                godAbilityTimer1.text = "";
+            }
+        }
+        else
+        {
+            godAbilityIcon1.enabled = false;
+            godAbilityTimer1.enabled = false;
+            godAbilityCost1.enabled = false;
+        }
+
+        if (playerGod.Action2 != null)
+        {
+            godAbilityIcon2.enabled = true;
+            godAbilityTimer2.enabled = true;
+            godAbilityIcon2.sprite = playerGod.Action2.icon;
+            godAbilityCost2.text = playerGod.Action2.manaCost.ToString();
+            godAbilityCost2.enabled = true;
+
+
+            if (!playerGod.Action2.IsOffCooldown())
+            {
+                godAbilityIcon2.color = Color.grey;
+                godAbilityTimer2.text = playerGod.Action2.GetCooldown().ToString();
+            }
+            else
+            {
+                godAbilityIcon2.color = Color.white;
+                godAbilityTimer2.text = "";
+            }
+        }
+        else
+        {
+            godAbilityIcon2.enabled = false;
+            godAbilityTimer2.enabled = false;
+            godAbilityCost2.enabled = false;
+        }
+
+        if (playerGod.Action3 != null)
+        {
+            godAbilityIcon3.enabled = true;
+            godAbilityTimer3.enabled = true;
+            godAbilityIcon3.sprite = playerGod.Action3.icon;
+            godAbilityCost3.text = playerGod.Action3.manaCost.ToString();
+            godAbilityCost3.enabled = true;
+
+
+            if (!playerGod.Action3.IsOffCooldown())
+            {
+                godAbilityIcon3.color = Color.grey;
+                godAbilityTimer3.text = playerGod.Action3.GetCooldown().ToString();
+            }
+            else
+            {
+                godAbilityIcon3.color = Color.white;
+                godAbilityTimer3.text = "";
+            }
+        }
+        else
+        {
+            godAbilityIcon3.enabled = false;
+            godAbilityTimer3.enabled = false;
+            godAbilityCost3.enabled = false;
+        }
+
+        if (playerGod.Action4 != null)
+        {
+            godAbilityIcon4.enabled = true;
+            godAbilityTimer4.enabled = true;
+            godAbilityIcon4.sprite = playerGod.Action4.icon;
+            godAbilityCost4.text = playerGod.Action4.manaCost.ToString();
+            godAbilityCost4.enabled = true;
+
+
+            if (!playerGod.Action4.IsOffCooldown())
+            {
+                godAbilityIcon4.color = Color.grey;
+                godAbilityTimer4.text = playerGod.Action4.GetCooldown().ToString();
+            }
+            else
+            {
+                godAbilityIcon4.color = Color.white;
+                godAbilityTimer4.text = "";
+            }
+        }
+        else
+        {
+            godAbilityIcon4.enabled = false;
+            godAbilityTimer4.enabled = false;
+            godAbilityCost4.enabled = false;
+        }
+
+        if (playerGod.Action5 != null)
+        {
+            godAbilityIcon5.enabled = true;
+            godAbilityTimer5.enabled = true;
+            godAbilityIcon5.sprite = playerGod.Action5.icon;
+            godAbilityCost5.text = playerGod.Action5.manaCost.ToString();
+            godAbilityCost5.enabled = true;
+
+
+            if (!playerGod.Action5.IsOffCooldown())
+            {
+                godAbilityIcon5.color = Color.grey;
+                godAbilityTimer5.text = playerGod.Action5.GetCooldown().ToString();
+            }
+            else
+            {
+                godAbilityIcon5.color = Color.white;
+                godAbilityTimer5.text = "";
+            }
+        }
+        else
+        {
+            godAbilityIcon5.enabled = false;
+            godAbilityTimer5.enabled = false;
+            godAbilityCost5.enabled = false;
+        }
+
+        if (playerGod.Action6 != null)
+        {
+            godAbilityIcon6.enabled = true;
+            godAbilityTimer6.enabled = true;
+            godAbilityIcon6.sprite = playerGod.Action6.icon;
+            godAbilityCost6.text = playerGod.Action6.manaCost.ToString();
+            godAbilityCost6.enabled = true;
+
+
+            if (!playerGod.Action6.IsOffCooldown())
+            {
+                godAbilityIcon6.color = Color.grey;
+                godAbilityTimer6.text = playerGod.Action6.GetCooldown().ToString();
+            }
+            else
+            {
+                godAbilityIcon6.color = Color.white;
+                godAbilityTimer6.text = "";
+            }
+        }
+        else
+        {
+            godAbilityIcon6.enabled = false;
+            godAbilityTimer6.enabled = false;
+            godAbilityCost6.enabled = false;
+        }
+
+        if (playerGod.Action7 != null)
+        {
+            godAbilityIcon7.enabled = true;
+            godAbilityTimer7.enabled = true;
+            godAbilityIcon7.sprite = playerGod.Action7.icon;
+            godAbilityCost7.text = playerGod.Action7.manaCost.ToString();
+            godAbilityCost7.enabled = true;
+
+
+            if (!playerGod.Action7.IsOffCooldown())
+            {
+                godAbilityIcon7.color = Color.grey;
+                godAbilityTimer7.text = playerGod.Action7.GetCooldown().ToString();
+            }
+            else
+            {
+                godAbilityIcon7.color = Color.white;
+                godAbilityTimer7.text = "";
+            }
+        }
+        else
+        {
+            godAbilityIcon7.enabled = false;
+            godAbilityTimer7.enabled = false;
+            godAbilityCost7.enabled = false;
         }
     }
 }

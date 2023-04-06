@@ -43,25 +43,29 @@ public class StatusController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.localScale = Vector3.one + Vector3.one * (goliathTransform.localScale.y-1)/2;
-        transform.position = new Vector3(goliathTransform.position.x, goliathTransform.position.y + (1.1f * goliathTransform.localScale.y), goliathTransform.position.z);  //reposition to be directly over goliath
-
-        for (int i = 0;i < iconArray.Length;i++)
+        if (goliathTransform != null)
         {
-            if (iconInUse[i])
+            transform.localScale = Vector3.one + Vector3.one * (goliathTransform.localScale.y - 1) / 2;
+            transform.position = new Vector3(goliathTransform.position.x, goliathTransform.position.y + (1.1f * goliathTransform.localScale.y), goliathTransform.position.z);  //reposition to be directly over goliath
+
+            for (int i = 0; i < iconArray.Length; i++)
             {
-                statusTimers[i] -= Time.deltaTime;
-                if (statusTimers[i] < 0f)
+                if (iconInUse[i])
                 {
-                    iconArray[i].GetComponent<Image>().enabled = false;
-                    iconInUse[i] = false;
-                    Transform iconOverlay = iconArray[i].transform.GetChild(0);
-                    iconOverlay.localScale = new Vector3(iconOverlay.localScale.x, 0f, iconOverlay.localScale.z);
-                } else
-                {
-                    Transform iconOverlay = iconArray[i].transform.GetChild(0);
-                    float percentageLeft = statusTimers[i] / maxTimers[i];
-                    iconOverlay.localScale = new Vector3(iconOverlay.localScale.x, 1 - percentageLeft, iconOverlay.localScale.z);
+                    statusTimers[i] -= Time.deltaTime;
+                    if (statusTimers[i] < 0f)
+                    {
+                        iconArray[i].GetComponent<Image>().enabled = false;
+                        iconInUse[i] = false;
+                        Transform iconOverlay = iconArray[i].transform.GetChild(0);
+                        iconOverlay.localScale = new Vector3(iconOverlay.localScale.x, 0f, iconOverlay.localScale.z);
+                    }
+                    else
+                    {
+                        Transform iconOverlay = iconArray[i].transform.GetChild(0);
+                        float percentageLeft = statusTimers[i] / maxTimers[i];
+                        iconOverlay.localScale = new Vector3(iconOverlay.localScale.x, 1 - percentageLeft, iconOverlay.localScale.z);
+                    }
                 }
             }
         }

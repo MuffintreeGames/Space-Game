@@ -626,7 +626,7 @@ public class GoliathController : MonoBehaviour
                 break;
                 case 5:
                     neededExp = 1;
-                    currentExp = 0;
+                    currentExp = -1;
                     goliathTransform.localScale = new Vector3(5f, 5f, 1f);
                     goliathArmScript.Damage = 50;
                 damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
@@ -676,23 +676,23 @@ public class GoliathController : MonoBehaviour
 
         public void SetCameraZoom()
         {
-            float sizeZoom = 8f; //zoom level is determined by goliath size
+            float sizeZoom = 12f; //zoom level is determined by goliath size
             switch (level)
             {
                 case 1:
-                    sizeZoom = 8f;
-                    break;
-                case 2:
-                    sizeZoom = 10f;
-                    break;
-                case 3:
                     sizeZoom = 12f;
                     break;
-                case 4:
+                case 2:
                     sizeZoom = 14f;
                     break;
-                case 5:
+                case 3:
                     sizeZoom = 16f;
+                    break;
+                case 4:
+                    sizeZoom = 18f;
+                    break;
+                case 5:
+                    sizeZoom = 20f;
                     break;
             }
             goliathCamera.SetZoom(sizeZoom);
