@@ -101,6 +101,11 @@ public class Killable : MonoBehaviour
             return;
         }
 
+        if (damage <= 0)
+        {
+            return;
+        }
+
         if (blockableHits > 0)
         {
             blockableHits -= 1;

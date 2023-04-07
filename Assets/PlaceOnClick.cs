@@ -6,6 +6,7 @@ public class PlaceOnClick : MonoBehaviour    //attach to object to have image fo
 {
     public GameObject CreatedObject;
     public float Cost = 25f;
+    public string helpText = "Left-click on empty area to place object. Right-click to cancel.";
 
     private GodController god;
     private LayerMask preventedLayers;
@@ -30,6 +31,7 @@ public class PlaceOnClick : MonoBehaviour    //attach to object to have image fo
         preventedLayers |= (1 << LayerMask.NameToLayer("GoliathDestructible"));
         preventedLayers |= (1 << LayerMask.NameToLayer("Indestructible"));
         preventedLayers |= (1 << LayerMask.NameToLayer("GodProjectile"));
+        HUDManager.UpdateGodAbilityHelpText.Invoke(helpText);
     }
 
     // Update is called once per frame
@@ -60,6 +62,7 @@ public class PlaceOnClick : MonoBehaviour    //attach to object to have image fo
                 }
                 Instantiate(CreatedObject, mouseCoords, Quaternion.identity);
                 god.SetAbilityUsage(true);
+                HUDManager.UpdateGodAbilityHelpText.Invoke("");
                 Destroy(gameObject);
             } else
             {
@@ -68,6 +71,7 @@ public class PlaceOnClick : MonoBehaviour    //attach to object to have image fo
         } else if (Input.GetMouseButtonUp(1))
         {
             god.SetAbilityUsage(true);
+            HUDManager.UpdateGodAbilityHelpText.Invoke("");
             Destroy(gameObject);
         }
     }

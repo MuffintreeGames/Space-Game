@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
+
+public class UpdateGodAbilityHelpTextEvent : UnityEvent<string>
+{
+
+}
 
 public class HUDManager : MonoBehaviour
 {
     public GoliathController playerGoliath;
     public GodController playerGod;
+
+    public static UpdateGodAbilityHelpTextEvent UpdateGodAbilityHelpText;
 
     private Transform expBar;
     private Transform hpBar;
@@ -55,6 +63,9 @@ public class HUDManager : MonoBehaviour
     private Text godAbilityName7;
     private Text godAbilityCost7;
 
+    private Text godAbilityHelp;
+    private GameObject godAbilityHelpBackground;
+
     private Image newIcon;
     private GameObject abilitySelectionDisplay;
 
@@ -80,7 +91,7 @@ public class HUDManager : MonoBehaviour
     private float timeToChangeMp = 0.2f;
     private float lastReadMpCount = 0f;
     private float mpCountBeforeSpending = 0f;   //mp value before it was spent on an ability
-    private float oldMpScale = 0f;
+    private float oldMpScale = 1f;
     // Start is called before the first frame update
     void Start()
     {
@@ -385,6 +396,23 @@ public class HUDManager : MonoBehaviour
         {
             Debug.LogError("Couldn't find god ability cost 7!");
         }
+
+        godAbilityHelpBackground = GameObject.Find("GodAbilityHelp");
+        if (!godAbilityHelpBackground)
+        {
+            Debug.LogError("Couldn't find god ability help background!");
+        }
+
+        godAbilityHelp = GameObject.Find("GodAbilityHelpText").GetComponent<Text>();
+        if (!godAbilityHelp)
+        {
+            Debug.LogError("Couldn't find god ability help!");
+        }
+
+        UpdateGodAbilityHelpText = new UpdateGodAbilityHelpTextEvent();
+        UpdateGodAbilityHelpText.AddListener(SetGodHelpText);
+
+        SetGodHelpText("");
     }
 
     // Update is called once per frame
@@ -861,6 +889,20 @@ public class HUDManager : MonoBehaviour
             godAbilityTimer7.enabled = false;
             godAbilityCost7.enabled = false;
             godAbilityName7.enabled = false;
+        }
+    }
+
+    void SetGodHelpText(string text)
+    {
+        Debug.Log("changing help text to " + text);
+        godAbilityHelp.text = text;
+
+        if (text == "")
+        {
+            godAbilityHelpBackground.SetActive(false);
+        } else
+        {
+            godAbilityHelpBackground.SetActive(true);
         }
     }
 }

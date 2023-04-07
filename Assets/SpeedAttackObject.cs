@@ -30,12 +30,26 @@ public class SpeedAttackObject : AttackObject   //variant of attack object that 
             if (Damage < 10)
             {
                 Damage = 0;
+            } else
+            {
+                Debug.Log("at damaging speeds!");
             }
             if (currentSpeed == 0)
             {
-                enabled = false;    //disable any that aren't moving to avoid inefficiency
+                enabled = false;    //disable any that aren't moving to avoid excessive calculations
             }
         }
         positionLastFrame = transform.position;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        SpeedAttackObject collidedAttackObject = collision.gameObject.GetComponent<SpeedAttackObject>();
+        if (collidedAttackObject)
+        {
+            collidedAttackObject.enabled = true;
+            Debug.Log("billiards!");
+        }
+        base.OnCollisionEnter2D(collision);
     }
 }

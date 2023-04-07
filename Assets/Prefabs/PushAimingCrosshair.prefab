@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 5381536095683111251}
   - component: {fileID: 943252511900317141}
   - component: {fileID: 750646069681544338}
-  - component: {fileID: 2028998790794680017}
+  - component: {fileID: -2132422320891870406}
   m_Layer: 0
-  m_Name: Crosshair
+  m_Name: PushAimingCrosshair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,7 +102,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 3
---- !u!114 &2028998790794680017
+--- !u!114 &-2132422320891870406
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,7 +111,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5039469841758836263}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1ae07c200dce2543910c81418b5572c, type: 3}
+  m_Script: {fileID: 11500000, guid: 41e89be06cfdb184cb521a5039d92b19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AimingArrow: {fileID: 5783904702962982225, guid: 49e2e86cbc959f545bb2131490ed8094, type: 3}
+  AimingArrow: {fileID: 5783904702962982225, guid: 930f530f988e57d44a9bf881e922fbb2, type: 3}
+  helpText: Left-click to choose target location. Right-click to cancel.
+  parentAbility: {fileID: 0}

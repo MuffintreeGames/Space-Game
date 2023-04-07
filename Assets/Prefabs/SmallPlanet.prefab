@@ -180,4 +180,4 @@ MonoBehaviour:
   RepeatedDamage: 0
   InvincibilityDuration: 0.8
   BelongsToGoliath: 0
-  DamagePerSpeed: 60
+  DamagePerSpeed: 30

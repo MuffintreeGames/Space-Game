@@ -27,7 +27,7 @@ public class AttackObject : MonoBehaviour
         
     }
 
-    void OnCollisionEnter2D(Collision2D col)  //uncomment this if you want to use a collider rather than a trigger for a hitbox at some point
+    protected void OnCollisionEnter2D(Collision2D col)  //uncomment this if you want to use a collider rather than a trigger for a hitbox at some point
     {
         Debug.Log("damage collision");
         if (!enabled)

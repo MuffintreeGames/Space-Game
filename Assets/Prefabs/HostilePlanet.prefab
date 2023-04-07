@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1601247718672788740}
   - component: {fileID: 4422917790989804597}
   - component: {fileID: 9098195377146710616}
+  - component: {fileID: 4181296240369957872}
   m_Layer: 8
   m_Name: HostilePlanet
   m_TagString: Untagged
@@ -117,7 +118,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 1
+  m_Mass: 12.566371
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -172,3 +173,27 @@ MonoBehaviour:
   PlanetShot: {fileID: 7045386937356173623, guid: fcacd59c7c5e5b64babd687068d21aaf, type: 3}
   AttackSpeed: 10
   AttackDuration: 5
+--- !u!114 &4181296240369957872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6088609408505885020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71b638ed3e9b6ff449b8a2fa00ebc14a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damage: 0
+  TargetLayers:
+    serializedVersion: 2
+    m_Bits: 1088
+  DamagedLayers:
+    serializedVersion: 2
+    m_Bits: 1088
+  DestroyOnHit: 0
+  RepeatedDamage: 0
+  InvincibilityDuration: 0.8
+  BelongsToGoliath: 0
+  DamagePerSpeed: 3
