@@ -9,6 +9,7 @@ public abstract class AbilityTemplate : MonoBehaviour
 
     public float cooldown;  //time between ability uses
     public Sprite icon;  //symbol for the ability
+    public string displayName;  //name shown in UI
 
     protected GoliathController parentGoliath;
     protected float tickingCooldown;

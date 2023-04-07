@@ -27,10 +27,13 @@ public class SpeedAttackObject : AttackObject   //variant of attack object that 
             float yDifference = transform.position.y - positionLastFrame.y;
             float currentSpeed = Mathf.Sqrt(xDifference * xDifference + yDifference * yDifference);
             Damage = Mathf.RoundToInt(currentSpeed * DamagePerSpeed);
-            Debug.Log("Damage: " + Damage);
             if (Damage < 10)
             {
                 Damage = 0;
+            }
+            if (currentSpeed == 0)
+            {
+                enabled = false;    //disable any that aren't moving to avoid inefficiency
             }
         }
         positionLastFrame = transform.position;

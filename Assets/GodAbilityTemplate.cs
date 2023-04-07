@@ -10,6 +10,7 @@ public abstract class GodAbilityTemplate : MonoBehaviour
     public float cooldown;  //time between ability uses
     public float manaCost;  //amount of mp spent on ability
     public Sprite icon;  //symbol for the ability
+    public string displayName;  //name shown in ui
     public bool spendOnClick = false;   //if true, ability costs mp + cooldown on clicking icon; otherwise, will be spent on confirming action
 
     protected GodController parentGod;

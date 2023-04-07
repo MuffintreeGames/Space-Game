@@ -15,33 +15,44 @@ public class HUDManager : MonoBehaviour
 
     private Image abilityIcon1;
     private Text abilityTimer1;
+    private Text abilityName1;
     private Image abilityIcon2;
     private Text abilityTimer2;
+    private Text abilityName2;
     private Image abilityIcon3;
     private Text abilityTimer3;
+    private Text abilityName3;
     private Image abilityIcon4;
     private Text abilityTimer4;
+    private Text abilityName4;
 
     private Image godAbilityIcon1;
     private Text godAbilityTimer1;
+    private Text godAbilityName1;
     private Text godAbilityCost1;
     private Image godAbilityIcon2;
     private Text godAbilityTimer2;
+    private Text godAbilityName2;
     private Text godAbilityCost2;
     private Image godAbilityIcon3;
     private Text godAbilityTimer3;
+    private Text godAbilityName3;
     private Text godAbilityCost3;
     private Image godAbilityIcon4;
     private Text godAbilityTimer4;
+    private Text godAbilityName4;
     private Text godAbilityCost4;
     private Image godAbilityIcon5;
     private Text godAbilityTimer5;
+    private Text godAbilityName5;
     private Text godAbilityCost5;
     private Image godAbilityIcon6;
     private Text godAbilityTimer6;
+    private Text godAbilityName6;
     private Text godAbilityCost6;
     private Image godAbilityIcon7;
     private Text godAbilityTimer7;
+    private Text godAbilityName7;
     private Text godAbilityCost7;
 
     private Image newIcon;
@@ -135,6 +146,12 @@ public class HUDManager : MonoBehaviour
             Debug.LogError("Couldn't find ability timer 1!");
         }
 
+        abilityName1 = GameObject.Find("Ability1Name").GetComponent<Text>();
+        if (!abilityName1)
+        {
+            Debug.LogError("Couldn't find ability name 1!");
+        }
+
         abilityIcon2 = GameObject.Find("Ability2Icon").GetComponent<Image>();
         if (!abilityIcon2)
         {
@@ -145,6 +162,12 @@ public class HUDManager : MonoBehaviour
         if (!abilityTimer2)
         {
             Debug.LogError("Couldn't find ability timer 2!");
+        }
+
+        abilityName2 = GameObject.Find("Ability2Name").GetComponent<Text>();
+        if (!abilityName2)
+        {
+            Debug.LogError("Couldn't find ability name 2!");
         }
 
         abilityIcon3 = GameObject.Find("Ability3Icon").GetComponent<Image>();
@@ -159,6 +182,12 @@ public class HUDManager : MonoBehaviour
             Debug.LogError("Couldn't find ability timer 3!");
         }
 
+        abilityName3 = GameObject.Find("Ability3Name").GetComponent<Text>();
+        if (!abilityName3)
+        {
+            Debug.LogError("Couldn't find ability name 3!");
+        }
+
         abilityIcon4 = GameObject.Find("Ability4Icon").GetComponent<Image>();
         if (!abilityIcon4)
         {
@@ -169,6 +198,12 @@ public class HUDManager : MonoBehaviour
         if (!abilityTimer4)
         {
             Debug.LogError("Couldn't find ability timer 4!");
+        }
+
+        abilityName4 = GameObject.Find("Ability4Name").GetComponent<Text>();
+        if (!abilityName4)
+        {
+            Debug.LogError("Couldn't find ability name 4!");
         }
 
         newIcon = GameObject.Find("NewIcon").GetComponent<Image>();
@@ -195,6 +230,12 @@ public class HUDManager : MonoBehaviour
             Debug.LogError("Couldn't find god ability timer 1!");
         }
 
+        godAbilityName1 = GameObject.Find("GodAbility1Name").GetComponent<Text>();
+        if (!godAbilityName1)
+        {
+            Debug.LogError("Couldn't find god ability name 1!");
+        }
+
         godAbilityCost1 = GameObject.Find("GodAbility1Cost").GetComponent<Text>();
         if (!godAbilityCost1)
         {
@@ -211,6 +252,12 @@ public class HUDManager : MonoBehaviour
         if (!godAbilityTimer2)
         {
             Debug.LogError("Couldn't find god ability timer 2!");
+        }
+
+        godAbilityName2 = GameObject.Find("GodAbility2Name").GetComponent<Text>();
+        if (!godAbilityName2)
+        {
+            Debug.LogError("Couldn't find god ability name 2!");
         }
 
         godAbilityCost2 = GameObject.Find("GodAbility2Cost").GetComponent<Text>();
@@ -231,6 +278,12 @@ public class HUDManager : MonoBehaviour
             Debug.LogError("Couldn't find god ability timer 3!");
         }
 
+        godAbilityName3 = GameObject.Find("GodAbility3Name").GetComponent<Text>();
+        if (!godAbilityName3)
+        {
+            Debug.LogError("Couldn't find god ability name 3!");
+        }
+
         godAbilityCost3 = GameObject.Find("GodAbility3Cost").GetComponent<Text>();
         if (!godAbilityCost3)
         {
@@ -247,6 +300,12 @@ public class HUDManager : MonoBehaviour
         if (!godAbilityTimer4)
         {
             Debug.LogError("Couldn't find god ability timer 4!");
+        }
+
+        godAbilityName4 = GameObject.Find("GodAbility4Name").GetComponent<Text>();
+        if (!godAbilityName4)
+        {
+            Debug.LogError("Couldn't find god ability name 4!");
         }
 
         godAbilityCost4 = GameObject.Find("GodAbility4Cost").GetComponent<Text>();
@@ -267,6 +326,12 @@ public class HUDManager : MonoBehaviour
             Debug.LogError("Couldn't find god ability timer 5!");
         }
 
+        godAbilityName5 = GameObject.Find("GodAbility5Name").GetComponent<Text>();
+        if (!godAbilityName5)
+        {
+            Debug.LogError("Couldn't find god ability name 5!");
+        }
+
         godAbilityCost5 = GameObject.Find("GodAbility5Cost").GetComponent<Text>();
         if (!godAbilityCost5)
         {
@@ -285,6 +350,12 @@ public class HUDManager : MonoBehaviour
             Debug.LogError("Couldn't find god ability timer 6!");
         }
 
+        godAbilityName6 = GameObject.Find("GodAbility6Name").GetComponent<Text>();
+        if (!godAbilityName6)
+        {
+            Debug.LogError("Couldn't find god ability name 6!");
+        }
+
         godAbilityCost6 = GameObject.Find("GodAbility6Cost").GetComponent<Text>();
         if (!godAbilityCost6)
         {
@@ -301,6 +372,12 @@ public class HUDManager : MonoBehaviour
         if (!godAbilityTimer7)
         {
             Debug.LogError("Couldn't find god ability timer 7!");
+        }
+
+        godAbilityName7 = GameObject.Find("GodAbility7Name").GetComponent<Text>();
+        if (!godAbilityName7)
+        {
+            Debug.LogError("Couldn't find god ability name 7!");
         }
 
         godAbilityCost7 = GameObject.Find("GodAbility7Cost").GetComponent<Text>();
@@ -468,6 +545,8 @@ public class HUDManager : MonoBehaviour
             abilityIcon1.enabled = true;
             abilityTimer1.enabled = true;
             abilityIcon1.sprite = playerGoliath.Action1.icon;
+            abilityName1.enabled = true;
+            abilityName1.text = playerGoliath.Action1.displayName;
 
             if (!playerGoliath.Action1.IsOffCooldown())
             {
@@ -483,6 +562,7 @@ public class HUDManager : MonoBehaviour
         {
             abilityIcon1.enabled = false;
             abilityTimer1.enabled = false;
+            abilityName1.enabled = false;
         }
 
         if (playerGoliath.Action2 != null)
@@ -490,6 +570,9 @@ public class HUDManager : MonoBehaviour
             abilityIcon2.enabled = true;
             abilityTimer2.enabled = true;
             abilityIcon2.sprite = playerGoliath.Action2.icon;
+            abilityName2.enabled = true;
+            abilityName2.text = playerGoliath.Action2.displayName;
+
             if (!playerGoliath.Action2.IsOffCooldown())
             {
                 abilityIcon2.color = Color.grey;
@@ -505,6 +588,7 @@ public class HUDManager : MonoBehaviour
         {
             abilityIcon2.enabled = false;
             abilityTimer2.enabled = false;
+            abilityName2.enabled = false;
         }
 
         if (playerGoliath.Action3 != null)
@@ -512,6 +596,9 @@ public class HUDManager : MonoBehaviour
             abilityIcon3.enabled = true;
             abilityTimer3.enabled = true;
             abilityIcon3.sprite = playerGoliath.Action3.icon;
+            abilityName3.enabled = true;
+            abilityName3.text = playerGoliath.Action3.displayName;
+
             if (!playerGoliath.Action3.IsOffCooldown())
             {
                 abilityIcon3.color = Color.grey;
@@ -526,6 +613,7 @@ public class HUDManager : MonoBehaviour
         {
             abilityIcon3.enabled = false;
             abilityTimer3.enabled = false;
+            abilityName3.enabled = false;
         }
 
         if (playerGoliath.Action4 != null)
@@ -533,6 +621,9 @@ public class HUDManager : MonoBehaviour
             abilityIcon4.enabled = true;
             abilityTimer4.enabled = true;
             abilityIcon4.sprite = playerGoliath.Action4.icon;
+            abilityName4.enabled = true;
+            abilityName4.text = playerGoliath.Action4.displayName;
+
             if (!playerGoliath.Action4.IsOffCooldown())
             {
                 abilityIcon4.color = Color.grey;
@@ -547,6 +638,7 @@ public class HUDManager : MonoBehaviour
         {
             abilityIcon4.enabled = false;
             abilityTimer4.enabled = false;
+            abilityName4.enabled = false;
         }
 
         if (playerGoliath.InAbilitySelection()) {
@@ -575,7 +667,8 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon1.sprite = playerGod.Action1.icon;
             godAbilityCost1.text = playerGod.Action1.manaCost.ToString();
             godAbilityCost1.enabled = true;
-
+            godAbilityName1.enabled = true;
+            godAbilityName1.text = playerGod.Action1.displayName;
 
             if (!playerGod.Action1.IsOffCooldown())
             {
@@ -593,6 +686,7 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon1.enabled = false;
             godAbilityTimer1.enabled = false;
             godAbilityCost1.enabled = false;
+            godAbilityName1.enabled = false;
         }
 
         if (playerGod.Action2 != null)
@@ -602,7 +696,8 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon2.sprite = playerGod.Action2.icon;
             godAbilityCost2.text = playerGod.Action2.manaCost.ToString();
             godAbilityCost2.enabled = true;
-
+            godAbilityName2.enabled = true;
+            godAbilityName2.text = playerGod.Action2.displayName;
 
             if (!playerGod.Action2.IsOffCooldown())
             {
@@ -620,6 +715,7 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon2.enabled = false;
             godAbilityTimer2.enabled = false;
             godAbilityCost2.enabled = false;
+            godAbilityName2.enabled = false;
         }
 
         if (playerGod.Action3 != null)
@@ -629,7 +725,8 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon3.sprite = playerGod.Action3.icon;
             godAbilityCost3.text = playerGod.Action3.manaCost.ToString();
             godAbilityCost3.enabled = true;
-
+            godAbilityName3.enabled = true;
+            godAbilityName3.text = playerGod.Action3.displayName;
 
             if (!playerGod.Action3.IsOffCooldown())
             {
@@ -647,6 +744,7 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon3.enabled = false;
             godAbilityTimer3.enabled = false;
             godAbilityCost3.enabled = false;
+            godAbilityName3.enabled = false;
         }
 
         if (playerGod.Action4 != null)
@@ -656,7 +754,8 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon4.sprite = playerGod.Action4.icon;
             godAbilityCost4.text = playerGod.Action4.manaCost.ToString();
             godAbilityCost4.enabled = true;
-
+            godAbilityName4.enabled = true;
+            godAbilityName4.text = playerGod.Action4.displayName;
 
             if (!playerGod.Action4.IsOffCooldown())
             {
@@ -674,6 +773,7 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon4.enabled = false;
             godAbilityTimer4.enabled = false;
             godAbilityCost4.enabled = false;
+            godAbilityName4.enabled = false;
         }
 
         if (playerGod.Action5 != null)
@@ -683,7 +783,8 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon5.sprite = playerGod.Action5.icon;
             godAbilityCost5.text = playerGod.Action5.manaCost.ToString();
             godAbilityCost5.enabled = true;
-
+            godAbilityName5.enabled = true;
+            godAbilityName5.text = playerGod.Action5.displayName;
 
             if (!playerGod.Action5.IsOffCooldown())
             {
@@ -701,6 +802,7 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon5.enabled = false;
             godAbilityTimer5.enabled = false;
             godAbilityCost5.enabled = false;
+            godAbilityName5.enabled = false;
         }
 
         if (playerGod.Action6 != null)
@@ -710,7 +812,8 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon6.sprite = playerGod.Action6.icon;
             godAbilityCost6.text = playerGod.Action6.manaCost.ToString();
             godAbilityCost6.enabled = true;
-
+            godAbilityName6.enabled = true;
+            godAbilityName6.text = playerGod.Action6.displayName;
 
             if (!playerGod.Action6.IsOffCooldown())
             {
@@ -728,6 +831,7 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon6.enabled = false;
             godAbilityTimer6.enabled = false;
             godAbilityCost6.enabled = false;
+            godAbilityName6.enabled = false;
         }
 
         if (playerGod.Action7 != null)
@@ -737,7 +841,8 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon7.sprite = playerGod.Action7.icon;
             godAbilityCost7.text = playerGod.Action7.manaCost.ToString();
             godAbilityCost7.enabled = true;
-
+            godAbilityName7.enabled = true;
+            godAbilityName7.text = playerGod.Action7.displayName;
 
             if (!playerGod.Action7.IsOffCooldown())
             {
@@ -755,6 +860,7 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon7.enabled = false;
             godAbilityTimer7.enabled = false;
             godAbilityCost7.enabled = false;
+            godAbilityName7.enabled = false;
         }
     }
 }
