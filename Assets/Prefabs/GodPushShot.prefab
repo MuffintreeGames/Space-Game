@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2680724956529489542}
   - component: {fileID: 5333707974461333185}
   - component: {fileID: 7641512819346146938}
+  - component: {fileID: 391845274734116804}
   m_Layer: 20
   m_Name: GodPushShot
   m_TagString: Untagged
@@ -99,8 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3e1b751b985c274785669cc5df2f041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
-  LifeTime: 5
+  Speed: 14
+  LifeTime: 0.5
   direction: 0
   Acceleration: 0
   CanStop: 0
@@ -151,3 +152,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &391845274734116804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7045386937356173623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2b7b84816ecce6468e56987929eaaba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockback: 40
+  BouncedLayers:
+    serializedVersion: 2
+    m_Bits: 34240

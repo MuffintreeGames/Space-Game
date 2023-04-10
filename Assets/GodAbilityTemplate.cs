@@ -76,7 +76,11 @@ public abstract class GodAbilityTemplate : MonoBehaviour
                 return false;
             }
             offCooldown = false;
-            tickingCooldown = cooldown;
+            StartCooldown();
+        } else if (parentGod.GetMP() < manaCost)
+        {
+            Debug.Log("can't afford mp!");
+            return false;
         }
 
         return true;
@@ -121,5 +125,12 @@ public abstract class GodAbilityTemplate : MonoBehaviour
     public float GetCooldown()
     {
         return tickingCooldown;
+    }
+
+    public void StartCooldown()
+    {
+        Debug.Log("triggering cooldown for " + this);
+        offCooldown = false;
+        tickingCooldown = cooldown;
     }
 }

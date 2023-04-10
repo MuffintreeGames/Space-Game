@@ -5,19 +5,26 @@ using UnityEngine;
 public class PlaceOnClick : MonoBehaviour    //attach to object to have image follow mouse, and on a click place an object into the world
 {
     public GameObject CreatedObject;
-    public float Cost = 25f;
     public string helpText = "Left-click on empty area to place object. Right-click to cancel.";
+    public bool canPlaceOnSolids = false;
+    public bool spendOnSpawn = false;   //if true, triggers parent ability mana cost + cooldown
+    public GodAbilityTemplate parentAbility;
 
     private GodController god;
     private LayerMask preventedLayers;
     private bool canPlace = true;
-    private CircleCollider2D hoverCollider;
+    private CircleCollider2D hoverCircleCollider;
+    private BoxCollider2D hoverBoxCollider;
 
     // Start is called before the first frame update
     void Start()
     {
         god = GameObject.Find("GodController").GetComponent<GodController>();
-        hoverCollider = GetComponent<CircleCollider2D>();
+        hoverCircleCollider = GetComponent<CircleCollider2D>();
+        if (hoverCircleCollider == null)
+        {
+            hoverBoxCollider = GetComponent<BoxCollider2D>();
+        }
         preventedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize1"));
         preventedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
         preventedLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
@@ -41,11 +48,27 @@ public class PlaceOnClick : MonoBehaviour    //attach to object to have image fo
         Vector2 mouseCoords = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         transform.position = mouseCoords;
 
-        Collider2D preventativeObject = Physics2D.OverlapCircle(mouseCoords, hoverCollider.radius * transform.localScale.y, preventedLayers);
-        if (preventativeObject != null)
+        if (!canPlaceOnSolids)
         {
-            Debug.Log("found something in the way: " + preventativeObject.gameObject.name);
-            canPlace = false;
+            Collider2D preventativeObject;
+            if (hoverCircleCollider != null)
+            {
+                preventativeObject = Physics2D.OverlapCircle(mouseCoords, hoverCircleCollider.radius * transform.localScale.y, preventedLayers);
+            }
+            else
+            {
+                preventativeObject = Physics2D.OverlapBox(mouseCoords, hoverBoxCollider.size * transform.localScale.y, preventedLayers);
+            }
+
+            if (preventativeObject != null)
+            {
+                Debug.Log("found something in the way: " + preventativeObject.gameObject.name + " on layer " + LayerMask.LayerToName(preventativeObject.gameObject.layer));
+                canPlace = false;
+            }
+            else
+            {
+                canPlace = true;
+            }
         } else
         {
             canPlace = true;
@@ -55,11 +78,16 @@ public class PlaceOnClick : MonoBehaviour    //attach to object to have image fo
         {
             if (canPlace)
             {
-                if (!god.SpendMP(Cost))
+                if (spendOnSpawn)
                 {
-                    Debug.Log("Can't afford to place!");
-                    return;
+                    if (!god.SpendMP(parentAbility.manaCost))
+                    {
+                        Debug.Log("Can't afford to place!");
+                        return;
+                    }
+                    parentAbility.StartCooldown();
                 }
+
                 Instantiate(CreatedObject, mouseCoords, Quaternion.identity);
                 god.SetAbilityUsage(true);
                 HUDManager.UpdateGodAbilityHelpText.Invoke("");

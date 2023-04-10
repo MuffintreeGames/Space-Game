@@ -62,7 +62,7 @@ public class AimingArrow : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             god.SpendMP(parentAbility.manaCost);
-
+            parentAbility.StartCooldown();
             if (shootingObject)
             {
                 Rigidbody2D aimedRigid = aimedObject.gameObject.GetComponent<Rigidbody2D>();
@@ -74,7 +74,6 @@ public class AimingArrow : MonoBehaviour
                 GameObject firedShot = Instantiate(projectile, transform.position, Quaternion.identity);
                 Projectile shotScript = firedShot.GetComponent<Projectile>();
                 shotScript.SetProjectileParameters(shotScript.Speed, targetRotation.eulerAngles.z, shotScript.LifeTime);
-                Debug.Log("spawned " + firedShot);
             }
             
             god.SetAbilityUsage(true);

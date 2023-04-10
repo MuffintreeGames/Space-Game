@@ -61,7 +61,7 @@ public class GodController : MonoBehaviour
 
     public void UseAbility1()
     {
-        if (Action1 != null)
+        if (Action1 != null && canUseAbilities)
         {
             Action1.UseAbility();
         }
@@ -69,7 +69,7 @@ public class GodController : MonoBehaviour
 
     public void UseAbility2()
     {
-        if (Action2 != null)
+        if (Action2 != null && canUseAbilities)
         {
             Action2.UseAbility();
         }
@@ -77,7 +77,7 @@ public class GodController : MonoBehaviour
 
     public void UseAbility3()
     {
-        if (Action3 != null)
+        if (Action3 != null && canUseAbilities)
         {
             Action3.UseAbility();
         }
@@ -85,7 +85,7 @@ public class GodController : MonoBehaviour
 
     public void UseAbility4()
     {
-        if (Action4 != null)
+        if (Action4 != null && canUseAbilities)
         {
             Action4.UseAbility();
         }
@@ -93,7 +93,7 @@ public class GodController : MonoBehaviour
 
     public void UseAbility5()
     {
-        if (Action5 != null)
+        if (Action5 != null && canUseAbilities)
         {
             Action5.UseAbility();
         }
@@ -101,7 +101,7 @@ public class GodController : MonoBehaviour
 
     public void UseAbility6()
     {
-        if (Action6 != null)
+        if (Action6 != null && canUseAbilities)
         {
             Action6.UseAbility();
         }
@@ -109,7 +109,7 @@ public class GodController : MonoBehaviour
 
     public void UseAbility7()
     {
-        if (Action7 != null)
+        if (Action7 != null && canUseAbilities)
         {
             Action7.UseAbility();
         }

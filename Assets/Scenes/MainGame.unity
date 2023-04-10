@@ -1518,6 +1518,7 @@ GameObject:
   - component: {fileID: 353425597}
   - component: {fileID: 353425598}
   - component: {fileID: 353425599}
+  - component: {fileID: 353425600}
   m_Layer: 0
   m_Name: GodController
   m_TagString: Untagged
@@ -1542,7 +1543,7 @@ MonoBehaviour:
   Action1: {fileID: 353425597}
   Action2: {fileID: 353425598}
   Action3: {fileID: 353425599}
-  Action4: {fileID: 353425597}
+  Action4: {fileID: 353425600}
   Action5: {fileID: 353425597}
   Action6: {fileID: 353425597}
   Action7: {fileID: 353425597}
@@ -1612,9 +1613,27 @@ MonoBehaviour:
   cooldown: 10
   manaCost: 40
   icon: {fileID: 21300000, guid: b02875e6532c5a24abcaa4b3b087af7a, type: 3}
-  displayName: Wall of Force
+  displayName: Breath of God
   spendOnClick: 0
   crosshair: {fileID: 5039469841758836263, guid: 4d608b00d077d5940a5617c270c7a943, type: 3}
+--- !u!114 &353425600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353425594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b1dfe175796f864fb24e363b56a3aca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 6
+  manaCost: 25
+  icon: {fileID: 21300000, guid: 4478e6ba02469084c8ed99a0d36866f9, type: 3}
+  displayName: Foot of God
+  spendOnClick: 0
+  spawnOutline: {fileID: 5039469841758836263, guid: 322c32ce305d75247bdf6e3fce289758, type: 3}
 --- !u!1001 &355174722
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -277,32 +277,40 @@ public class GoliathController : MonoBehaviour
             return;
         }
 
+
         float horizontalDirection = Input.GetAxisRaw("Horizontal");
         float verticalDirection = Input.GetAxisRaw("Vertical");
 
-
-        goliathRigid.AddForce(new Vector2(1, 0) * horizontalDirection * currentHorAcceleration);
-        goliathRigid.AddForce(new Vector2(0, 1) * verticalDirection * currentVertAcceleration);
-
-        Vector2 finalVelocity = goliathRigid.velocity;
-        if (finalVelocity.x > (maxSpeed))
+        Vector2 currentVelocity = goliathRigid.velocity;
+        if (!(currentVelocity.x > maxSpeed && horizontalDirection > 0) && !((currentVelocity.x < -maxSpeed && horizontalDirection < 0)))
         {
-            finalVelocity.x = (maxSpeed);
-        } else if (finalVelocity.x < -(maxSpeed))
-        {
-            finalVelocity.x = -(maxSpeed);
+            goliathRigid.AddForce(new Vector2(1, 0) * horizontalDirection * currentHorAcceleration);
         }
 
-        if (finalVelocity.y > (maxSpeed))
+        if (!(currentVelocity.y > maxSpeed && verticalDirection > 0) && !((currentVelocity.y < -maxSpeed && verticalDirection < 0)))
         {
-            finalVelocity.y = (maxSpeed);
-        }
-        else if (finalVelocity.y < -(maxSpeed))
-        {
-            finalVelocity.y = -(maxSpeed);
+            goliathRigid.AddForce(new Vector2(0, 1) * verticalDirection * currentVertAcceleration);
         }
 
-        goliathRigid.velocity = finalVelocity;
+        /*Vector2 finalVelocity = goliathRigid.velocity;
+        if (finalVelocity.x > maxSpeed)
+        {
+            finalVelocity.x = maxSpeed;
+        } else if (finalVelocity.x < -maxSpeed)
+        {
+            finalVelocity.x = -maxSpeed;
+        }
+
+        if (finalVelocity.y > maxSpeed)
+        {
+            finalVelocity.y = maxSpeed;
+        }
+        else if (finalVelocity.y < -maxSpeed)
+        {
+            finalVelocity.y = -maxSpeed;
+        }
+
+        goliathRigid.velocity = finalVelocity;*/
     }
 
         public void StartBasicAttack(float timeToFinish, bool mirrored = false) //activate arm, disable ability to perform further attacks

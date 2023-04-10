@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GodSpawnHostilePlanetAbility : GodAbilityTemplate
+public class GodStomp : GodAbilityTemplate    //create a leg which swings after a short delay, punting planets + the goliath
 {
     public GameObject spawnOutline;
 

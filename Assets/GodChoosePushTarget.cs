@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GodChoosePushTarget : MonoBehaviour    //select a planet to launch
+public class GodChoosePushTarget : MonoBehaviour    //select where to create pushing wall
 {
     public GameObject AimingArrow;
     public string helpText;
