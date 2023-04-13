@@ -66,7 +66,7 @@ public class AimingArrow : MonoBehaviour
             if (shootingObject)
             {
                 Rigidbody2D aimedRigid = aimedObject.gameObject.GetComponent<Rigidbody2D>();
-                aimedRigid.AddForce(targetDirection.normalized * launchForce, ForceMode2D.Impulse);
+                aimedRigid.AddForce(targetDirection.normalized * launchForce * aimedRigid.mass, ForceMode2D.Impulse);
                 SpeedAttackObject aimedAttack = aimedObject.GetComponent<SpeedAttackObject>();
                 aimedAttack.enabled = true;
             } else

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GodStomp : GodAbilityTemplate    //create a leg which swings after a short delay, punting planets + the goliath
+public class GodMakeEyeAbility : GodAbilityTemplate    //create an eye which gradually paralyzes the goliath if it looks at the eye
 {
     public GameObject spawnOutline;
 

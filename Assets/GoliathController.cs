@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -72,6 +73,7 @@ public class GoliathController : MonoBehaviour
     private int level5Exp = 1500;   //exp to reach level 5
 
     private int level = 1;  //size of creature, max out at 5
+    private float levelHealthBonus = 100f; //extra health gained per level
 
     public GoliathCameraController goliathCamera;
 
@@ -101,6 +103,11 @@ public class GoliathController : MonoBehaviour
     private StatusController statusController;
 
     private bool abilitiesLocked = false;   //used when some effect prevents goliath from using abilities
+
+    private float paralysisLevel = 0f;  //slows down goliath as a multiplier
+    private float maxParalysis = 0.85f; //cap on paralysis
+    private float paralysisDuration = 2f;   //time that paralysis lasts after being applied
+    private float currentParalysisDuration = 0f;    //current time elapsed in paralysis
 
     // Start is called before the first frame update
 
@@ -132,6 +139,7 @@ public class GoliathController : MonoBehaviour
 
         damagableLayers = (1 << LayerMask.NameToLayer("DestructibleSize1"));
         damagableLayers |= (1 << LayerMask.NameToLayer("GoliathDestructible"));
+        damagableLayers |= (1 << LayerMask.NameToLayer("AlienShip"));
 
         statusController = GameObject.Find("StatusContainer").GetComponent<StatusController>();
     }
@@ -226,7 +234,7 @@ public class GoliathController : MonoBehaviour
                 smoothRotation = Mathf.Max(smoothRotation, targetRotation);
             } else
             {
-                smoothRotation += rotationSpeed * Time.deltaTime;
+                smoothRotation += rotationSpeed * Time.deltaTime * (1f - paralysisLevel);
                 smoothRotation = Mathf.Min(smoothRotation, targetRotation);
             }
             goliathRigid.SetRotation(smoothRotation);
@@ -284,12 +292,12 @@ public class GoliathController : MonoBehaviour
         Vector2 currentVelocity = goliathRigid.velocity;
         if (!(currentVelocity.x > maxSpeed && horizontalDirection > 0) && !((currentVelocity.x < -maxSpeed && horizontalDirection < 0)))
         {
-            goliathRigid.AddForce(new Vector2(1, 0) * horizontalDirection * currentHorAcceleration);
+            goliathRigid.AddForce(new Vector2(1, 0) * horizontalDirection * currentHorAcceleration * (1f - paralysisLevel) * goliathRigid.mass);
         }
 
         if (!(currentVelocity.y > maxSpeed && verticalDirection > 0) && !((currentVelocity.y < -maxSpeed && verticalDirection < 0)))
         {
-            goliathRigid.AddForce(new Vector2(0, 1) * verticalDirection * currentVertAcceleration);
+            goliathRigid.AddForce(new Vector2(0, 1) * verticalDirection * currentVertAcceleration * (1f - paralysisLevel) * goliathRigid.mass);
         }
 
         /*Vector2 finalVelocity = goliathRigid.velocity;
@@ -517,7 +525,7 @@ public class GoliathController : MonoBehaviour
         {
             CheckAbilityReplacement();
         }
-            
+        ManageParalysis();
             SetGoliathSpeed();
             MoveGoliath();
             goliathCamera.updateCamera();   //now that we've moved, set new camera position
@@ -605,6 +613,7 @@ public class GoliathController : MonoBehaviour
             }
 
             level += 1;
+        goliathHealth.IncreaseMaxHealth(levelHealthBonus);
             currentExp -= neededExp;
             Debug.Log("leveled up! Level is now " + level);
             switch (level)
@@ -720,8 +729,8 @@ public class GoliathController : MonoBehaviour
         {
         Debug.Log("setting speed with " + xSpeed + ", " +  ySpeed);
         goliathRigid.velocity = new Vector2(xSpeed, ySpeed);
-        goliathRigid.AddForce(new Vector2(1, 0)  * xSpeed);
-        goliathRigid.AddForce(new Vector2(0, 1) * ySpeed);
+        goliathRigid.AddForce(new Vector2(1, 0)  * xSpeed * goliathRigid.mass);
+        goliathRigid.AddForce(new Vector2(0, 1) * ySpeed * goliathRigid.mass);
     }
 
         public int GetExp()
@@ -882,6 +891,31 @@ public class GoliathController : MonoBehaviour
         {
             Debug.Log("handling collision with something solid");
             StopDashAbility();
+        }
+    }
+
+    public void ApplyParalysis(float paralysisAmount)
+    {
+        paralysisLevel += paralysisAmount;
+        if (paralysisLevel > maxParalysis)
+        {
+            paralysisLevel = maxParalysis;
+        }
+        currentParalysisDuration = 0f;
+    }
+
+    private void ManageParalysis()
+    {
+        if (paralysisLevel == 0f)
+        {
+            return;
+        }
+
+        currentParalysisDuration += Time.deltaTime;
+        if (currentParalysisDuration > paralysisDuration)
+        {
+            paralysisLevel = 0f;
+            currentParalysisDuration = 0f;
         }
     }
     }

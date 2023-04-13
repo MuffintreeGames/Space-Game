@@ -28,6 +28,9 @@ public class Killable : MonoBehaviour
 
     public int blockableHits = 0;   //how many hits this unit can block before taking damage
 
+    public GameObject SpawnedOnDeath = null;    //spawned when this object is killed
+    public GameObject SpawnedOnGoliathKill = null;  //spawned when specifically the goliath kills this object
+
     // Start is called before the first frame update
     void Start()
     {
@@ -94,6 +97,12 @@ public class Killable : MonoBehaviour
         return blockableHits;
     }
 
+    public void IncreaseMaxHealth(float amount)
+    {
+        MaxHealth += amount;
+        currentHealth += amount;
+    }
+
     public void TakeDamage(float damage, bool fromGoliath, float invincibilityDuration)
     {
         if (invincible)
@@ -132,6 +141,17 @@ public class Killable : MonoBehaviour
             {
                 abilityScript.KilledByGoliath();    //used to grant ability to the goliath if killed by something controlled by the goliath. Note that objects that grant abilities shouldn't be killable by non-goliath things
             }
+
+            if (SpawnedOnDeath != null)
+            {
+                Instantiate(SpawnedOnDeath, transform.position, Quaternion.identity);
+            }
+
+            if (fromGoliath && SpawnedOnGoliathKill != null)
+            {
+                Instantiate(SpawnedOnGoliathKill, transform.position, Quaternion.identity);
+            }
+
             Destroy(this.gameObject);
         }
 

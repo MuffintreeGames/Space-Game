@@ -351,4 +351,9 @@ public class SpaceManager : MonoBehaviour
 
         return returnList;
     }
+
+    public static float GetElapsedTime()
+    {
+        return timeElapsed;
+    }
 }

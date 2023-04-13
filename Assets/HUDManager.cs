@@ -698,10 +698,17 @@ public class HUDManager : MonoBehaviour
             godAbilityName1.enabled = true;
             godAbilityName1.text = playerGod.Action1.displayName;
 
-            if (!playerGod.Action1.IsOffCooldown())
+            if (!playerGod.CanUseAbility1())
             {
                 godAbilityIcon1.color = Color.grey;
-                godAbilityTimer1.text = playerGod.Action1.GetCooldown().ToString();
+                if (!playerGod.Action1.IsOffCooldown())
+                {
+                    godAbilityTimer1.text = playerGod.Action1.GetCooldown().ToString("F0");
+                } else
+                {
+                    godAbilityTimer1.text = "";
+                }
+                
             }
             else
             {
@@ -722,15 +729,22 @@ public class HUDManager : MonoBehaviour
             godAbilityIcon2.enabled = true;
             godAbilityTimer2.enabled = true;
             godAbilityIcon2.sprite = playerGod.Action2.icon;
-            godAbilityCost2.text = playerGod.Action2.manaCost.ToString();
+            godAbilityCost2.text = playerGod.Action2.manaCost.ToString("F0");
             godAbilityCost2.enabled = true;
             godAbilityName2.enabled = true;
             godAbilityName2.text = playerGod.Action2.displayName;
 
-            if (!playerGod.Action2.IsOffCooldown())
+            if (!playerGod.CanUseAbility2())
             {
                 godAbilityIcon2.color = Color.grey;
-                godAbilityTimer2.text = playerGod.Action2.GetCooldown().ToString();
+                if (!playerGod.Action2.IsOffCooldown())
+                {
+                    godAbilityTimer2.text = playerGod.Action2.GetCooldown().ToString("F0");
+                }
+                else
+                {
+                    godAbilityTimer2.text = "";
+                }
             }
             else
             {
@@ -756,10 +770,23 @@ public class HUDManager : MonoBehaviour
             godAbilityName3.enabled = true;
             godAbilityName3.text = playerGod.Action3.displayName;
 
-            if (!playerGod.Action3.IsOffCooldown())
+            if (!playerGod.CanUseAbility3())
             {
                 godAbilityIcon3.color = Color.grey;
-                godAbilityTimer3.text = playerGod.Action3.GetCooldown().ToString();
+                if (playerGod.Action3UnlockTime > SpaceManager.GetElapsedTime())
+                {
+                    godAbilityTimer3.color = Color.blue;
+                    godAbilityTimer3.text = (playerGod.Action3UnlockTime - SpaceManager.GetElapsedTime()).ToString("F0");
+                }
+                else if (!playerGod.Action3.IsOffCooldown())
+                {
+                    godAbilityTimer3.color = Color.red;
+                    godAbilityTimer3.text = playerGod.Action3.GetCooldown().ToString("F0");
+                }
+                else
+                {
+                    godAbilityTimer3.text = "";
+                }
             }
             else
             {
@@ -785,10 +812,23 @@ public class HUDManager : MonoBehaviour
             godAbilityName4.enabled = true;
             godAbilityName4.text = playerGod.Action4.displayName;
 
-            if (!playerGod.Action4.IsOffCooldown())
+            if (!playerGod.CanUseAbility4())
             {
                 godAbilityIcon4.color = Color.grey;
-                godAbilityTimer4.text = playerGod.Action4.GetCooldown().ToString();
+                if (playerGod.Action4UnlockTime > SpaceManager.GetElapsedTime())
+                {
+                    godAbilityTimer4.color = Color.blue;
+                    godAbilityTimer4.text = (playerGod.Action4UnlockTime - SpaceManager.GetElapsedTime()).ToString("F0");
+                }
+                else if (!playerGod.Action4.IsOffCooldown())
+                {
+                    godAbilityTimer4.color = Color.red;
+                    godAbilityTimer4.text = playerGod.Action4.GetCooldown().ToString("F0");
+                }
+                else
+                {
+                    godAbilityTimer4.text = "";
+                }
             }
             else
             {
@@ -814,10 +854,23 @@ public class HUDManager : MonoBehaviour
             godAbilityName5.enabled = true;
             godAbilityName5.text = playerGod.Action5.displayName;
 
-            if (!playerGod.Action5.IsOffCooldown())
+            if (!playerGod.CanUseAbility5())
             {
                 godAbilityIcon5.color = Color.grey;
-                godAbilityTimer5.text = playerGod.Action5.GetCooldown().ToString();
+                if (playerGod.Action5UnlockTime > SpaceManager.GetElapsedTime())
+                {
+                    godAbilityTimer5.color = Color.blue;
+                    godAbilityTimer5.text = (playerGod.Action5UnlockTime - SpaceManager.GetElapsedTime()).ToString("F0");
+                }
+                else if (!playerGod.Action5.IsOffCooldown())
+                {
+                    godAbilityTimer5.color = Color.red;
+                    godAbilityTimer5.text = playerGod.Action5.GetCooldown().ToString("F0");
+                }
+                else
+                {
+                    godAbilityTimer5.text = "";
+                }
             }
             else
             {
