@@ -109,6 +109,8 @@ public class GoliathController : MonoBehaviour
     private float paralysisDuration = 2f;   //time that paralysis lasts after being applied
     private float currentParalysisDuration = 0f;    //current time elapsed in paralysis
 
+    private SlowableObject slowComponent;
+
     // Start is called before the first frame update
 
     void Start()
@@ -142,6 +144,7 @@ public class GoliathController : MonoBehaviour
         damagableLayers |= (1 << LayerMask.NameToLayer("AlienShip"));
 
         statusController = GameObject.Find("StatusContainer").GetComponent<StatusController>();
+        slowComponent = GetComponent<SlowableObject>();
     }
 
         void SetGoliathRotation()
@@ -289,15 +292,16 @@ public class GoliathController : MonoBehaviour
         float horizontalDirection = Input.GetAxisRaw("Horizontal");
         float verticalDirection = Input.GetAxisRaw("Vertical");
 
+
         Vector2 currentVelocity = goliathRigid.velocity;
-        if (!(currentVelocity.x > maxSpeed && horizontalDirection > 0) && !((currentVelocity.x < -maxSpeed && horizontalDirection < 0)))
+        if (!(currentVelocity.x > (maxSpeed/slowComponent.GetSlowFactor()) && horizontalDirection > 0) && !((currentVelocity.x < -(maxSpeed/slowComponent.GetSlowFactor()) && horizontalDirection < 0)))
         {
-            goliathRigid.AddForce(new Vector2(1, 0) * horizontalDirection * currentHorAcceleration * (1f - paralysisLevel) * goliathRigid.mass);
+            goliathRigid.AddForce(new Vector2(1, 0) * horizontalDirection * currentHorAcceleration * (1f - paralysisLevel) * goliathRigid.mass / slowComponent.GetSlowFactor());
         }
 
-        if (!(currentVelocity.y > maxSpeed && verticalDirection > 0) && !((currentVelocity.y < -maxSpeed && verticalDirection < 0)))
+        if (!(currentVelocity.y > (maxSpeed/slowComponent.GetSlowFactor()) && verticalDirection > 0) && !((currentVelocity.y < -(maxSpeed / slowComponent.GetSlowFactor()) && verticalDirection < 0)))
         {
-            goliathRigid.AddForce(new Vector2(0, 1) * verticalDirection * currentVertAcceleration * (1f - paralysisLevel) * goliathRigid.mass);
+            goliathRigid.AddForce(new Vector2(0, 1) * verticalDirection * currentVertAcceleration * (1f - paralysisLevel) * goliathRigid.mass / slowComponent.GetSlowFactor());
         }
 
         /*Vector2 finalVelocity = goliathRigid.velocity;
@@ -918,4 +922,5 @@ public class GoliathController : MonoBehaviour
             currentParalysisDuration = 0f;
         }
     }
+
     }

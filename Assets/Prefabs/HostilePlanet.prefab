@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4422917790989804597}
   - component: {fileID: 9098195377146710616}
   - component: {fileID: 4181296240369957872}
+  - component: {fileID: 6822758449387754540}
   m_Layer: 8
   m_Name: HostilePlanet
   m_TagString: Untagged
@@ -199,3 +200,15 @@ MonoBehaviour:
   InvincibilityDuration: 0.8
   BelongsToGoliath: 0
   DamagePerSpeed: 40
+--- !u!114 &6822758449387754540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6088609408505885020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8442664667273644091fd3466e659585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

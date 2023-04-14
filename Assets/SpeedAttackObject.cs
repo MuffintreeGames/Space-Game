@@ -10,7 +10,10 @@ public class SpeedAttackObject : AttackObject   //variant of attack object that 
     private Rigidbody2D rb;
     private Vector3 positionLastFrame;
     private bool initializing = true;
-    private float speedCutoff = 0.1f;   //speed at which we should disable attack script. Decrease if stuff isn't doing damage when it should
+    private bool positionSet = false;
+
+    private SlowableObject slowComponent;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,33 +22,41 @@ public class SpeedAttackObject : AttackObject   //variant of attack object that 
         {
             Debug.LogError("Speed attack object without a rigidbody!");
         }
+        slowComponent = rb.GetComponent<SlowableObject>();
+        if (slowComponent == null)
+        {
+            Debug.LogError("Speed attack object without a slowable component!");
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (positionLastFrame != null)
+        if (positionSet)    //have to do this first so that planet knows where it is
         {
-            float xDifference = transform.position.x - positionLastFrame.x;
-            float yDifference = transform.position.y - positionLastFrame.y;
+            float xDifference = rb.position.x - positionLastFrame.x;
+            float yDifference = rb.position.y - positionLastFrame.y;
             float currentSpeed = Mathf.Sqrt(xDifference * xDifference + yDifference * yDifference);
             if (initializing && currentSpeed != 0f)
             {
                 initializing = false;
             }
-            Damage = Mathf.RoundToInt(currentSpeed * DamagePerSpeed);
-            if (Damage < 10)
+
+            Damage = Mathf.RoundToInt(currentSpeed * DamagePerSpeed * slowComponent.GetSlowFactor());  //multiply by slow factor here to keep relative damage the same even when slowed
+            if (Damage < 5)
             {
                 Damage = 0;
-            }
-            if (currentSpeed <= speedCutoff && !initializing)
-            {
-                Debug.Log("disabling speed attack");
-                initializing = true;
-                enabled = false;    //disable any that aren't moving to avoid excessive calculations
+                if (!initializing)
+                {
+                    Debug.Log("disabling speed attack");
+                    initializing = true;
+                    positionSet = false;
+                    enabled = false;    //disable any that aren't moving to avoid excessive calculations
+                }
             }
         }
-        positionLastFrame = transform.position;
+        positionLastFrame = rb.position;
+        positionSet = true;
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -56,7 +67,6 @@ public class SpeedAttackObject : AttackObject   //variant of attack object that 
             if (collidedAttackObject)
             {
                 collidedAttackObject.enabled = true;
-                Debug.Log("billiards!");
             }
             base.OnCollisionStay2D(collision);
         }

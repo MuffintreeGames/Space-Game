@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8174500485608430157}
   - component: {fileID: 220462857271953768}
   - component: {fileID: 960343694999228041}
+  - component: {fileID: 2518501071477245574}
   m_Layer: 7
   m_Name: Asteroid (4)
   m_TagString: Untagged
@@ -162,6 +163,18 @@ MonoBehaviour:
   InvincibilityDuration: 0.5
   BelongsToGoliath: 0
   DamagePerSpeed: 100
+--- !u!114 &2518501071477245574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5486413670860119445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8442664667273644091fd3466e659585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5595354266347997742
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,6 +189,7 @@ GameObject:
   - component: {fileID: 7015893478072501074}
   - component: {fileID: 1707428410731536487}
   - component: {fileID: 2723183792902985373}
+  - component: {fileID: 5777924856086527988}
   m_Layer: 7
   m_Name: Asteroid (5)
   m_TagString: Untagged
@@ -324,6 +338,18 @@ MonoBehaviour:
   InvincibilityDuration: 0.5
   BelongsToGoliath: 0
   DamagePerSpeed: 100
+--- !u!114 &5777924856086527988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5595354266347997742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8442664667273644091fd3466e659585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6528937312871052380
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,6 +364,7 @@ GameObject:
   - component: {fileID: 2845762306317104118}
   - component: {fileID: 3296833287684441157}
   - component: {fileID: 8088349010133066917}
+  - component: {fileID: 7942235691536265990}
   m_Layer: 7
   m_Name: Asteroid (6)
   m_TagString: Untagged
@@ -486,6 +513,18 @@ MonoBehaviour:
   InvincibilityDuration: 0.5
   BelongsToGoliath: 0
   DamagePerSpeed: 100
+--- !u!114 &7942235691536265990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6528937312871052380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8442664667273644091fd3466e659585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7352650624715784733
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,6 +539,7 @@ GameObject:
   - component: {fileID: 589497731320950439}
   - component: {fileID: 1260891780483775821}
   - component: {fileID: 7772913184907339007}
+  - component: {fileID: 2625112960690898931}
   m_Layer: 7
   m_Name: Asteroid (1)
   m_TagString: Untagged
@@ -648,6 +688,18 @@ MonoBehaviour:
   InvincibilityDuration: 0.5
   BelongsToGoliath: 0
   DamagePerSpeed: 100
+--- !u!114 &2625112960690898931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7352650624715784733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8442664667273644091fd3466e659585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7781704286262689673
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,6 +714,7 @@ GameObject:
   - component: {fileID: 2693260017256414391}
   - component: {fileID: 2747432285826571246}
   - component: {fileID: 6288140669393270585}
+  - component: {fileID: 5271072277272021590}
   m_Layer: 7
   m_Name: Asteroid
   m_TagString: Solid
@@ -810,6 +863,18 @@ MonoBehaviour:
   InvincibilityDuration: 0.5
   BelongsToGoliath: 0
   DamagePerSpeed: 100
+--- !u!114 &5271072277272021590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7781704286262689673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8442664667273644091fd3466e659585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8444404833751190482
 GameObject:
   m_ObjectHideFlags: 0
@@ -824,6 +889,7 @@ GameObject:
   - component: {fileID: 6915131878069918343}
   - component: {fileID: 5192520419983423011}
   - component: {fileID: 8951454905373667274}
+  - component: {fileID: 8088845903165550577}
   m_Layer: 7
   m_Name: Asteroid (7)
   m_TagString: Untagged
@@ -972,6 +1038,18 @@ MonoBehaviour:
   InvincibilityDuration: 0.5
   BelongsToGoliath: 0
   DamagePerSpeed: 100
+--- !u!114 &8088845903165550577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8444404833751190482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8442664667273644091fd3466e659585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9002695785301529549
 GameObject:
   m_ObjectHideFlags: 0

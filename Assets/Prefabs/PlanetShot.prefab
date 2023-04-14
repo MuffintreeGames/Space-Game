@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3846245684141882531}
   - component: {fileID: 9023866774906467180}
   - component: {fileID: 6689333086043523588}
+  - component: {fileID: 2372754202369913819}
   m_Layer: 23
   m_Name: PlanetShot
   m_TagString: Untagged
@@ -193,3 +194,18 @@ MonoBehaviour:
   DamageFlashToggle: 0
   DamageFlash: {r: 1, g: 0, b: 0, a: 1}
   InvincibilityOpacity: 0.5
+  blockableHits: 0
+  SpawnedOnDeath: {fileID: 0}
+  SpawnedOnGoliathKill: {fileID: 0}
+--- !u!114 &2372754202369913819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7045386937356173623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8442664667273644091fd3466e659585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

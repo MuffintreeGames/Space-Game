@@ -29,7 +29,6 @@ public class AttackObject : MonoBehaviour
 
     protected void OnCollisionStay2D(Collision2D col)  //uncomment this if you want to use a collider rather than a trigger for a hitbox at some point
     {
-        Debug.Log("damage collision");
         if (!enabled)
         {
             return;
@@ -53,7 +52,6 @@ public class AttackObject : MonoBehaviour
             {
                 if (hitTargets.ContainsKey(hitGameObject))
                 {
-                    Debug.Log("have already hit this object before");
                     return;
                 }
                 hitTargets.Add(hitGameObject, true);
@@ -62,6 +60,7 @@ public class AttackObject : MonoBehaviour
             if ((DamagedLayers & (1 << hitGameObject.layer)) != 0)
             {
                 targetKillable.TakeDamage(Damage * damageMultiplier, BelongsToGoliath, InvincibilityDuration);
+                Debug.Log("inflicting " + Damage * damageMultiplier + " damage!");
             }
             if (DestroyOnHit)
             {

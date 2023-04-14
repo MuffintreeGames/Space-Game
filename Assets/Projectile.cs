@@ -20,10 +20,16 @@ public class Projectile : MonoBehaviour
     private float angle = 90f; //angle of projectile
     private float currentTime = 0f; //length of time that projectile has been active
 
+    private SlowableObject slowComponent;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        slowComponent = GetComponent<SlowableObject>();
+        if (slowComponent == null)
+        {
+            Debug.LogError("Projectile object without a slowable component!");
+        }
     }
 
     // Update is called once per frame
@@ -36,13 +42,13 @@ public class Projectile : MonoBehaviour
 
         if (direction == directionChoices.right)
         {
-            transform.position += transform.right * Speed * Time.deltaTime;
+            transform.position += transform.right * Speed * Time.deltaTime / slowComponent.GetSlowFactor();
         } else
         {
-            transform.position += transform.up * Speed * Time.deltaTime;
+            transform.position += transform.up * Speed * Time.deltaTime / slowComponent.GetSlowFactor();
         }
 
-        currentTime += Time.deltaTime;
+        currentTime += Time.deltaTime / slowComponent.GetSlowFactor();    //projectile lasts longer if slowed
 
         Speed += Acceleration * Time.deltaTime;
         if (CanStop && Speed <= 0f)

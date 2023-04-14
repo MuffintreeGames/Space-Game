@@ -7,9 +7,12 @@ public class KnockbackOnTouch : MonoBehaviour
     public float knockback;  //force of knockback
     public LayerMask BouncedLayers; //layers that should be affected
 
+    private Vector2 oldCoords;
+
     // Start is called before the first frame update
     void Start()
     {
+        oldCoords = transform.position;
     }
 
     // Update is called once per frame
@@ -18,7 +21,7 @@ public class KnockbackOnTouch : MonoBehaviour
 
     }
 
-    protected void OnCollisionEnter2D(Collision2D col)  //uncomment this if you want to use a collider rather than a trigger for a hitbox at some point
+    protected void OnTriggerEnter2D(Collider2D col)  //uncomment this if you want to use a collider rather than a trigger for a hitbox at some point
     {
         Debug.Log("knockback collision");
         if (!enabled)
@@ -35,10 +38,23 @@ public class KnockbackOnTouch : MonoBehaviour
                 return;
             }
 
-            Vector2 direction = (Vector2)hitGameObject.transform.position - col.contacts[0].point;
-            Debug.Log("knockback in " + direction);
-            targetRigid.AddForce(direction * knockback, ForceMode2D.Impulse);
+            SpeedAttackObject speedAttackObject = targetRigid.GetComponent<SpeedAttackObject>();
+            if (speedAttackObject != null)
+            {
+                speedAttackObject.enabled = true;
+            }
+
+            Vector2 direction = (Vector2) transform.position - oldCoords;
+            SlowableObject slowComponent = hitGameObject.GetComponent<SlowableObject>();
+            if (slowComponent != null)
+            {
+                targetRigid.AddForce(direction.normalized * knockback * targetRigid.mass / slowComponent.GetSlowFactor(), ForceMode2D.Impulse);
+            } else
+            {
+                targetRigid.AddForce(direction.normalized * knockback * targetRigid.mass, ForceMode2D.Impulse);
+            }
         }
+        oldCoords = transform.position;
     }
 
     /*void OnTriggerEnter2D(Collider2D col)

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7838426537178242089}
   - component: {fileID: 5333707974461333185}
   - component: {fileID: 6734802541037809805}
+  - component: {fileID: 1104787130853930966}
   m_Layer: 20
   m_Name: GoliathShot
   m_TagString: Untagged
@@ -165,3 +166,15 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &1104787130853930966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7045386937356173623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8442664667273644091fd3466e659585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

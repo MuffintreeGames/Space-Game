@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 2829819367288283323}
   - component: {fileID: 1230356903693809176}
   - component: {fileID: 8079195818484017457}
+  - component: {fileID: 8494048557476920258}
   m_Layer: 13
   m_Name: BabyMonster
   m_TagString: Untagged
@@ -280,3 +281,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 5
   acceleration: 12
+--- !u!114 &8494048557476920258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8721794712599513096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8442664667273644091fd3466e659585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
