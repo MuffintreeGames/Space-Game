@@ -21,4 +21,9 @@ public class TitleScreenController : MonoBehaviour
     {
         SceneManager.LoadSceneAsync(1);
     }
+
+    public void Online()
+    {
+        SceneManager.LoadSceneAsync(2);
+    }
 }
