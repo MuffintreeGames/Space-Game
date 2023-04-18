@@ -8,6 +8,8 @@ public class AvatarController : MonoBehaviour
     private Rigidbody2D avatarRb;
     private Rigidbody2D goliathRb;
 
+    private int currentMovementPattern = -1;    //-1 means unset, 0 = circle clockwise, 1 = circle counter, 2 = short-range teleporting, 3 = hiding, 4 = running
+
     private float offTrackMaxSpeed = 13f;
     private float offTrackMinSpeed = 5f;
     private float offTrackCurrentSpeed = 5f;
@@ -38,8 +40,34 @@ public class AvatarController : MonoBehaviour
     void FixedUpdate()
     {
         CalculateGoliathPosition();
-        PerformMovementPattern1();
+        bool movementDone = false;
+        while (!movementDone)
+        {
+            switch (currentMovementPattern)
+            {
+                case -1:
+                    SelectMovementPattern(); break;
+                case 0:
+                    PerformMovementPatternCircleClockwise(); movementDone = true; break;
+                case 1:
+                    PerformMovementPatternCircleCounterClockwise(); movementDone = true; break;
+                case 2:
+                    PerformMovementPatternRapidBlinks(); movementDone = true; break;
+                case 3:
+                    PerformMovementPatternHide(); movementDone = true; break;
+                case 4:
+                    PerformMovementPatternFlee(); movementDone = true; break;
+            }
+        }
         ApplyMovement();
+    }
+
+    private void SelectMovementPattern()
+    {
+        currentMovementPattern = Random.Range(0, 2);
+        patternRunTime = 0f;
+        targetPositionInitialized = false;
+        Debug.Log("chosen: " + currentMovementPattern);
     }
 
     void CalculateGoliathPosition()
@@ -89,22 +117,27 @@ public class AvatarController : MonoBehaviour
         }
     }
 
-    void PerformMovementPattern1()  //circle around goliath
+    void PerformMovementPatternCircleClockwise()  //circle around goliath clockwise
     {
-        patternRunTime %= circleTime;
+        if (patternRunTime > circleTime)
+        {
+            currentMovementPattern = -1;
+            return;
+        }
+
         Vector3 rotationAxis = new Vector3(0, 0, 1);
-        Quaternion q = Quaternion.AngleAxis(360f * (patternRunTime / circleTime), rotationAxis);
+        Quaternion q = Quaternion.AngleAxis(-360f * (patternRunTime / circleTime), rotationAxis);
         Vector2 DefaultDistance = new Vector2(circlingDistance, circlingDistance);
         Vector2 calculatedPosition = (Vector2) (q * DefaultDistance) + assumedGoliathPosition;
-        Debug.Log("calculated: " + calculatedPosition + ", current: " + avatarRb.position);
-        if (!targetPositionInitialized)
+        if (!targetPositionInitialized) //warps avatar into place
         {
             targetPosition = calculatedPosition;
+            avatarRb.position = calculatedPosition;
             targetPositionInitialized = true;
             return;
         }
 
-        if (Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance || Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance)
+        if (Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance || Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance) //when avatar is too far off the path, should pause the pattern until they're back on track
         {
             //Debug.Log("avatar is off-track, pausing pattern");
         }
@@ -113,6 +146,52 @@ public class AvatarController : MonoBehaviour
             targetPosition = calculatedPosition;
             patternRunTime += Time.deltaTime;
         }
+    }
+
+    void PerformMovementPatternCircleCounterClockwise() //circle around goliath counter-clockwise
+    {
+        if (patternRunTime > circleTime)
+        {
+            currentMovementPattern = -1;
+            return;
+        }
+
+        Vector3 rotationAxis = new Vector3(0, 0, 1);
+        Quaternion q = Quaternion.AngleAxis(360f * (patternRunTime / circleTime), rotationAxis);
+        Vector2 DefaultDistance = new Vector2(circlingDistance, circlingDistance);
+        Vector2 calculatedPosition = (Vector2)(q * DefaultDistance) + assumedGoliathPosition;
+        if (!targetPositionInitialized) //warps avatar into place
+        {
+            targetPosition = calculatedPosition;
+            avatarRb.position = calculatedPosition;
+            targetPositionInitialized = true;
+            return;
+        }
+
+        if (Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance || Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance) //when avatar is too far off the path, should pause the pattern until they're back on track
+        {
+            //Debug.Log("avatar is off-track, pausing pattern");
+        }
+        else
+        {
+            targetPosition = calculatedPosition;
+            patternRunTime += Time.deltaTime;
+        }
+    }
+
+    void PerformMovementPatternRapidBlinks()
+    {
+
+    }
+
+    void PerformMovementPatternHide()
+    {
+
+    }
+
+    void PerformMovementPatternFlee()
+    {
+
     }
 
     void ApplyMovement()
