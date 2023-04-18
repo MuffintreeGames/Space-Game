@@ -104,7 +104,7 @@ MonoBehaviour:
   Damage: 7
   TargetLayers:
     serializedVersion: 2
-    m_Bits: 2620352
+    m_Bits: 73923520
   DamagedLayers:
     serializedVersion: 2
     m_Bits: 2097216

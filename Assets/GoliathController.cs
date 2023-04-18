@@ -113,6 +113,12 @@ public class GoliathController : MonoBehaviour
 
     // Start is called before the first frame update
 
+    void Awake()
+    {
+        GoliathLevelup = new GoliathLevelupEvent();
+        GoliathFinishAttack = new GoliathFinishAttackEvent();
+        GoliathEquipAbility = new GoliathEquipAbilityEvent();
+    }
     void Start()
     {
         goliath = this.gameObject;
@@ -130,10 +136,6 @@ public class GoliathController : MonoBehaviour
         EXPSource.GoliathGainExp.AddListener(GainExp);
         GrantAbility.GoliathGainAbility.AddListener(GainAbility);
 
-        GoliathLevelup = new GoliathLevelupEvent();
-        GoliathFinishAttack = new GoliathFinishAttackEvent();
-        GoliathEquipAbility = new GoliathEquipAbilityEvent();
-
         originalMaxSpeed = maxSpeed;
         originalAcceleration = acceleration;
         originalReversingAcceleration = reversingAcceleration;
@@ -142,6 +144,7 @@ public class GoliathController : MonoBehaviour
         damagableLayers = (1 << LayerMask.NameToLayer("DestructibleSize1"));
         damagableLayers |= (1 << LayerMask.NameToLayer("GoliathDestructible"));
         damagableLayers |= (1 << LayerMask.NameToLayer("AlienShip"));
+        damagableLayers |= (1 << LayerMask.NameToLayer("Avatar"));
 
         statusController = GameObject.Find("StatusContainer").GetComponent<StatusController>();
         slowComponent = GetComponent<SlowableObject>();

@@ -93,6 +93,11 @@ public class HUDManager : MonoBehaviour
     private float mpCountBeforeSpending = 0f;   //mp value before it was spent on an ability
     private float oldMpScale = 1f;
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        UpdateGodAbilityHelpText = new UpdateGodAbilityHelpTextEvent();
+    }
     void Start()
     {
         expBar = GameObject.Find("ExpBarFillContainer").transform;
@@ -409,7 +414,6 @@ public class HUDManager : MonoBehaviour
             Debug.LogError("Couldn't find god ability help!");
         }
 
-        UpdateGodAbilityHelpText = new UpdateGodAbilityHelpTextEvent();
         UpdateGodAbilityHelpText.AddListener(SetGodHelpText);
 
         SetGodHelpText("");
@@ -773,10 +777,10 @@ public class HUDManager : MonoBehaviour
             if (!playerGod.CanUseAbility3())
             {
                 godAbilityIcon3.color = Color.grey;
-                if (playerGod.Action3UnlockTime > SpaceManager.GetElapsedTime())
+                if (playerGod.Action3UnlockTime > TimeManager.GetElapsedTime())
                 {
                     godAbilityTimer3.color = Color.blue;
-                    godAbilityTimer3.text = (playerGod.Action3UnlockTime - SpaceManager.GetElapsedTime()).ToString("F0");
+                    godAbilityTimer3.text = (playerGod.Action3UnlockTime - TimeManager.GetElapsedTime()).ToString("F0");
                 }
                 else if (!playerGod.Action3.IsOffCooldown())
                 {
@@ -815,10 +819,10 @@ public class HUDManager : MonoBehaviour
             if (!playerGod.CanUseAbility4())
             {
                 godAbilityIcon4.color = Color.grey;
-                if (playerGod.Action4UnlockTime > SpaceManager.GetElapsedTime())
+                if (playerGod.Action4UnlockTime > TimeManager.GetElapsedTime())
                 {
                     godAbilityTimer4.color = Color.blue;
-                    godAbilityTimer4.text = (playerGod.Action4UnlockTime - SpaceManager.GetElapsedTime()).ToString("F0");
+                    godAbilityTimer4.text = (playerGod.Action4UnlockTime - TimeManager.GetElapsedTime()).ToString("F0");
                 }
                 else if (!playerGod.Action4.IsOffCooldown())
                 {
@@ -857,10 +861,10 @@ public class HUDManager : MonoBehaviour
             if (!playerGod.CanUseAbility5())
             {
                 godAbilityIcon5.color = Color.grey;
-                if (playerGod.Action5UnlockTime > SpaceManager.GetElapsedTime())
+                if (playerGod.Action5UnlockTime > TimeManager.GetElapsedTime())
                 {
                     godAbilityTimer5.color = Color.blue;
-                    godAbilityTimer5.text = (playerGod.Action5UnlockTime - SpaceManager.GetElapsedTime()).ToString("F0");
+                    godAbilityTimer5.text = (playerGod.Action5UnlockTime - TimeManager.GetElapsedTime()).ToString("F0");
                 }
                 else if (!playerGod.Action5.IsOffCooldown())
                 {

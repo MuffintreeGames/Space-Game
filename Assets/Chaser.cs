@@ -17,6 +17,7 @@ public class Chaser : MonoBehaviour //chases after the goliath
     {
         goliathRigid = GameObject.Find("Goliath").GetComponent<Rigidbody2D>();
         chaserRigid = GetComponent<Rigidbody2D>();
+        slowComponent = GetComponent<SlowableObject>();
     }
 
     private void Update()

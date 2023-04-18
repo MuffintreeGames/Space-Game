@@ -43,7 +43,7 @@ public class SpaceManager : MonoBehaviour
     private static GameObject[][][][] WorldMap;   //map of all the sectors
     private static GameObject[][] AbilityMap;  //map of all the ability planets contained in the sectors
 
-    private static float timeElapsed = 0f;
+    
     private static bool bigBangSpawned = false;
 
     // Start is called before the first frame update
@@ -276,15 +276,13 @@ public class SpaceManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((timeElapsed >= bigBangTime) && !bigBangSpawned)
+        if ((TimeManager.GetElapsedTime() >= bigBangTime) && !bigBangSpawned)
         {
             Debug.Log("spawning big bang");
             Instantiate(BigBang, new Vector3(0, 0, 0), Quaternion.identity);
             bigBangSpawned = true;
         }
 
-        timeElapsed += Time.deltaTime;
-        //Debug.Log("time elapsed: " + timeElapsed);
     }
 
     public static SectorCoordinates GetSectorAtCoords(float xCoords, float yCoords)  //used to convert x,y coords into sector values
@@ -350,10 +348,5 @@ public class SpaceManager : MonoBehaviour
         }
 
         return returnList;
-    }
-
-    public static float GetElapsedTime()
-    {
-        return timeElapsed;
     }
 }

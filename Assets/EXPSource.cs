@@ -18,7 +18,7 @@ public class EXPSource : MonoBehaviour
     public int ExpAmount; //experience gained on a kill
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         if (GoliathGainExp == null)
         {

@@ -18,13 +18,15 @@ public class GrantAbility : MonoBehaviour
     private bool spriteSet = false;
 
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         if (GoliathGainAbility == null)
         {
             GoliathGainAbility = new AbilityGainEvent();
         }
-
+    }
+    void Start()
+    {
         GameObject childImage = transform.GetChild(0).gameObject;
         if (childImage)
         {

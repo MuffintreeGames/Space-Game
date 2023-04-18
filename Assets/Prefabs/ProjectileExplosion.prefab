@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2680724956529489542}
   - component: {fileID: 7838426537178242089}
   - component: {fileID: 5333707974461333185}
+  - component: {fileID: 6079067681554942535}
   - component: {fileID: 6734802541037809805}
   m_Layer: 22
   m_Name: ProjectileExplosion
@@ -120,10 +121,10 @@ MonoBehaviour:
   Damage: 30
   TargetLayers:
     serializedVersion: 2
-    m_Bits: 2621376
+    m_Bits: 73924544
   DamagedLayers:
     serializedVersion: 2
-    m_Bits: 2097216
+    m_Bits: 69214272
   DestroyOnHit: 0
   RepeatedDamage: 0
   InvincibilityDuration: 0
@@ -149,6 +150,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &6079067681554942535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7045386937356173623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8442664667273644091fd3466e659585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!58 &6734802541037809805
 CircleCollider2D:
   m_ObjectHideFlags: 0

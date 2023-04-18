@@ -101,7 +101,7 @@ public class GodController : MonoBehaviour
 
     public bool CanUseAbility3()
     {
-        return Action3 != null && canUseAbilities && currentMp >= Action3.manaCost && SpaceManager.GetElapsedTime() >= Action3UnlockTime && Action3.IsOffCooldown();
+        return Action3 != null && canUseAbilities && currentMp >= Action3.manaCost && TimeManager.GetElapsedTime() >= Action3UnlockTime && Action3.IsOffCooldown();
     }
 
     public void UseAbility4()
@@ -114,7 +114,7 @@ public class GodController : MonoBehaviour
 
     public bool CanUseAbility4()
     {
-        return Action4 != null && canUseAbilities && currentMp >= Action4.manaCost && SpaceManager.GetElapsedTime() >= Action4UnlockTime && Action4.IsOffCooldown();
+        return Action4 != null && canUseAbilities && currentMp >= Action4.manaCost && TimeManager.GetElapsedTime() >= Action4UnlockTime && Action4.IsOffCooldown();
     }
 
     public void UseAbility5()
@@ -127,7 +127,7 @@ public class GodController : MonoBehaviour
 
     public bool CanUseAbility5()
     {
-        return Action5 != null && canUseAbilities && currentMp >= Action5.manaCost && SpaceManager.GetElapsedTime() >= Action5UnlockTime && Action5.IsOffCooldown();
+        return Action5 != null && canUseAbilities && currentMp >= Action5.manaCost && TimeManager.GetElapsedTime() >= Action5UnlockTime && Action5.IsOffCooldown();
     }
 
     public void UseAbility6()
