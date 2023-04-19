@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class AvatarController : MonoBehaviour
+public class AvatarController : Killable
 {
     private Rigidbody2D avatarRb;
     private Rigidbody2D goliathRb;
 
-    private int currentMovementPattern = -1;    //-1 means unset, 0 = circle clockwise, 1 = circle counter, 2 = short-range teleporting, 3 = hiding, 4 = running
+    private int currentMovementPattern = 1;    //-1 means unset, 0 = circle clockwise, 1 = circle counter, 2 = short-range teleporting, 3 = hiding, 4 = running
+    private int previousMovementPattern = 3;
+    private float damageTakenInPattern = 0f;
+    private float damageLimit = 100f;
 
     private float offTrackMaxSpeed = 13f;
     private float offTrackMinSpeed = 5f;
@@ -27,12 +30,19 @@ public class AvatarController : MonoBehaviour
     private float circleTime = 20f;
     private float circlingDistance = 10f;
     private float circleTolerance = 2f;
+
+    private float minBlinkRange = 8f;
+    private float maxBlinkRange = 10f;
+    private int totalBlinks = 5;
+    private int currentBlinks = 0;
+    private float timeBetweenBlinks = 5f;
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
         avatarRb = GetComponent<Rigidbody2D>();
         goliathRb = GameObject.Find("Goliath").GetComponent<Rigidbody2D>();
         assumedGoliathPosition = goliathRb.position;
+        base.Start();
         //targetPosition = new Vector2(goliathRb.position.x, goliathRb.position.y + circlingDistance);
     }
 
@@ -41,6 +51,10 @@ public class AvatarController : MonoBehaviour
     {
         CalculateGoliathPosition();
         bool movementDone = false;
+        if (damageTakenInPattern >= damageLimit)    //took too much damage in current pattern; swapping
+        {
+            currentMovementPattern = -1;
+        }
         while (!movementDone)
         {
             switch (currentMovementPattern)
@@ -48,9 +62,9 @@ public class AvatarController : MonoBehaviour
                 case -1:
                     SelectMovementPattern(); break;
                 case 0:
-                    PerformMovementPatternCircleClockwise(); movementDone = true; break;
+                    PerformMovementPatternCircleClockwise(); ApplyMovement(); movementDone = true; break;
                 case 1:
-                    PerformMovementPatternCircleCounterClockwise(); movementDone = true; break;
+                    PerformMovementPatternCircleCounterClockwise(); ApplyMovement(); movementDone = true; break;
                 case 2:
                     PerformMovementPatternRapidBlinks(); movementDone = true; break;
                 case 3:
@@ -59,12 +73,17 @@ public class AvatarController : MonoBehaviour
                     PerformMovementPatternFlee(); movementDone = true; break;
             }
         }
-        ApplyMovement();
     }
 
-    private void SelectMovementPattern()
+    private void SelectMovementPattern()    //pick one of the 5 movement patterns, excluding the last one chosen
     {
-        currentMovementPattern = Random.Range(0, 2);
+        currentMovementPattern = Random.Range(0, 4);
+        if (currentMovementPattern >= previousMovementPattern)
+        {
+            currentMovementPattern += 1;
+        }
+        previousMovementPattern = currentMovementPattern;
+        damageTakenInPattern = 0f;
         patternRunTime = 0f;
         targetPositionInitialized = false;
         Debug.Log("chosen: " + currentMovementPattern);
@@ -179,9 +198,43 @@ public class AvatarController : MonoBehaviour
         }
     }
 
-    void PerformMovementPatternRapidBlinks()
+    void PerformMovementPatternRapidBlinks()    //teleport repeatedly, including if god takes damage
     {
+        if (patternRunTime > timeBetweenBlinks || currentBlinks == 0 || damageTakenInPattern > 0f)
+        {
+            patternRunTime = 0;
+            damageTakenInPattern = 0;
+            currentBlinks += 1;
+            if (currentBlinks >= totalBlinks)
+            {
+                currentBlinks = 0;
+                currentMovementPattern = -1;
+                return;
+            }
+            float randomX = Random.Range(minBlinkRange, maxBlinkRange);
+            float randomXMultiplier = Random.Range(1, 3);   //1 = +, 2 = -
+            float randomY = Random.Range(minBlinkRange, maxBlinkRange);
+            float randomYMultiplier = Random.Range(1, 3);
 
+            if (randomXMultiplier == 1)
+            {
+                targetPosition.x = goliathRb.position.x + randomX;
+            } else
+            {
+                targetPosition.x = goliathRb.position.x - randomX;
+            }
+
+            if (randomYMultiplier == 1)
+            {
+                targetPosition.y = goliathRb.position.y + randomY;
+            }
+            else
+            {
+                targetPosition.y = goliathRb.position.y - randomY;
+            }
+            avatarRb.position = targetPosition;
+        }
+        patternRunTime += Time.deltaTime;
     }
 
     void PerformMovementPatternHide()
@@ -240,5 +293,17 @@ public class AvatarController : MonoBehaviour
             offTrackCurrentSpeed -= offTrackAcceleration * Time.deltaTime;
             offTrackCurrentSpeed = Mathf.Max(offTrackCurrentSpeed, offTrackMinSpeed);
         }
+    }
+
+    public override bool TakeDamage(float damage, bool fromGoliath, float invincibilityDuration)
+    {
+        Debug.Log("checking that this is getting called");
+        bool tookDamage = base.TakeDamage(damage, fromGoliath, invincibilityDuration);
+        if (tookDamage)
+        {
+            damageTakenInPattern += damage * damageMultiplier;
+        }
+        Debug.Log("damage taken in pattern: " + damageTakenInPattern);
+        return true;
     }
 }

@@ -7463,7 +7463,6 @@ GameObject:
   - component: {fileID: 1569546674}
   - component: {fileID: 1569546675}
   - component: {fileID: 1569546677}
-  - component: {fileID: 1569546676}
   - component: {fileID: 1569546679}
   - component: {fileID: 1569546678}
   - component: {fileID: 1569546680}
@@ -7541,26 +7540,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1569546676
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1569546673}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42a337aa95415324194de6c024ed838d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxHealth: 10
-  DamageTo1: 0
-  DamageFlashToggle: 1
-  DamageFlash: {r: 1, g: 0, b: 0, a: 1}
-  InvincibilityOpacity: 0.5
-  blockableHits: 0
-  SpawnedOnDeath: {fileID: 0}
-  SpawnedOnGoliathKill: {fileID: 0}
 --- !u!114 &1569546677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7573,6 +7552,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a443d6698b13b44c820d039cf4c8703, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MaxHealth: 1000
+  DamageTo1: 0
+  DamageFlashToggle: 1
+  DamageFlash: {r: 1, g: 0, b: 0, a: 1}
+  InvincibilityOpacity: 0.5
+  blockableHits: 0
+  SpawnedOnDeath: {fileID: 0}
+  SpawnedOnGoliathKill: {fileID: 0}
 --- !u!50 &1569546678
 Rigidbody2D:
   serializedVersion: 4

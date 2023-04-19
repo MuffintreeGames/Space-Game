@@ -24,7 +24,7 @@ public class Killable : MonoBehaviour
     private GrantAbility abilityScript;
     private SpriteRenderer parentSprite;
 
-    private float damageMultiplier = 1f;
+    protected float damageMultiplier = 1f;
 
     public int blockableHits = 0;   //how many hits this unit can block before taking damage
 
@@ -32,16 +32,17 @@ public class Killable : MonoBehaviour
     public GameObject SpawnedOnGoliathKill = null;  //spawned when specifically the goliath kills this object
 
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
         currentHealth = MaxHealth;
         expScript = GetComponent<EXPSource>();
         abilityScript = GetComponent<GrantAbility>();
-        parentSprite = gameObject.GetComponent<SpriteRenderer>();
+        parentSprite = GetComponent<SpriteRenderer>();
+        Debug.Log(parentSprite);
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
         if (flashing)
         {
@@ -103,22 +104,23 @@ public class Killable : MonoBehaviour
         currentHealth += amount;
     }
 
-    public void TakeDamage(float damage, bool fromGoliath, float invincibilityDuration)
+    public virtual bool TakeDamage(float damage, bool fromGoliath, float invincibilityDuration) //returns true if damage was taken, false otherwise
     {
+        Debug.Log("base killable");
         if (invincible)
         {
-            return;
+            return false;
         }
 
         if (damage <= 0)
         {
-            return;
+            return false;
         }
 
         if (blockableHits > 0)
         {
             blockableHits -= 1;
-            return;
+            return false;
         }
 
         if (DamageTo1)
@@ -169,5 +171,6 @@ public class Killable : MonoBehaviour
             currentInvincibilityTime = 0f;
             invincible = true;
         }
+        return true;
     }
 }
