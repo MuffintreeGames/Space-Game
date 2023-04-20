@@ -8,7 +8,9 @@ public class AvatarController : Killable
     private Rigidbody2D avatarRb;
     private Rigidbody2D goliathRb;
 
-    private int currentMovementPattern = 1;    //-1 means unset, 0 = circle clockwise, 1 = circle counter, 2 = short-range teleporting, 3 = hiding, 4 = running
+    private float arenaSize = 50f;
+
+    private int currentMovementPattern = 2;    //-1 means unset, 0 = circle clockwise, 1 = circle counter, 2 = short-range teleporting, 3 = hiding, 4 = running
     private int previousMovementPattern = 3;
     private float damageTakenInPattern = 0f;
     private float damageLimit = 100f;
@@ -31,11 +33,17 @@ public class AvatarController : Killable
     private float circlingDistance = 10f;
     private float circleTolerance = 2f;
 
-    private float minBlinkRange = 8f;
-    private float maxBlinkRange = 10f;
+    private float hideMargin = 10f; //min distance allowed between avatar and wall
+
+    private float blinkDistance = 15f;
+    private float blinkVariance = 3f;
     private int totalBlinks = 5;
     private int currentBlinks = 0;
     private float timeBetweenBlinks = 5f;
+
+    private float hideDistance = 30f;
+    private float hideVariance = 5f;
+    private float hideTime = 20f;
     // Start is called before the first frame update
     new void Start()
     {
@@ -211,27 +219,44 @@ public class AvatarController : Killable
                 currentMovementPattern = -1;
                 return;
             }
-            float randomX = Random.Range(minBlinkRange, maxBlinkRange);
-            float randomXMultiplier = Random.Range(1, 3);   //1 = +, 2 = -
-            float randomY = Random.Range(minBlinkRange, maxBlinkRange);
-            float randomYMultiplier = Random.Range(1, 3);
-
-            if (randomXMultiplier == 1)
+            float distanceFromGoliath = Random.Range(0, blinkVariance) + blinkDistance;   //fixed distance that avatar will move away from goliath; choose a random x distance, then use the matching y distance
+            float randomXMin = -distanceFromGoliath;
+            if (goliathRb.position.x + randomXMin <= -(arenaSize - hideMargin)) //would spawn too close to/in the wall, adjust
             {
-                targetPosition.x = goliathRb.position.x + randomX;
-            } else
-            {
-                targetPosition.x = goliathRb.position.x - randomX;
+                randomXMin = -arenaSize + hideMargin - goliathRb.position.x;
             }
 
-            if (randomYMultiplier == 1)
+            float randomXMax = distanceFromGoliath;
+            if (goliathRb.position.x + randomXMax >= (arenaSize - hideMargin))
             {
-                targetPosition.y = goliathRb.position.y + randomY;
+                randomXMax = arenaSize - hideMargin - goliathRb.position.x;
+            }
+
+            float xDistance = Random.Range(randomXMin, randomXMax);
+            targetPosition.x = goliathRb.position.x + xDistance;
+            float yDistance = distanceFromGoliath - Mathf.Abs(xDistance);
+
+            if (goliathRb.position.y - yDistance <= -(arenaSize - hideMargin))  //if can't place below goliath, go above goliath and vice versa. Only randomly pick if both are valid
+            {
+                targetPosition.y = goliathRb.position.y + yDistance + hideMargin;
+            }
+            else if (goliathRb.position.y + yDistance >= (arenaSize - hideMargin))
+            {
+                targetPosition.y = goliathRb.position.y - yDistance - hideMargin;
             }
             else
             {
-                targetPosition.y = goliathRb.position.y - randomY;
+                int ySign = Random.Range(0, 2);
+                if (ySign == 0)
+                {
+                    targetPosition.y = goliathRb.position.y + yDistance;
+                }
+                else
+                {
+                    targetPosition.y = goliathRb.position.y - yDistance;
+                }
             }
+
             avatarRb.position = targetPosition;
         }
         patternRunTime += Time.deltaTime;
@@ -239,7 +264,52 @@ public class AvatarController : Killable
 
     void PerformMovementPatternHide()
     {
+        if (patternRunTime >= hideTime)
+        {
+            patternRunTime = 0;
+            damageTakenInPattern = 0;
+            currentMovementPattern = 0;
+            return;
+        } else if (patternRunTime == 0)
+        {
+            float distanceFromGoliath = Random.Range(0, hideVariance) + hideDistance;   //fixed distance that avatar will move away from goliath; choose a random x distance, then use the matching y distance
+            float randomXMin = -distanceFromGoliath;
+            if (goliathRb.position.x + randomXMin <= -(arenaSize - hideMargin)) //would spawn too close to/in the wall, adjust
+            {
+            randomXMin = -arenaSize + hideMargin - goliathRb.position.x;
+            }
 
+            float randomXMax = distanceFromGoliath;
+            if (goliathRb.position.x + randomXMax >= (arenaSize - hideMargin))
+            {
+            randomXMax = arenaSize - hideMargin - goliathRb.position.x;
+            }
+
+            float xDistance = Random.Range(randomXMin, randomXMax);
+            targetPosition.x = goliathRb.position.x + xDistance;
+            float yDistance = distanceFromGoliath - Mathf.Abs(xDistance);
+
+            if (goliathRb.position.y - yDistance <= -(arenaSize - hideMargin))  //if can't place below goliath, go above goliath and vice versa. Only randomly pick if both are valid
+            {
+                targetPosition.y = goliathRb.position.y + yDistance + hideMargin;
+            } else if (goliathRb.position.y + yDistance >= (arenaSize - hideMargin))
+            {
+                targetPosition.y = goliathRb.position.y - yDistance - hideMargin;
+            } else
+            {
+                int ySign = Random.Range(0, 2);
+                if (ySign == 0)
+                {
+                    targetPosition.y = goliathRb.position.y + yDistance;
+                } else
+                {
+                    targetPosition.y = goliathRb.position.y - yDistance;
+                }
+            }
+
+            avatarRb.position = targetPosition;
+        }
+        patternRunTime += Time.deltaTime;
     }
 
     void PerformMovementPatternFlee()

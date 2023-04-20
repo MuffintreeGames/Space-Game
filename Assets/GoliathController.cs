@@ -271,7 +271,7 @@ public class GoliathController : MonoBehaviour
             }
 
 
-        if (verticalDirection != 0f)   //set horizontal accel
+        if (verticalDirection != 0f)   //set vertical accel
         {
             if (goliathRigid.velocity.y*verticalDirection < 0f)   //accelerate faster when going the opposite direction to reach a standstill sooner
             {
@@ -294,15 +294,23 @@ public class GoliathController : MonoBehaviour
 
         float horizontalDirection = Input.GetAxisRaw("Horizontal");
         float verticalDirection = Input.GetAxisRaw("Vertical");
+        float currentMaxSpeed = maxSpeed;
+
+        if(horizontalDirection != 0f && verticalDirection != 0f) {  //reduce speed/acceleration when moving diagonally
+            currentMaxSpeed = Mathf.Sqrt((maxSpeed * maxSpeed) / 2);
+            float accelerationMultiplier = Mathf.Sqrt((acceleration * acceleration) / 2) / acceleration;
+            currentHorAcceleration *= accelerationMultiplier;
+            currentVertAcceleration *= accelerationMultiplier;
+        }
 
 
         Vector2 currentVelocity = goliathRigid.velocity;
-        if (!(currentVelocity.x > (maxSpeed/slowComponent.GetSlowFactor()) && horizontalDirection > 0) && !((currentVelocity.x < -(maxSpeed/slowComponent.GetSlowFactor()) && horizontalDirection < 0)))
+        if (!(currentVelocity.x > (currentMaxSpeed/slowComponent.GetSlowFactor()) && horizontalDirection > 0) && !((currentVelocity.x < -(currentMaxSpeed/slowComponent.GetSlowFactor()) && horizontalDirection < 0)))
         {
             goliathRigid.AddForce(new Vector2(1, 0) * horizontalDirection * currentHorAcceleration * (1f - paralysisLevel) * goliathRigid.mass / slowComponent.GetSlowFactor());
         }
 
-        if (!(currentVelocity.y > (maxSpeed/slowComponent.GetSlowFactor()) && verticalDirection > 0) && !((currentVelocity.y < -(maxSpeed / slowComponent.GetSlowFactor()) && verticalDirection < 0)))
+        if (!(currentVelocity.y > (currentMaxSpeed /slowComponent.GetSlowFactor()) && verticalDirection > 0) && !((currentVelocity.y < -(currentMaxSpeed / slowComponent.GetSlowFactor()) && verticalDirection < 0)))
         {
             goliathRigid.AddForce(new Vector2(0, 1) * verticalDirection * currentVertAcceleration * (1f - paralysisLevel) * goliathRigid.mass / slowComponent.GetSlowFactor());
         }
