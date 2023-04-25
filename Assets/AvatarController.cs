@@ -10,15 +10,15 @@ public class AvatarController : Killable
 
     private float arenaSize = 50f;
 
-    private int currentMovementPattern = 2;    //-1 means unset, 0 = circle clockwise, 1 = circle counter, 2 = short-range teleporting, 3 = hiding, 4 = running
-    private int previousMovementPattern = 3;
+    private int currentMovementPattern = -1;    //-1 means unset, 0 = circle clockwise, 1 = circle counter, 2 = short-range teleporting, 3 = hiding, 4 = running
+    private int previousMovementPattern = 10;
     private float damageTakenInPattern = 0f;
     private float damageLimit = 100f;
 
-    private float offTrackMaxSpeed = 13f;
-    private float offTrackMinSpeed = 5f;
-    private float offTrackCurrentSpeed = 5f;
-    private float offTrackAcceleration = 6f;
+    private float maxSpeed = 13f;
+    private float minSpeed = 5f;
+    private float currentSpeed = 5f;
+    private float acceleration = 6f;
 
     private Vector2 assumedGoliathPosition; //used so that the avatar doesn't instantly react to goliath position changes; takes some time
     private float goliathPositionChangeMaxSpeed = 10f;
@@ -32,6 +32,7 @@ public class AvatarController : Killable
     private float circleTime = 20f;
     private float circlingDistance = 10f;
     private float circleTolerance = 2f;
+    private float circleDistanceCovered = 0f;
 
     private float hideMargin = 10f; //min distance allowed between avatar and wall
 
@@ -76,19 +77,21 @@ public class AvatarController : Killable
                 case 2:
                     PerformMovementPatternRapidBlinks(); movementDone = true; break;
                 case 3:
-                    PerformMovementPatternHide(); movementDone = true; break;
-                case 4:
-                    PerformMovementPatternFlee(); movementDone = true; break;
+                    PerformMovementPatternFlee(); ApplyMovement();  movementDone = true; break;
             }
         }
     }
 
-    private void SelectMovementPattern()    //pick one of the 5 movement patterns, excluding the last one chosen
+    private void SelectMovementPattern()    //pick one of the 4 movement patterns, excluding the last one chosen
     {
-        currentMovementPattern = Random.Range(0, 4);
+        currentMovementPattern = Random.Range(0, 1);
         if (currentMovementPattern >= previousMovementPattern)
         {
-            currentMovementPattern += 1;
+            //currentMovementPattern += 1;
+            if (currentMovementPattern > 3)
+            {
+                currentMovementPattern = 0;
+            }
         }
         previousMovementPattern = currentMovementPattern;
         damageTakenInPattern = 0f;
@@ -149,11 +152,18 @@ public class AvatarController : Killable
         if (patternRunTime > circleTime)
         {
             currentMovementPattern = -1;
+            circleDistanceCovered = 0;
             return;
         }
 
         Vector3 rotationAxis = new Vector3(0, 0, 1);
-        Quaternion q = Quaternion.AngleAxis(-360f * (patternRunTime / circleTime), rotationAxis);
+
+        float positionInCircle = circleDistanceCovered / (2 * circlingDistance * Mathf.PI); //circumference = 2*pi*r
+        if (positionInCircle >= 1f)
+        {
+            positionInCircle -= 1f;
+        }
+        Quaternion q = Quaternion.AngleAxis(-360f * positionInCircle, rotationAxis);
         Vector2 DefaultDistance = new Vector2(circlingDistance, circlingDistance);
         Vector2 calculatedPosition = (Vector2) (q * DefaultDistance) + assumedGoliathPosition;
         if (!targetPositionInitialized) //warps avatar into place
@@ -164,27 +174,32 @@ public class AvatarController : Killable
             return;
         }
 
-        if (Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance || Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance) //when avatar is too far off the path, should pause the pattern until they're back on track
+        if (!(Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance || Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance)) //when avatar is too far off the path, should pause the pattern until they're back on track
         {
-            //Debug.Log("avatar is off-track, pausing pattern");
+            circleDistanceCovered += currentSpeed * Time.deltaTime;
         }
-        else
-        {
-            targetPosition = calculatedPosition;
-            patternRunTime += Time.deltaTime;
-        }
+
+        targetPosition = calculatedPosition;
+        patternRunTime += Time.deltaTime;
     }
 
-    void PerformMovementPatternCircleCounterClockwise() //circle around goliath counter-clockwise
+    void PerformMovementPatternCircleCounterClockwise()  //circle around goliath clockwise
     {
         if (patternRunTime > circleTime)
         {
             currentMovementPattern = -1;
+            circleDistanceCovered = 0;
             return;
         }
 
         Vector3 rotationAxis = new Vector3(0, 0, 1);
-        Quaternion q = Quaternion.AngleAxis(360f * (patternRunTime / circleTime), rotationAxis);
+
+        float positionInCircle = circleDistanceCovered / (2 * circlingDistance * Mathf.PI); //circumference = 2*pi*r
+        if (positionInCircle >= 1f)
+        {
+            positionInCircle -= 1f;
+        }
+        Quaternion q = Quaternion.AngleAxis(360f * positionInCircle, rotationAxis);
         Vector2 DefaultDistance = new Vector2(circlingDistance, circlingDistance);
         Vector2 calculatedPosition = (Vector2)(q * DefaultDistance) + assumedGoliathPosition;
         if (!targetPositionInitialized) //warps avatar into place
@@ -195,15 +210,13 @@ public class AvatarController : Killable
             return;
         }
 
-        if (Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance || Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance) //when avatar is too far off the path, should pause the pattern until they're back on track
+        if (!(Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance || Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance)) //when avatar is too far off the path, should pause the pattern until they're back on track
         {
-            //Debug.Log("avatar is off-track, pausing pattern");
+            circleDistanceCovered += currentSpeed * Time.deltaTime;
         }
-        else
-        {
-            targetPosition = calculatedPosition;
-            patternRunTime += Time.deltaTime;
-        }
+
+        targetPosition = calculatedPosition;
+        patternRunTime += Time.deltaTime;
     }
 
     void PerformMovementPatternRapidBlinks()    //teleport repeatedly, including if god takes damage
@@ -314,55 +327,92 @@ public class AvatarController : Killable
 
     void PerformMovementPatternFlee()
     {
+        if (patternRunTime >= hideTime)
+        {
+            patternRunTime = 0;
+            damageTakenInPattern = 0;
+            currentMovementPattern = 0;
+            return;
+        }
+        else if (patternRunTime == 0)
+        {
+            float distanceFromGoliath = Random.Range(0, hideVariance) + hideDistance;   //fixed distance that avatar will move away from goliath; choose a random x distance, then use the matching y distance
+            float randomXMin = -distanceFromGoliath;
+            if (goliathRb.position.x + randomXMin <= -(arenaSize - hideMargin)) //would spawn too close to/in the wall, adjust
+            {
+                randomXMin = -arenaSize + hideMargin - goliathRb.position.x;
+            }
 
+            float randomXMax = distanceFromGoliath;
+            if (goliathRb.position.x + randomXMax >= (arenaSize - hideMargin))
+            {
+                randomXMax = arenaSize - hideMargin - goliathRb.position.x;
+            }
+
+            float xDistance = Random.Range(randomXMin, randomXMax);
+            targetPosition.x = goliathRb.position.x + xDistance;
+            float yDistance = distanceFromGoliath - Mathf.Abs(xDistance);
+
+            if (goliathRb.position.y - yDistance <= -(arenaSize - hideMargin))  //if can't place below goliath, go above goliath and vice versa. Only randomly pick if both are valid
+            {
+                targetPosition.y = goliathRb.position.y + yDistance + hideMargin;
+            }
+            else if (goliathRb.position.y + yDistance >= (arenaSize - hideMargin))
+            {
+                targetPosition.y = goliathRb.position.y - yDistance - hideMargin;
+            }
+            else
+            {
+                int ySign = Random.Range(0, 2);
+                if (ySign == 0)
+                {
+                    targetPosition.y = goliathRb.position.y + yDistance;
+                }
+                else
+                {
+                    targetPosition.y = goliathRb.position.y - yDistance;
+                }
+            }
+
+            //avatarRb.position = targetPosition;
+        }
+        patternRunTime += Time.deltaTime;
     }
 
     void ApplyMovement()
     {
-        Vector2 newPosition = avatarRb.position;
-        float speedForFrame = Time.deltaTime * offTrackCurrentSpeed;
-        bool increaseSpeed = false;
+        Vector2 targetDirection = targetPosition - avatarRb.position;
+        targetDirection.Normalize();
+        float speedForFrame = Time.deltaTime * currentSpeed;
+        bool increaseSpeed = true;
 
-        if (Mathf.Abs(targetPosition.x - avatarRb.position.x) <= speedForFrame)
+        Vector2 movePosition = avatarRb.position + (targetDirection * speedForFrame);
+
+        if (Mathf.Abs(movePosition.x - targetPosition.x) < Mathf.Abs(targetDirection.x * speedForFrame)) //prevent overshooting the goal
         {
-            newPosition.x = targetPosition.x;
-        } else if (targetPosition.x > avatarRb.position.x)
-        {
-            newPosition.x += speedForFrame;
-            increaseSpeed = true;
-        } else
-        {
-            newPosition.x -= speedForFrame;
-            increaseSpeed = true;
+            movePosition.x = targetPosition.x;
+            increaseSpeed = false;
         }
 
-        if (Mathf.Abs(targetPosition.y - avatarRb.position.y) <= speedForFrame)
+        if (Mathf.Abs(movePosition.y - targetPosition.y) < Mathf.Abs(targetDirection.y * speedForFrame))
         {
-            newPosition.y = targetPosition.y;
-        }
-        else if (targetPosition.y > avatarRb.position.y)
-        {
-            newPosition.y += speedForFrame;
-            increaseSpeed = true;
-        }
-        else
-        {
-            newPosition.y -= speedForFrame;
-            increaseSpeed=true;
+            movePosition.y = targetPosition.y;
+            increaseSpeed = false;
         }
 
-        avatarRb.MovePosition(newPosition);
+        avatarRb.MovePosition(movePosition);
 
         if (increaseSpeed)
         {
-            offTrackCurrentSpeed += offTrackAcceleration * Time.deltaTime;
-            offTrackCurrentSpeed = Mathf.Min(offTrackCurrentSpeed, offTrackMaxSpeed);
-            //Debug.Log("speeding up avatar");
-        } else
-        {
-            offTrackCurrentSpeed -= offTrackAcceleration * Time.deltaTime;
-            offTrackCurrentSpeed = Mathf.Max(offTrackCurrentSpeed, offTrackMinSpeed);
+            currentSpeed += acceleration * Time.deltaTime;
+            currentSpeed = Mathf.Min(currentSpeed, maxSpeed);
         }
+        else
+        {
+            currentSpeed -= acceleration * Time.deltaTime;
+            currentSpeed = Mathf.Max(currentSpeed, minSpeed);
+        }
+        
     }
 
     public override bool TakeDamage(float damage, bool fromGoliath, float invincibilityDuration)
