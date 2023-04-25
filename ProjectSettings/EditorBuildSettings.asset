@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WaitingRoom.unity
     guid: 776a895ea0192e146b3a43757a80709d
+  - enabled: 1
+    path: Assets/Scenes/FinalFight.unity
+    guid: e302d5fd2434abe41a16582786c6fa43
   m_configObjects: {}

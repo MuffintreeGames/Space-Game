@@ -38,7 +38,6 @@ public class Killable : MonoBehaviour
         expScript = GetComponent<EXPSource>();
         abilityScript = GetComponent<GrantAbility>();
         parentSprite = GetComponent<SpriteRenderer>();
-        Debug.Log(parentSprite);
     }
 
     // Update is called once per frame

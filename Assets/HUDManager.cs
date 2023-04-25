@@ -97,9 +97,6 @@ public class HUDManager : MonoBehaviour
     private void Awake()
     {
         UpdateGodAbilityHelpText = new UpdateGodAbilityHelpTextEvent();
-    }
-    void Start()
-    {
         expBar = GameObject.Find("ExpBarFillContainer").transform;
         if (!expBar)
         {
@@ -417,6 +414,10 @@ public class HUDManager : MonoBehaviour
         UpdateGodAbilityHelpText.AddListener(SetGodHelpText);
 
         SetGodHelpText("");
+    }
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame

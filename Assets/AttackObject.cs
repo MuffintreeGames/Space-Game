@@ -9,6 +9,7 @@ public class AttackObject : MonoBehaviour
     public LayerMask DamagedLayers; //layers that should take damage from attack
     public bool DestroyOnHit;   //should this object be removed on hitting something or persist
     public bool RepeatedDamage;   //if true, targets will take damage as long as they are in contact with attack; otherwise, they can only be hit once
+    public bool OverTime = false;   //if true, object is designed to do damage over time. Otherwise, damage is meant to be done in single large burst
     public float InvincibilityDuration = 0f;    //length of invincibility granted
     public bool BelongsToGoliath = false;   //if true, give Goliath exp when this kills something
 
@@ -103,7 +104,14 @@ public class AttackObject : MonoBehaviour
 
             if ((DamagedLayers & (1 << hitGameObject.layer)) != 0)
             {
-                targetKillable.TakeDamage(Damage, BelongsToGoliath, InvincibilityDuration);
+                if (OverTime)
+                {
+                    targetKillable.TakeDamage(Damage * Time.deltaTime, BelongsToGoliath, 0f);
+                }
+                else
+                {
+                    targetKillable.TakeDamage(Damage, BelongsToGoliath, InvincibilityDuration);
+                }
             }
             if (DestroyOnHit)
             {
