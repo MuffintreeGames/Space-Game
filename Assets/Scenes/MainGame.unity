@@ -5744,9 +5744,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24e440c8f2ad98841a12997c65323674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetLayers:
+  TargetLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 67632064
 --- !u!1001 &1381718857
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6651,7 +6651,7 @@ MonoBehaviour:
   Level3Barrier: {fileID: 950341768418902669, guid: 3451feaf772611940ae7718396ae6806, type: 3}
   EdgeOfWorld: {fileID: 950341768418902669, guid: e34cc127bd2528d48a5f643777a60021, type: 3}
   BigBang: {fileID: 523506087866071105, guid: 7c81c1d5280c70d4ea5d9c3cdd36dde2, type: 3}
-  bigBangTime: 10
+  bigBangTime: 120
   AbilityPool:
   - {fileID: 2066654989}
   - {fileID: 2066654988}
