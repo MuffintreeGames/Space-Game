@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class AvatarController : Killable
+public class AvatarController : Killable    //script to manage AI for god avatar
 {
     private Rigidbody2D avatarRb;
     private Rigidbody2D goliathRb;
@@ -265,56 +265,6 @@ public class AvatarController : Killable
                     targetPosition.y = goliathRb.position.y + yDistance;
                 }
                 else
-                {
-                    targetPosition.y = goliathRb.position.y - yDistance;
-                }
-            }
-
-            avatarRb.position = targetPosition;
-        }
-        patternRunTime += Time.deltaTime;
-    }
-
-    void PerformMovementPatternHide()
-    {
-        if (patternRunTime >= hideTime)
-        {
-            patternRunTime = 0;
-            damageTakenInPattern = 0;
-            currentMovementPattern = 0;
-            return;
-        } else if (patternRunTime == 0)
-        {
-            float distanceFromGoliath = Random.Range(0, hideVariance) + hideDistance;   //fixed distance that avatar will move away from goliath; choose a random x distance, then use the matching y distance
-            float randomXMin = -distanceFromGoliath;
-            if (goliathRb.position.x + randomXMin <= -(arenaSize - hideMargin)) //would spawn too close to/in the wall, adjust
-            {
-            randomXMin = -arenaSize + hideMargin - goliathRb.position.x;
-            }
-
-            float randomXMax = distanceFromGoliath;
-            if (goliathRb.position.x + randomXMax >= (arenaSize - hideMargin))
-            {
-            randomXMax = arenaSize - hideMargin - goliathRb.position.x;
-            }
-
-            float xDistance = Random.Range(randomXMin, randomXMax);
-            targetPosition.x = goliathRb.position.x + xDistance;
-            float yDistance = distanceFromGoliath - Mathf.Abs(xDistance);
-
-            if (goliathRb.position.y - yDistance <= -(arenaSize - hideMargin))  //if can't place below goliath, go above goliath and vice versa. Only randomly pick if both are valid
-            {
-                targetPosition.y = goliathRb.position.y + yDistance + hideMargin;
-            } else if (goliathRb.position.y + yDistance >= (arenaSize - hideMargin))
-            {
-                targetPosition.y = goliathRb.position.y - yDistance - hideMargin;
-            } else
-            {
-                int ySign = Random.Range(0, 2);
-                if (ySign == 0)
-                {
-                    targetPosition.y = goliathRb.position.y + yDistance;
-                } else
                 {
                     targetPosition.y = goliathRb.position.y - yDistance;
                 }

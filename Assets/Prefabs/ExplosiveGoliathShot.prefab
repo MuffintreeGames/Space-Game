@@ -107,9 +107,10 @@ MonoBehaviour:
     m_Bits: 73923520
   DamagedLayers:
     serializedVersion: 2
-    m_Bits: 2097216
+    m_Bits: 69214272
   DestroyOnHit: 1
   RepeatedDamage: 0
+  OverTime: 0
   InvincibilityDuration: 0
   BelongsToGoliath: 1
 --- !u!50 &5333707974461333185

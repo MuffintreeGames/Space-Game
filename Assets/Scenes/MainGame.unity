@@ -3850,11 +3850,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7192721937990158954, guid: e34cc127bd2528d48a5f643777a60021, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 10000
       objectReference: {fileID: 0}
     - target: {fileID: 7192721937990158954, guid: e34cc127bd2528d48a5f643777a60021, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 62.6
+      value: 141.1
       objectReference: {fileID: 0}
     - target: {fileID: 7192721937990158954, guid: e34cc127bd2528d48a5f643777a60021, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5607,6 +5607,7 @@ GameObject:
   - component: {fileID: 1335254495}
   - component: {fileID: 1335254494}
   - component: {fileID: 1335254493}
+  - component: {fileID: 1335254496}
   m_Layer: 10
   m_Name: Tongue
   m_TagString: Untagged
@@ -5731,6 +5732,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1335254496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1335254491}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24e440c8f2ad98841a12997c65323674, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1001 &1381718857
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6631,8 +6647,9 @@ MonoBehaviour:
   MassivePlanet: {fileID: 6088609408505885020, guid: bc81ddde4a14e49498526a705761da2b, type: 3}
   AbilityPlanet: {fileID: 6088609408505885020, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
   Level1Barrier: {fileID: 950341768418902669, guid: 87c93d704cc1f214baa6841ac3296958, type: 3}
-  Level2Barrier: {fileID: 950341768418902669, guid: 87c93d704cc1f214baa6841ac3296958, type: 3}
-  Level3Barrier: {fileID: 950341768418902669, guid: 87c93d704cc1f214baa6841ac3296958, type: 3}
+  Level2Barrier: {fileID: 950341768418902669, guid: 47a2be2736c9804448726a8530db0078, type: 3}
+  Level3Barrier: {fileID: 950341768418902669, guid: 3451feaf772611940ae7718396ae6806, type: 3}
+  EdgeOfWorld: {fileID: 950341768418902669, guid: e34cc127bd2528d48a5f643777a60021, type: 3}
   BigBang: {fileID: 523506087866071105, guid: 7c81c1d5280c70d4ea5d9c3cdd36dde2, type: 3}
   bigBangTime: 10
   AbilityPool:
@@ -8406,6 +8423,7 @@ GameObject:
   - component: {fileID: 2066654997}
   - component: {fileID: 2066654998}
   - component: {fileID: 2066654999}
+  - component: {fileID: 2066655002}
   - component: {fileID: 2066655000}
   m_Layer: 10
   m_Name: Goliath
@@ -8453,7 +8471,7 @@ MonoBehaviour:
   Action1: {fileID: 2066654999}
   Action2: {fileID: 2066654998}
   Action3: {fileID: 2066654994}
-  Action4: {fileID: 2066654996}
+  Action4: {fileID: 2066655002}
   damagableLayers:
     serializedVersion: 2
     m_Bits: 2105408
@@ -8807,6 +8825,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8442664667273644091fd3466e659585, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2066655002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2066654981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c9b4e83be4891a4a90cd7985bda079c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 0
+  icon: {fileID: 21300000, guid: 72a28cd85c4f74642a37a75e1b275ec9, type: 3}
+  displayName: Grapple
+  numOfCopies: 0
+  grappleLength: 10
 --- !u!1 &2092784773
 GameObject:
   m_ObjectHideFlags: 0

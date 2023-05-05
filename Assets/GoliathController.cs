@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public class GoliathLevelupEvent : UnityEvent<int>
 {
@@ -21,7 +22,7 @@ public class GoliathEquipAbilityEvent : UnityEvent<AbilityTemplate>
 
 }
 
-public class GoliathController : MonoBehaviour
+public class GoliathController : MonoBehaviour  //responsible for handling of player character
 {
     private GameObject goliath; //the goliath that this script is attached to
     private Transform goliathTransform; //the transform of the goliath
@@ -34,6 +35,7 @@ public class GoliathController : MonoBehaviour
 
     private AttackObject goliathArmScript;  //script attached to the goliath arm
     private AttackObject goliathTongueScript;  //script attached to the goliath tongue
+    private GrappleOnTouch goliathTongueGrappleScript;  //script attached to goliath tongue to allow grappling
 
     private float maxSpeed = 7.5f;  //top speed goliath can achieve; maintained separately for horizontal and vertical
     private float currentHorAcceleration = 0f; //acceleration value that we're currently using
@@ -57,6 +59,7 @@ public class GoliathController : MonoBehaviour
     private bool inBasicAttackCooldown = false; //determines if basic attack cooldown is ticking
 
     public Color chargedColor = Color.yellow;
+    private int tongueDamage = 20;
     private float stabChargeTime = 0.7f;    //time to hold down basic attack button to prepare stab
     private float tongueMaxLength = 2f; //max default tongue extension distance
     private float tongueExtendTime = 0.1f;  //time to reach max extension on tongue
@@ -64,6 +67,11 @@ public class GoliathController : MonoBehaviour
     private bool performingStabAttack = false;  //determines if stab attack is underway
     private float currentStabTime = 0f; //time elapsed in stab so far
     private float currentMaxLength = 2f;
+    private bool currentlyGrappling = false;
+    private Vector2 relativeGrapplePoint;
+    private GameObject grappledObject;
+    private float grappleSpeed = 10f;
+    private float grappleTargetDistance = 1.5f;
 
     private int currentExp = 0; //current exp of the goliath
     private int neededExp = 100;    //needed exp to level up; initial value is amount needed to reach level 2
@@ -128,6 +136,8 @@ public class GoliathController : MonoBehaviour
         goliathArmScript = goliathArm.transform.GetChild(0).GetComponent<AttackObject>();
         goliathTongue = goliathTransform.GetChild(3).gameObject;
         goliathTongueScript = goliathTongue.transform.GetChild(0).GetComponent<AttackObject>();
+        goliathTongueGrappleScript = goliathTongue.transform.GetChild(0).GetComponent<GrappleOnTouch>();
+        Debug.Log("grapple script: " + goliathTongueGrappleScript);
 
         ramHitboxScript = goliathTransform.GetChild(4).gameObject.GetComponent<AttackObject>();
 
@@ -150,70 +160,73 @@ public class GoliathController : MonoBehaviour
         slowComponent = GetComponent<SlowableObject>();
     }
 
-        void SetGoliathRotation()
+    void SetGoliathRotation()
+    {
+        if (performingBasicAttack || performingStabAttack)  //lock rotation while attacking
         {
-            if (performingBasicAttack || performingStabAttack)  //lock rotation while attacking
-            {
-                return;
-            }
+            return;
+        }
 
-            if (movementLocked)
-            {
-                return;
-            }
+        if (movementLocked)
+        {
+            return;
+        }
 
 
 
-            float horizontalDirection = Input.GetAxisRaw("Horizontal");
-            float verticalDirection = Input.GetAxisRaw("Vertical");
+        float horizontalDirection = Input.GetAxisRaw("Horizontal");
+        float verticalDirection = Input.GetAxisRaw("Vertical");
 
         float targetRotation = goliathRigid.rotation;
         float currentRotation = goliathRigid.rotation;
 
-            if (horizontalDirection > 0f)   //moving right
+        if (horizontalDirection > 0f)   //moving right
+        {
+            if (verticalDirection > 0f)
             {
-                if (verticalDirection > 0f)
-                {
-                    targetRotation = 315f;
-                }
-                else if (verticalDirection < 0f)
-                {
-                    targetRotation = 225f;
-                }
-                else
-                {
+                targetRotation = 315f;
+            }
+            else if (verticalDirection < 0f)
+            {
+                targetRotation = 225f;
+            }
+            else
+            {
                 targetRotation = 270f;
-                }
             }
-            else if (horizontalDirection < 0f)  //moving left
+        }
+        else if (horizontalDirection < 0f)  //moving left
+        {
+            if (verticalDirection > 0f)
             {
-                if (verticalDirection > 0f)
-                {
                 targetRotation = 45f;
-                }
-                else if (verticalDirection < 0f)
-                {
-                    targetRotation = 135f;
-                }
-                else
-                {
-                    targetRotation = 90f;
-                }
-            } else {    //moving vertically
-                if (verticalDirection > 0f)
-                {
-                    targetRotation = 360f;
-                }
-                else if (verticalDirection < 0f)
-                {
-                    targetRotation = 180f;
-                }
             }
+            else if (verticalDirection < 0f)
+            {
+                targetRotation = 135f;
+            }
+            else
+            {
+                targetRotation = 90f;
+            }
+        }
+        else
+        {    //moving vertically
+            if (verticalDirection > 0f)
+            {
+                targetRotation = 360f;
+            }
+            else if (verticalDirection < 0f)
+            {
+                targetRotation = 180f;
+            }
+        }
 
         if (currentRotation < 0f)
         {
             currentRotation += 360f;
-        } else if (currentRotation >= 360f)
+        }
+        else if (currentRotation >= 360f)
         {
             currentRotation -= 360f;
         }
@@ -238,28 +251,29 @@ public class GoliathController : MonoBehaviour
             {
                 smoothRotation -= rotationSpeed * Time.deltaTime;
                 smoothRotation = Mathf.Max(smoothRotation, targetRotation);
-            } else
+            }
+            else
             {
                 smoothRotation += rotationSpeed * Time.deltaTime * (1f - paralysisLevel);
                 smoothRotation = Mathf.Min(smoothRotation, targetRotation);
             }
             goliathRigid.SetRotation(smoothRotation);
         }
-        }
+    }
 
-        void SetGoliathSpeed()  //set acceleration based on goliath state
+    void SetGoliathSpeed()  //set acceleration based on goliath state
+    {
+        if (movementLocked)
         {
-            if (movementLocked)
-            {
             currentHorAcceleration = 0f;
             currentVertAcceleration = 0f;
             return;
-            }
-            float horizontalDirection = Input.GetAxisRaw("Horizontal");
-            float verticalDirection = Input.GetAxisRaw("Vertical");
+        }
+        float horizontalDirection = Input.GetAxisRaw("Horizontal");
+        float verticalDirection = Input.GetAxisRaw("Vertical");
 
-            if (horizontalDirection != 0f)   //set horizontal accel
-            {
+        if (horizontalDirection != 0f)   //set horizontal accel
+        {
             if (goliathRigid.velocity.x * horizontalDirection < 0f)   //accelerate faster when going the opposite direction to reach a standstill sooner
             {
                 currentHorAcceleration = reversingAcceleration;
@@ -268,12 +282,12 @@ public class GoliathController : MonoBehaviour
             {
                 currentHorAcceleration = acceleration;
             }
-            }
+        }
 
 
         if (verticalDirection != 0f)   //set vertical accel
         {
-            if (goliathRigid.velocity.y*verticalDirection < 0f)   //accelerate faster when going the opposite direction to reach a standstill sooner
+            if (goliathRigid.velocity.y * verticalDirection < 0f)   //accelerate faster when going the opposite direction to reach a standstill sooner
             {
                 currentVertAcceleration = reversingAcceleration;
             }
@@ -284,8 +298,8 @@ public class GoliathController : MonoBehaviour
         }
     }
 
-        void MoveGoliath()  //apply movement based off of current speed settings
-        {
+    void MoveGoliath()  //apply movement based off of current speed settings
+    {
         if (movementLocked)
         {
             return;
@@ -296,7 +310,8 @@ public class GoliathController : MonoBehaviour
         float verticalDirection = Input.GetAxisRaw("Vertical");
         float currentMaxSpeed = maxSpeed;
 
-        if(horizontalDirection != 0f && verticalDirection != 0f) {  //reduce speed/acceleration when moving diagonally
+        if (horizontalDirection != 0f && verticalDirection != 0f)
+        {  //reduce speed/acceleration when moving diagonally
             currentMaxSpeed = Mathf.Sqrt((maxSpeed * maxSpeed) / 2);
             float accelerationMultiplier = Mathf.Sqrt((acceleration * acceleration) / 2) / acceleration;
             currentHorAcceleration *= accelerationMultiplier;
@@ -305,12 +320,12 @@ public class GoliathController : MonoBehaviour
 
 
         Vector2 currentVelocity = goliathRigid.velocity;
-        if (!(currentVelocity.x > (currentMaxSpeed/slowComponent.GetSlowFactor()) && horizontalDirection > 0) && !((currentVelocity.x < -(currentMaxSpeed/slowComponent.GetSlowFactor()) && horizontalDirection < 0)))
+        if (!(currentVelocity.x > (currentMaxSpeed / slowComponent.GetSlowFactor()) && horizontalDirection > 0) && !((currentVelocity.x < -(currentMaxSpeed / slowComponent.GetSlowFactor()) && horizontalDirection < 0)))
         {
             goliathRigid.AddForce(new Vector2(1, 0) * horizontalDirection * currentHorAcceleration * (1f - paralysisLevel) * goliathRigid.mass / slowComponent.GetSlowFactor());
         }
 
-        if (!(currentVelocity.y > (currentMaxSpeed /slowComponent.GetSlowFactor()) && verticalDirection > 0) && !((currentVelocity.y < -(currentMaxSpeed / slowComponent.GetSlowFactor()) && verticalDirection < 0)))
+        if (!(currentVelocity.y > (currentMaxSpeed / slowComponent.GetSlowFactor()) && verticalDirection > 0) && !((currentVelocity.y < -(currentMaxSpeed / slowComponent.GetSlowFactor()) && verticalDirection < 0)))
         {
             goliathRigid.AddForce(new Vector2(0, 1) * verticalDirection * currentVertAcceleration * (1f - paralysisLevel) * goliathRigid.mass / slowComponent.GetSlowFactor());
         }
@@ -336,21 +351,21 @@ public class GoliathController : MonoBehaviour
         goliathRigid.velocity = finalVelocity;*/
     }
 
-        public void StartBasicAttack(float timeToFinish, bool mirrored = false) //activate arm, disable ability to perform further attacks
+    public void StartBasicAttack(float timeToFinish, bool mirrored = false) //activate arm, disable ability to perform further attacks
+    {
+        if (!canMeleeAttack && !performingComboAttack)  //skip normal cooldown if in combo attack
         {
-            if (!canMeleeAttack && !performingComboAttack)  //skip normal cooldown if in combo attack
-            {
-                Debug.Log("can't attack right now");
-                return;
-            }
-
-            goliathArm.SetActive(true);
-            currentSwingTime = 0f;
-        currentFullSwingTime = timeToFinish;
-            canMeleeAttack = false;
-        mirroredAttack = mirrored;
-            performingBasicAttack = true;
+            Debug.Log("can't attack right now");
+            return;
         }
+
+        goliathArm.SetActive(true);
+        currentSwingTime = 0f;
+        currentFullSwingTime = timeToFinish;
+        canMeleeAttack = false;
+        mirroredAttack = mirrored;
+        performingBasicAttack = true;
+    }
 
     public void StartComboAttack()
     {
@@ -364,38 +379,39 @@ public class GoliathController : MonoBehaviour
     }
 
     void ContinueBasicAttack()  //swing arm along attack arc
+    {
+        if (currentSwingTime >= currentFullSwingTime)
         {
-            if (currentSwingTime >= currentFullSwingTime)
-            {
-                EndBasicAttack();
-                return;
-            }
+            EndBasicAttack();
+            return;
+        }
         float targetArmAngle;
-            
+
         if (mirroredAttack)
         {
             targetArmAngle = 90f - (180f * (currentSwingTime / currentFullSwingTime));   //arm should start at 90f and end at -90f
-        } else
+        }
+        else
         {
             targetArmAngle = -90f + (180f * (currentSwingTime / currentFullSwingTime));   //arm should start at -90f and end at 90f
         }
-            goliathArm.transform.localEulerAngles = new Vector3(goliathArm.transform.eulerAngles.x, goliathArm.transform.eulerAngles.y, targetArmAngle);
-            //Debug.Log("current arm angle: " + goliathArm.transform.eulerAngles);
-            currentSwingTime += Time.deltaTime;
-        }
+        goliathArm.transform.localEulerAngles = new Vector3(goliathArm.transform.eulerAngles.x, goliathArm.transform.eulerAngles.y, targetArmAngle);
+        //Debug.Log("current arm angle: " + goliathArm.transform.eulerAngles);
+        currentSwingTime += Time.deltaTime;
+    }
 
-        void EndBasicAttack()   //disable arm, start cooldown
-        {
-            Debug.Log("ending attack sequence");
-            goliathArm.transform.GetChild(0).gameObject.GetComponent<AttackObject>().ClearHitTargets();
-            goliathArm.SetActive(false);
-            currentBasicAttackCooldown = basicAttackCooldown;
-            inBasicAttackCooldown = true;
-            performingBasicAttack = false;
+    void EndBasicAttack()   //disable arm, start cooldown
+    {
+        Debug.Log("ending attack sequence");
+        goliathArm.transform.GetChild(0).gameObject.GetComponent<AttackObject>().ClearHitTargets();
+        goliathArm.SetActive(false);
+        currentBasicAttackCooldown = basicAttackCooldown;
+        inBasicAttackCooldown = true;
+        performingBasicAttack = false;
         GoliathFinishAttack.Invoke();
-        }
+    }
 
-    public void StartStabAttack(float maxLength)
+    public void StartStabAttack(float maxLength, int specialDamage = -1, bool grapple = false)
     {
         if (!canMeleeAttack && !performingComboAttack)
         {
@@ -408,6 +424,16 @@ public class GoliathController : MonoBehaviour
         canMeleeAttack = false;
         performingStabAttack = true;
         currentMaxLength = maxLength;
+
+        if (specialDamage >= 0) //using non-standard damage; otherwise, use default stab damage
+        {
+            goliathTongueScript.Damage = specialDamage;
+        } else
+        {
+            goliathTongueScript.Damage = tongueDamage;
+        }
+
+        goliathTongueGrappleScript.enabled = grapple;
     }
 
     void ContinueStabAttack()  //extend tongue until reach max length, then hold
@@ -417,7 +443,6 @@ public class GoliathController : MonoBehaviour
         if (currentStabTime >= tongueExtendTime)
         {
             float totalStabTime = tongueExtendTime + tongueHoldTime;
-            Debug.Log("current: " + currentStabTime + ", max: " + totalStabTime);
             if (currentStabTime >= totalStabTime)
             {
                 EndStabAttack();
@@ -441,6 +466,52 @@ public class GoliathController : MonoBehaviour
         inBasicAttackCooldown = true;
         performingStabAttack = false;
         GoliathFinishAttack.Invoke();
+    }
+
+    public void PerformGrapple(GameObject grappledObject, Vector2 grapplePoint)
+    {
+        performingStabAttack = false;
+        goliathTongueScript.Damage = 0;
+        goliathTongueGrappleScript.enabled = false;
+        movementLocked = true;
+        currentlyGrappling = true;
+        this.grappledObject = grappledObject;
+        relativeGrapplePoint = grapplePoint - (Vector2) grappledObject.transform.position;  //track grapple point relative to center of target object so that we can keep the grapple in place if the object moves
+    }
+
+    void ContinueGrapple()
+    {
+        if (!grappledObject)
+        {
+            Debug.Log("no grappled object");
+            EndGrapple();
+        }
+        Vector2 currentGrappleTarget = (Vector2) grappledObject.transform.position + relativeGrapplePoint;
+        Vector2 targetDirection = currentGrappleTarget - (Vector2) goliath.transform.position;
+        Debug.Log("current target direction: " + targetDirection);
+        float currentDistance = Mathf.Abs(targetDirection.x) + Mathf.Abs(targetDirection.y);
+        if (currentDistance <= (grappleTargetDistance * transform.localScale.x))
+        {
+            Debug.Log("close enough to target");
+            EndGrapple();
+        }
+        float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
+        goliathTongue.transform.rotation = targetRotation;
+        goliathTongue.transform.localScale = new Vector3(goliathTongue.transform.localScale.x, currentDistance, goliathTongue.transform.localScale.z);
+        goliathRigid.velocity = targetDirection.normalized * grappleSpeed / slowComponent.GetSlowFactor();
+        //goliathRigid.AddForce(targetDirection * currentHorAcceleration * (1f - paralysisLevel) * goliathRigid.mass / slowComponent.GetSlowFactor());
+    }
+
+    void EndGrapple()
+    {
+        movementLocked = false;
+        currentlyGrappling = false;
+        goliathRigid.velocity = Vector2.zero;
+        goliathTongueScript.Damage = tongueDamage;
+        goliathTongue.transform.localRotation = Quaternion.identity;
+        goliathTongue.SetActive(false);
+        activeAbility.CancelAbility();
     }
 
     void CheckAbilityUsage()
@@ -530,20 +601,28 @@ public class GoliathController : MonoBehaviour
     {
         SetGoliathRotation();
     }
+
     // Update is called once per frame
     void Update()
     {
         if (!abilitySelectionMode)
         {
             CheckAbilityUsage();
-        } else  //player choosing which ability to replace, so ability keys are mapped to that instead
+        }
+        else  //player choosing which ability to replace, so ability keys are mapped to that instead
         {
             CheckAbilityReplacement();
         }
         ManageParalysis();
-            SetGoliathSpeed();
-            MoveGoliath();
-            goliathCamera.updateCamera();   //now that we've moved, set new camera position
+        SetGoliathSpeed();
+
+        MoveGoliath();
+        if (currentlyGrappling)
+        {
+            ContinueGrapple();
+        }
+
+        goliathCamera.updateCamera();   //now that we've moved, set new camera position
 
         if (holdingBasicAttack)
         {
@@ -561,7 +640,7 @@ public class GoliathController : MonoBehaviour
             }
         }
 
-            if (Input.GetButtonUp("Basic Attack") && !performingComboAttack)
+        if (Input.GetButtonUp("Basic Attack") && !performingComboAttack)
         {
             if (basicAttackHeldTimer >= stabChargeTime)
             {
@@ -572,36 +651,36 @@ public class GoliathController : MonoBehaviour
             basicAttackHeldTimer = 0f;
         }
 
-            if (performingBasicAttack)
-            {
-                ContinueBasicAttack();
-            }
+        if (performingBasicAttack)
+        {
+            ContinueBasicAttack();
+        }
 
-            if (performingStabAttack)
+        if (performingStabAttack)
         {
             ContinueStabAttack();
         }
 
-            if (inBasicAttackCooldown)
-            {
-                currentBasicAttackCooldown -= Time.deltaTime;
-                if (currentBasicAttackCooldown <= 0f)
-                {
-                    inBasicAttackCooldown = false;
-                    canMeleeAttack = true;
-                }
-            }
-
-        }
-
-        void GainExp(int exp)   //get exp, check for level up
+        if (inBasicAttackCooldown)
         {
-            if (level > 4)  //no need for exp at max level
+            currentBasicAttackCooldown -= Time.deltaTime;
+            if (currentBasicAttackCooldown <= 0f)
             {
-                return;
+                inBasicAttackCooldown = false;
+                canMeleeAttack = true;
             }
-            currentExp += exp;
         }
+
+    }
+
+    void GainExp(int exp)   //get exp, check for level up
+    {
+        if (level > 4)  //no need for exp at max level
+        {
+            return;
+        }
+        currentExp += exp;
+    }
 
 
     /*void Blink(Color blinkColor)
@@ -638,7 +717,7 @@ public class GoliathController : MonoBehaviour
                     goliathTransform.localScale = new Vector3(2f, 2f, 1f);
                     goliathArmScript.Damage = 20;
                     damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
-                    goliathTongueScript.Damage = 40;
+                    tongueDamage = 40;
                 break;
                 case 3:
                     neededExp = level4Exp;
@@ -646,7 +725,7 @@ public class GoliathController : MonoBehaviour
                     goliathArmScript.Damage = 30;
                 damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
                 damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
-                    goliathTongueScript.Damage = 60;
+                    tongueDamage = 60;
                 break;
                 case 4:
                     neededExp = level5Exp;
@@ -654,7 +733,7 @@ public class GoliathController : MonoBehaviour
                     goliathArmScript.Damage = 40;
                 damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
                 damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
-                    goliathTongueScript.Damage = 80;
+                    tongueDamage = 80;
                 break;
                 case 5:
                     neededExp = 1;
@@ -662,7 +741,7 @@ public class GoliathController : MonoBehaviour
                     goliathTransform.localScale = new Vector3(5f, 5f, 1f);
                     goliathArmScript.Damage = 50;
                 damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
-                    goliathTongueScript.Damage = 100;
+                    tongueDamage = 100;
                 break;
             }
         goliathArmScript.DamagedLayers = damagableLayers;

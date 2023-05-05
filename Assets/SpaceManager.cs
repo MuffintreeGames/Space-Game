@@ -14,7 +14,7 @@ public struct SectorCoordinates
     }
 }
 
-public class SpaceManager : MonoBehaviour
+public class SpaceManager : MonoBehaviour   //script to generate space map
 {
 
     public GameObject SmallPlanet;
@@ -26,6 +26,7 @@ public class SpaceManager : MonoBehaviour
     public GameObject Level1Barrier;
     public GameObject Level2Barrier;
     public GameObject Level3Barrier;
+    public GameObject EdgeOfWorld;
 
     public GameObject BigBang;
     public float bigBangTime = 60f; //time at which big bang should begin
@@ -96,10 +97,10 @@ public class SpaceManager : MonoBehaviour
                 if (totalDistance <= 2) //starting sectors
                 {
                     WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, null);
-                } else if (totalDistance <= 4)
+                } else if (totalDistance <= 3)
                 {
                     WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, Level1Barrier);
-                } else if (totalDistance <= 6)
+                } else if (totalDistance <= 5)
                 {
                     WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, Level2Barrier);
                 } else
@@ -110,6 +111,32 @@ public class SpaceManager : MonoBehaviour
         }
         SectorWall.UnlockSector.AddListener(ActivateSector);
         
+        //set up edge of world
+        for (int y = -1; y < worldSize + 1; y++)
+        {
+            CreateEdgeTeleporter(-1 - centerIndex, y - centerIndex);
+        }
+
+        for (int y = -1; y < worldSize + 1; y++)
+        {
+            CreateEdgeTeleporter(centerIndex, y - centerIndex);
+        }
+
+        for (int x = 0; x < worldSize; x++)
+        {
+            CreateEdgeTeleporter(x - centerIndex, -1 - centerIndex);
+        }
+
+        for (int x = 0; x < worldSize; x++)
+        {
+            CreateEdgeTeleporter(x - centerIndex, centerIndex);
+        }
+    }
+
+    void CreateEdgeTeleporter(int sectorX, int sectorY)
+    {
+        Vector3 teleCoords = new Vector3(sectorSize / 2 + (sectorSize * sectorX), sectorSize / 2 + (sectorSize * sectorY), 0);
+        Instantiate(EdgeOfWorld, teleCoords, Quaternion.identity);
     }
 
     GameObject[][] BuildSector(int MediumMin, int MediumMax, int LargeMin, int LargeMax, int MassiveMin, int MassiveMax, int sectorX, int sectorY, int arrayX, int arrayY, GameObject barrier)

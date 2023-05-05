@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7045386937356173623
+--- !u!1 &950341768418902669
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,42 +8,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1521896339236846246}
-  - component: {fileID: 8744965733033765246}
-  - component: {fileID: 2680724956529489542}
-  - component: {fileID: 7838426537178242089}
-  - component: {fileID: 5333707974461333185}
-  - component: {fileID: 6079067681554942535}
-  - component: {fileID: 6734802541037809805}
-  m_Layer: 22
-  m_Name: ProjectileExplosion
+  - component: {fileID: 7192721937990158954}
+  - component: {fileID: 6217226578690984149}
+  - component: {fileID: 863449428565472954}
+  - component: {fileID: 2766326379324577313}
+  - component: {fileID: 6009303866801680271}
+  - component: {fileID: 9100266468824767278}
+  m_Layer: 17
+  m_Name: SectorWallMedium
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1521896339236846246
+--- !u!4 &7192721937990158954
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7045386937356173623}
+  m_GameObject: {fileID: 950341768418902669}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.5, y: 3.5, z: 3.5}
+  m_LocalScale: {x: 100, y: 100, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &8744965733033765246
+--- !u!212 &6217226578690984149
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7045386937356173623}
+  m_GameObject: {fileID: 950341768418902669}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -78,8 +77,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 0.32299632, b: 0, a: 1}
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Color: {r: 0.2970191, g: 0.16264686, b: 0.4056604, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -89,56 +88,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2680724956529489542
-MonoBehaviour:
+--- !u!61 &863449428565472954
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7045386937356173623}
+  m_GameObject: {fileID: 950341768418902669}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3e1b751b985c274785669cc5df2f041, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Speed: 0
-  LifeTime: 0.4
-  direction: 1
-  Acceleration: 0
-  CanStop: 0
---- !u!114 &7838426537178242089
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7045386937356173623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 335b45a523558b544b9419aa5b171c17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Damage: 30
-  TargetLayers:
-    serializedVersion: 2
-    m_Bits: 73924544
-  DamagedLayers:
-    serializedVersion: 2
-    m_Bits: 69214272
-  DestroyOnHit: 0
-  RepeatedDamage: 0
-  OverTime: 0
-  InvincibilityDuration: 0
-  BelongsToGoliath: 1
---- !u!50 &5333707974461333185
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!50 &2766326379324577313
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7045386937356173623}
-  m_BodyType: 1
+  m_GameObject: {fileID: 950341768418902669}
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -151,31 +135,35 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &6079067681554942535
+--- !u!114 &6009303866801680271
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7045386937356173623}
+  m_GameObject: {fileID: 950341768418902669}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8442664667273644091fd3466e659585, type: 3}
+  m_Script: {fileID: 11500000, guid: 42a337aa95415324194de6c024ed838d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!58 &6734802541037809805
-CircleCollider2D:
+  MaxHealth: 3
+  DamageTo1: 1
+  DamageFlashToggle: 1
+  DamageFlash: {r: 1, g: 0, b: 0, a: 1}
+  InvincibilityOpacity: 0.5
+  blockableHits: 0
+  SpawnedOnDeath: {fileID: 0}
+  SpawnedOnGoliathKill: {fileID: 0}
+--- !u!114 &9100266468824767278
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7045386937356173623}
+  m_GameObject: {fileID: 950341768418902669}
   m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13c619594947c774f909f0ad8ed7d561, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
