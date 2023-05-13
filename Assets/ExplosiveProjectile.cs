@@ -10,7 +10,7 @@ public class ExplosiveProjectile : Projectile {     //like a normal projectile, 
 
     protected override void ProjectileExpire()
     {
-        PhotonNetwork.Instantiate(Explosion.ToString(), transform.position, Quaternion.identity);
+        PhotonNetwork.Instantiate(Explosion.name, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
     }
 }

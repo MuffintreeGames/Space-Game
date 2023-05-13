@@ -52,7 +52,7 @@ namespace Online
 
         void LoadArena()
         {
-            controlPanel.SetActive(false);
+            controlPanel.SetActive(true);
             if (!PhotonNetwork.IsMasterClient)
             {
                 Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
@@ -96,7 +96,7 @@ namespace Online
                 Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
                 PhotonNetwork.CurrentRoom.IsOpen = true;
                 PhotonNetwork.CurrentRoom.IsVisible = true;
-                controlPanel.SetActive(false);
+                // controlPanel.SetActive(false);
                 LoadArena();
             }
         }

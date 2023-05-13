@@ -146,12 +146,12 @@ public class Killable : MonoBehaviourPun
 
             if (SpawnedOnDeath != null)
             {
-                PhotonNetwork.Instantiate(SpawnedOnDeath.ToString(), transform.position, Quaternion.identity);
+                PhotonNetwork.Instantiate(SpawnedOnDeath.name, transform.position, Quaternion.identity);
             }
 
             if (fromGoliath && SpawnedOnGoliathKill != null)
             {
-                PhotonNetwork.Instantiate(SpawnedOnGoliathKill.ToString(), transform.position, Quaternion.identity);
+                PhotonNetwork.Instantiate(SpawnedOnGoliathKill.name, transform.position, Quaternion.identity);
             }
 
             Destroy(this.gameObject);

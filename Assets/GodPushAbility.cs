@@ -22,7 +22,7 @@ public class GodPushAbility : GodAbilityTemplate //create wave of force
     public override void UseNormalAbility()
     {
         Vector2 mouseCoords = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        GameObject newCrosshair = PhotonNetwork.Instantiate(crosshair.ToString(), mouseCoords, Quaternion.identity);
+        GameObject newCrosshair = PhotonNetwork.Instantiate(crosshair.name, mouseCoords, Quaternion.identity);
         newCrosshair.GetComponent<GodChoosePushTarget>().parentAbility = this;
     }
 }

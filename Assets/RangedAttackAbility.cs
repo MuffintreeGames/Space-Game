@@ -27,7 +27,7 @@ public class RangedAttackAbility : AbilityTemplate  //fire a projectile
 
     public override void UseNormalAbility()
     {
-        GameObject firedShot = PhotonNetwork.Instantiate(GoliathShot.ToString(), parentGoliath.transform.position, Quaternion.identity);
+        GameObject firedShot = PhotonNetwork.Instantiate(GoliathShot.name, parentGoliath.transform.position, Quaternion.identity);
         Debug.Log("checking shot damage: " + firedShot.GetComponent<AttackObject>().Damage);
         firedShot.GetComponent<Projectile>().SetProjectileParameters(projectileSpeed, parentGoliath.transform.eulerAngles.z, projectileDuration);
     }

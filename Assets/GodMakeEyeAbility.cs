@@ -22,7 +22,7 @@ public class GodMakeEyeAbility : GodAbilityTemplate    //create an eye which gra
     public override void UseNormalAbility()
     {
         Vector2 mouseCoords = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        GameObject createdOutline = PhotonNetwork.Instantiate(spawnOutline.ToString(), mouseCoords, Quaternion.identity);
+        GameObject createdOutline = PhotonNetwork.Instantiate(spawnOutline.name, mouseCoords, Quaternion.identity);
         createdOutline.GetComponent<PlaceOnClick>().parentAbility = this;
     }
 }

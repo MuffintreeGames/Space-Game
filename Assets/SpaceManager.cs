@@ -137,7 +137,7 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
     void CreateEdgeTeleporter(int sectorX, int sectorY)
     {
         Vector3 teleCoords = new Vector3(sectorSize / 2 + (sectorSize * sectorX), sectorSize / 2 + (sectorSize * sectorY), 0);
-        PhotonNetwork.Instantiate(EdgeOfWorld.ToString(), teleCoords, Quaternion.identity);
+        PhotonNetwork.Instantiate(EdgeOfWorld.name, teleCoords, Quaternion.identity);
     }
 
     GameObject[][] BuildSector(int MediumMin, int MediumMax, int LargeMin, int LargeMax, int MassiveMin, int MassiveMax, int sectorX, int sectorY, int arrayX, int arrayY, GameObject barrier)
@@ -198,7 +198,7 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
         int randX = Random.Range(Mathf.RoundToInt((float)(sectorDimensions * 0.4)), Mathf.RoundToInt((float)(sectorDimensions * 0.7)));
         int randY = Random.Range(Mathf.RoundToInt((float)(sectorDimensions * 0.4)), Mathf.RoundToInt((float)(sectorDimensions * 0.7)));
         Vector3 planetCoords = new Vector3(randX * chunkSize + chunkSize/2 + (sectorSize * sectorX), randY * chunkSize + chunkSize/2 + (sectorSize * sectorY), 0);
-        GameObject newPlanet = PhotonNetwork.Instantiate(AbilityPlanet.ToString(), planetCoords, Quaternion.identity);
+        GameObject newPlanet = PhotonNetwork.Instantiate(AbilityPlanet.name, planetCoords, Quaternion.identity);
         newPlanet.GetComponent<GrantAbility>().GrantedAbility = SelectAbility();
         sectorMap[randX][randY] = newPlanet;
         return newPlanet;
@@ -265,7 +265,7 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
             float planetXCoords = Random.Range(leftChunkLimit, rightChunkLimit);
             float planetYCoords = Random.Range(bottomChunkLimit, topChunkLimit);
             Vector3 planetCoords = new Vector3(planetXCoords + (sectorSize*sectorX), planetYCoords + (sectorSize*sectorY), 0);
-            GameObject newPlanet = PhotonNetwork.Instantiate(planetTemplate.ToString(), planetCoords, Quaternion.identity);
+            GameObject newPlanet = PhotonNetwork.Instantiate(planetTemplate.name, planetCoords, Quaternion.identity);
             newPlanet.GetComponent<SpriteRenderer>().color = PickRandomPlanetColor();
             sectorMap[chunkX][chunkY] = newPlanet;
     }
@@ -273,7 +273,7 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
     void SpawnBarrier(GameObject barrier, int sectorX, int sectorY)
     {
         Vector3 barrierCoords = new Vector3(sectorSize / 2 + (sectorSize * sectorX), sectorSize / 2 + (sectorSize * sectorY), 0);
-        GameObject newBarrier = PhotonNetwork.Instantiate(barrier.ToString(), barrierCoords, Quaternion.identity);
+        GameObject newBarrier = PhotonNetwork.Instantiate(barrier.name, barrierCoords, Quaternion.identity);
         newBarrier.GetComponent<SectorWall>().SetParameters(sectorX, sectorY);
     }
 
@@ -307,7 +307,7 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
         if ((TimeManager.GetElapsedTime() >= bigBangTime) && !bigBangSpawned)
         {
             Debug.Log("spawning big bang");
-            PhotonNetwork.Instantiate(BigBang.ToString(), new Vector3(0, 0, 0), Quaternion.identity);
+            PhotonNetwork.Instantiate(BigBang.name, new Vector3(0, 0, 0), Quaternion.identity);
             bigBangSpawned = true;
         }
 

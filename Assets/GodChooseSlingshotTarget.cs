@@ -47,7 +47,7 @@ public class GodChooseSlingshotTarget : MonoBehaviourPun    //select a planet to
         {
             if (canPlace)
             {
-                GameObject newArrow = PhotonNetwork.Instantiate(AimingArrow.ToString(), mouseCoords, Quaternion.identity);
+                GameObject newArrow = PhotonNetwork.Instantiate(AimingArrow.name, mouseCoords, Quaternion.identity);
                 AimingArrow arrowScript = newArrow.GetComponent<AimingArrow>();
                 arrowScript.aimedObject = (CircleCollider2D) validObject;
                 arrowScript.parentAbility = parentAbility;
