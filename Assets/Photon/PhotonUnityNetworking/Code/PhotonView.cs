@@ -98,7 +98,7 @@ namespace Photon.Pun
 
 
         /// <summary>
-        /// This is the InstantiationData that was passed when calling PhotonNetwork.Instantiate* (if that was used to spawn this prefab)
+        /// This is the InstantiationData that was passed when calling Instantiate* (if that was used to spawn this prefab)
         /// </summary>
         public object[] InstantiationData
         {
@@ -342,7 +342,7 @@ namespace Photon.Pun
             
             if (this.sceneViewId != 0)
             {
-                // PhotonNetwork.Instantiate will set a ViewID != 0 before the object awakes. So only objects loaded with the scene ever use the sceneViewId (even if the obj got pooled)
+                // Instantiate will set a ViewID != 0 before the object awakes. So only objects loaded with the scene ever use the sceneViewId (even if the obj got pooled)
                 this.ViewID = this.sceneViewId;
             }
 

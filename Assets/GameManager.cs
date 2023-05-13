@@ -10,6 +10,7 @@ namespace Online
         #region Public Fields
         [Tooltip("The Ui Panel to let the user start game")]
         [SerializeField]
+        public static GameManager Instance;
         private GameObject controlPanel;
         #endregion
 
@@ -28,6 +29,11 @@ namespace Online
 
         #region Public Methods
 
+        void Start()
+        {
+            Instance = this;
+        }
+
         public void LeaveRoom()
         {
             Debug.LogFormat("LeaveRoom"); // click Back to Online
@@ -36,6 +42,7 @@ namespace Online
 
         public void StartGame()
         {
+
             PhotonNetwork.LoadLevel("MainGame");
         }
 

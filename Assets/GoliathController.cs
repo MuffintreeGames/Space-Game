@@ -1,3 +1,5 @@
+using Online;
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -1013,4 +1015,9 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
         }
     }
 
+    private void OnDestroy()
+    {
+        if (PhotonNetwork.IsConnected) GameManager.Instance.LeaveRoom();
     }
+
+}

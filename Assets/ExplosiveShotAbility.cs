@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,7 +29,7 @@ public class ExplosiveShotAbility : AbilityTemplate  //fire a projectile that do
 
     public override void UseNormalAbility()
     {
-        GameObject firedShot = Instantiate(ExplosiveShot, parentGoliath.transform.position, Quaternion.identity);
+        GameObject firedShot = PhotonNetwork.Instantiate(ExplosiveShot.ToString(), parentGoliath.transform.position, Quaternion.identity);
         Debug.Log("checking shot damage: " + firedShot.GetComponent<AttackObject>().Damage);
         firedShot.GetComponent<ExplosiveProjectile>().SetProjectileParameters(projectileSpeed, parentGoliath.transform.eulerAngles.z, projectileDuration);
     }

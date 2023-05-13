@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class ExplosiveProjectile : Projectile {     //like a normal projectile, 
 
     protected override void ProjectileExpire()
     {
-        Instantiate(Explosion, transform.position, Quaternion.identity);
+        PhotonNetwork.Instantiate(Explosion.ToString(), transform.position, Quaternion.identity);
         Destroy(this.gameObject);
     }
 }

@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnAfterDelay : MonoBehaviour
+public class SpawnAfterDelay : MonoBehaviourPun
 {
     public GameObject spawnedObject;
     public float timeToSpawn = 1f;
@@ -20,7 +21,7 @@ public class SpawnAfterDelay : MonoBehaviour
         timeElapsed += Time.deltaTime;
         if (timeElapsed > timeToSpawn)
         {
-            Instantiate(spawnedObject, transform.position, Quaternion.identity);
+            PhotonNetwork.Instantiate(spawnedObject.ToString(), transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

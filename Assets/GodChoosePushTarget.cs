@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GodChoosePushTarget : MonoBehaviour    //select where to create pushing wall
+public class GodChoosePushTarget : MonoBehaviourPun   //select where to create pushing wall
 {
     public GameObject AimingArrow;
     public string helpText;
@@ -31,7 +32,7 @@ public class GodChoosePushTarget : MonoBehaviour    //select where to create pus
         {
             if (canPlace)
             {
-                GameObject newArrow = Instantiate(AimingArrow, mouseCoords, Quaternion.identity);
+                GameObject newArrow = PhotonNetwork.Instantiate(AimingArrow.ToString(), mouseCoords, Quaternion.identity);
                 AimingArrow arrowScript = newArrow.GetComponent<AimingArrow>();
                 arrowScript.parentAbility = parentAbility;
                 HUDManager.UpdateGodAbilityHelpText.Invoke("");

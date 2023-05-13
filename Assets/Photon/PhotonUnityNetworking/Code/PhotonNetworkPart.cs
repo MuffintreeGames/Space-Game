@@ -839,7 +839,7 @@ namespace Photon.Pun
                 // Notify all children PVs of impending destruction. Send the root PV (the actual object getting destroyed) to the callbacks.
                 view.OnPreNetDestroy(viewZero);
 
-                // we only destroy/clean PhotonViews that were created by PhotonNetwork.Instantiate (and those have an instantiationId!)
+                // we only destroy/clean PhotonViews that were created by Instantiate (and those have an instantiationId!)
                 if (view.InstantiationId >= 1)
                 {
                     LocalCleanPhotonView(view);

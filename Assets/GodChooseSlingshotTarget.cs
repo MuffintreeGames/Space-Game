@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GodChooseSlingshotTarget : MonoBehaviour    //select a planet to launch
+public class GodChooseSlingshotTarget : MonoBehaviourPun    //select a planet to launch
 {
     public GameObject AimingArrow;
     public string helpText;
@@ -46,7 +47,7 @@ public class GodChooseSlingshotTarget : MonoBehaviour    //select a planet to la
         {
             if (canPlace)
             {
-                GameObject newArrow = Instantiate(AimingArrow, mouseCoords, Quaternion.identity);
+                GameObject newArrow = PhotonNetwork.Instantiate(AimingArrow.ToString(), mouseCoords, Quaternion.identity);
                 AimingArrow arrowScript = newArrow.GetComponent<AimingArrow>();
                 arrowScript.aimedObject = (CircleCollider2D) validObject;
                 arrowScript.parentAbility = parentAbility;

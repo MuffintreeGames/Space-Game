@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AimingArrow : MonoBehaviour
+public class AimingArrow : MonoBehaviourPun
 {
     private GodController god;
     //private Vector2 startingPos;    //position of arrow at creation
@@ -72,7 +73,7 @@ public class AimingArrow : MonoBehaviour
                 aimedAttack.enabled = true;
             } else
             {
-                GameObject firedShot = Instantiate(projectile, transform.position, Quaternion.identity);
+                GameObject firedShot = PhotonNetwork.Instantiate(projectile.ToString(), transform.position, Quaternion.identity);
                 Projectile shotScript = firedShot.GetComponent<Projectile>();
                 shotScript.SetProjectileParameters(shotScript.Speed, targetRotation.eulerAngles.z, shotScript.LifeTime);
             }

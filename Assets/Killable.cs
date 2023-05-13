@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Killable : MonoBehaviour
+public class Killable : MonoBehaviourPun
 {
     public float MaxHealth;    //starting amount of health object has
     public bool DamageTo1 = false;  //if true, object only takes 1 damage from any valid hits
@@ -145,12 +146,12 @@ public class Killable : MonoBehaviour
 
             if (SpawnedOnDeath != null)
             {
-                Instantiate(SpawnedOnDeath, transform.position, Quaternion.identity);
+                PhotonNetwork.Instantiate(SpawnedOnDeath.ToString(), transform.position, Quaternion.identity);
             }
 
             if (fromGoliath && SpawnedOnGoliathKill != null)
             {
-                Instantiate(SpawnedOnGoliathKill, transform.position, Quaternion.identity);
+                PhotonNetwork.Instantiate(SpawnedOnGoliathKill.ToString(), transform.position, Quaternion.identity);
             }
 
             Destroy(this.gameObject);

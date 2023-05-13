@@ -4,13 +4,15 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using Online;
+using Photon.Pun;
 
 public class UpdateGodAbilityHelpTextEvent : UnityEvent<string>
 {
 
 }
 
-public class HUDManager : MonoBehaviour
+public class HUDManager : MonoBehaviourPun
 {
     public GoliathController playerGoliath;
     public GodController playerGod;

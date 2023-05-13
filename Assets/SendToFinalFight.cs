@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -20,8 +21,8 @@ public class SendToFinalFight : MonoBehaviour
 
     public static void GoToFinalFight()
     {
-
-        SceneManager.LoadSceneAsync(4);
+        if (PhotonNetwork.IsConnected) PhotonNetwork.LoadLevel("FinalFight");
+        else SceneManager.LoadSceneAsync(4);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

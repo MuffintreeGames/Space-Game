@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExplosivePlanet : MonoBehaviour
+public class ExplosivePlanet : MonoBehaviourPun
 {
     public GameObject Explosion;
     public Color blinkColor = Color.yellow;
@@ -70,7 +71,7 @@ public class ExplosivePlanet : MonoBehaviour
     void Explode()
     {
         Debug.Log("exploding!");
-        Instantiate(Explosion, transform.position, Quaternion.identity);
+        PhotonNetwork.Instantiate(Explosion.ToString(), transform.position, Quaternion.identity);
         Destroy(this.gameObject);
     }
 }

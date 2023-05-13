@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HostilePlanetController : MonoBehaviour
+public class HostilePlanetController : MonoBehaviourPun
 {
     public GameObject PlanetShot;
     public float AttackSpeed = 10f;
@@ -52,7 +53,7 @@ public class HostilePlanetController : MonoBehaviour
         Vector3 targetDirection = goliathTransform.position - transform.position;
         float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
         Quaternion targetRotation = Quaternion.Euler(new Vector3(0,0,angle));
-        GameObject firedShot = Instantiate(PlanetShot, transform.position + (targetDirection.normalized * distanceFromOrigin), Quaternion.identity);
+        GameObject firedShot = PhotonNetwork.Instantiate(PlanetShot.ToString(), transform.position + (targetDirection.normalized * distanceFromOrigin), Quaternion.identity);
         firedShot.GetComponent<Projectile>().SetProjectileParameters(AttackSpeed, targetRotation.eulerAngles.z, AttackDuration);
         attackReady = false;
         timeSinceAttack = 0f;

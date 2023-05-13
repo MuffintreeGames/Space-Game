@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlaceOnClick : MonoBehaviour    //attach to object to have image follow mouse, and on a click place an object into the world
+public class PlaceOnClick : MonoBehaviourPun    //attach to object to have image follow mouse, and on a click place an object into the world
 {
     public GameObject CreatedObject;
     public string helpText = "Left-click on empty area to place object. Right-click to cancel.";
@@ -88,7 +89,7 @@ public class PlaceOnClick : MonoBehaviour    //attach to object to have image fo
                     parentAbility.StartCooldown();
                 }
 
-                Instantiate(CreatedObject, mouseCoords, Quaternion.identity);
+                PhotonNetwork.Instantiate(CreatedObject.ToString(), mouseCoords, Quaternion.identity);
                 god.SetAbilityUsage(true);
                 HUDManager.UpdateGodAbilityHelpText.Invoke("");
                 Destroy(gameObject);

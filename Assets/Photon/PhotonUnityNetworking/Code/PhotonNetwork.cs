@@ -431,7 +431,7 @@ namespace Photon.Pun
         /// <summary>
         /// Offline mode can be set to re-use your multiplayer code in singleplayer game modes.
         /// When this is on PhotonNetwork will not create any connections and there is near to
-        /// no overhead. Mostly usefull for reusing RPC's and PhotonNetwork.Instantiate
+        /// no overhead. Mostly usefull for reusing RPC's and Instantiate
         /// </summary>
         public static bool OfflineMode
         {
@@ -2606,7 +2606,7 @@ namespace Photon.Pun
 
             if (photonViews.Length == 0)
             {
-                Debug.LogError("PhotonNetwork.Instantiate() can only instantiate objects with a PhotonView component. This prefab does not have one: " + parameters.prefabName);
+                Debug.LogError("Instantiate() can only instantiate objects with a PhotonView component. This prefab does not have one: " + parameters.prefabName);
                 return null;
             }
 
@@ -2730,13 +2730,13 @@ namespace Photon.Pun
         /// <remarks>
         /// Destroying a networked GameObject while in a Room includes:
         /// - Removal of the Instantiate call from the server's room buffer.
-        /// - Removing RPCs buffered for PhotonViews that got created indirectly with the PhotonNetwork.Instantiate call.
+        /// - Removing RPCs buffered for PhotonViews that got created indirectly with the Instantiate call.
         /// - Sending a message to other clients to remove the GameObject also (affected by network lag).
         ///
         /// Usually, when you leave a room, the GOs get destroyed automatically.
         /// If you have to destroy a GO while not in a room, the Destroy is only done locally.
         ///
-        /// Destroying networked objects works only if they got created with PhotonNetwork.Instantiate().
+        /// Destroying networked objects works only if they got created with Instantiate().
         /// Objects loaded with a scene are ignored, no matter if they have PhotonView components.
         ///
         /// The GameObject must be under this client's control:
@@ -2764,13 +2764,13 @@ namespace Photon.Pun
         /// <remarks>
         /// Destroying a networked GameObject includes:
         /// - Removal of the Instantiate call from the server's room buffer.
-        /// - Removing RPCs buffered for PhotonViews that got created indirectly with the PhotonNetwork.Instantiate call.
+        /// - Removing RPCs buffered for PhotonViews that got created indirectly with the Instantiate call.
         /// - Sending a message to other clients to remove the GameObject also (affected by network lag).
         ///
         /// Usually, when you leave a room, the GOs get destroyed automatically.
         /// If you have to destroy a GO while not in a room, the Destroy is only done locally.
         ///
-        /// Destroying networked objects works only if they got created with PhotonNetwork.Instantiate().
+        /// Destroying networked objects works only if they got created with Instantiate().
         /// Objects loaded with a scene are ignored, no matter if they have PhotonView components.
         ///
         /// The GameObject must be under this client's control:
@@ -2791,10 +2791,10 @@ namespace Photon.Pun
         /// <remarks>
         /// Destroying a networked GameObject includes:
         /// - Removal of the Instantiate call from the server's room buffer.
-        /// - Removing RPCs buffered for PhotonViews that got created indirectly with the PhotonNetwork.Instantiate call.
+        /// - Removing RPCs buffered for PhotonViews that got created indirectly with the Instantiate call.
         /// - Sending a message to other clients to remove the GameObject also (affected by network lag).
         ///
-        /// Destroying networked objects works only if they got created with PhotonNetwork.Instantiate().
+        /// Destroying networked objects works only if they got created with Instantiate().
         /// Objects loaded with a scene are ignored, no matter if they have PhotonView components.
         /// </remarks>
         /// <returns>Nothing. Check error debug log for any issues.</returns>
@@ -2814,10 +2814,10 @@ namespace Photon.Pun
         /// <remarks>
         /// Destroying a networked GameObject includes:
         /// - Removal of the Instantiate call from the server's room buffer.
-        /// - Removing RPCs buffered for PhotonViews that got created indirectly with the PhotonNetwork.Instantiate call.
+        /// - Removing RPCs buffered for PhotonViews that got created indirectly with the Instantiate call.
         /// - Sending a message to other clients to remove the GameObject also (affected by network lag).
         ///
-        /// Destroying networked objects works only if they got created with PhotonNetwork.Instantiate().
+        /// Destroying networked objects works only if they got created with Instantiate().
         /// Objects loaded with a scene are ignored, no matter if they have PhotonView components.
         /// </remarks>
         /// <returns>Nothing. Check error debug log for any issues.</returns>
@@ -2849,7 +2849,7 @@ namespace Photon.Pun
         /// - Remove anything from the server's room buffer (Instantiate, RPCs, anything buffered).
         /// - Sending a message to other clients to destroy everything locally, too (affected by network lag).
         ///
-        /// Destroying networked objects works only if they got created with PhotonNetwork.Instantiate().
+        /// Destroying networked objects works only if they got created with Instantiate().
         /// Objects loaded with a scene are ignored, no matter if they have PhotonView components.
         /// </remarks>
         /// <returns>Nothing. Check error debug log for any issues.</returns>

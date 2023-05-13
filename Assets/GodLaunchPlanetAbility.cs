@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +23,7 @@ public class GodLaunchPlanetAbility : GodAbilityTemplate    //slingshot a planet
     public override void UseNormalAbility()
     {
         Vector2 mouseCoords = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        GameObject newCrosshair = Instantiate(crosshair, mouseCoords, Quaternion.identity);
+        GameObject newCrosshair = PhotonNetwork.Instantiate(crosshair.ToString(), mouseCoords, Quaternion.identity);
         newCrosshair.GetComponent<GodChooseSlingshotTarget>().parentAbility = this;
     }
 }

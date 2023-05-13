@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,7 +38,7 @@ public class PoisonSprayAbility : AbilityTemplate  //fire several pellets which 
 
         for (int n = 0; n < projectileCount; n++)
         {
-            GameObject firedShot = Instantiate(GoliathShot, parentGoliath.transform.position, Quaternion.identity);
+            GameObject firedShot = PhotonNetwork.Instantiate(GoliathShot.ToString(), parentGoliath.transform.position, Quaternion.identity);
             float shotAngle = parentGoliath.transform.eulerAngles.z + ((n - projectileCount / 2) * spread);
             float randomDecel = deceleration + Random.Range(-decelVariance, decelVariance);
             firedShot.GetComponent<Projectile>().SetProjectileParameters(projectileSpeed, shotAngle, projectileDuration, -randomDecel, true);
