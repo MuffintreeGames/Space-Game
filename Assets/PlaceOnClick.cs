@@ -89,7 +89,8 @@ public class PlaceOnClick : MonoBehaviourPun    //attach to object to have image
                     parentAbility.StartCooldown();
                 }
 
-                PhotonNetwork.Instantiate(CreatedObject.name, mouseCoords, Quaternion.identity);
+                if (PhotonNetwork.IsConnected) PhotonNetwork.Instantiate(CreatedObject.name, mouseCoords, Quaternion.identity);
+                else Instantiate(CreatedObject, mouseCoords, Quaternion.identity);
                 god.SetAbilityUsage(true);
                 HUDManager.UpdateGodAbilityHelpText.Invoke("");
                 Destroy(gameObject);

@@ -21,7 +21,8 @@ public class SpawnAfterDelay : MonoBehaviourPun
         timeElapsed += Time.deltaTime;
         if (timeElapsed > timeToSpawn)
         {
-            PhotonNetwork.Instantiate(spawnedObject.name, transform.position, Quaternion.identity);
+            if (PhotonNetwork.IsConnected) PhotonNetwork.Instantiate(spawnedObject.name, transform.position, Quaternion.identity);
+            else Instantiate(spawnedObject, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

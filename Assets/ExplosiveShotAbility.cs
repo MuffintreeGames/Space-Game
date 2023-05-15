@@ -29,7 +29,9 @@ public class ExplosiveShotAbility : AbilityTemplate  //fire a projectile that do
 
     public override void UseNormalAbility()
     {
-        GameObject firedShot = PhotonNetwork.Instantiate(ExplosiveShot.name, parentGoliath.transform.position, Quaternion.identity);
+        GameObject firedShot;
+        if (PhotonNetwork.IsConnected) firedShot = PhotonNetwork.Instantiate(ExplosiveShot.name, parentGoliath.transform.position, Quaternion.identity);
+        else firedShot = Instantiate(ExplosiveShot, parentGoliath.transform.position, Quaternion.identity);
         Debug.Log("checking shot damage: " + firedShot.GetComponent<AttackObject>().Damage);
         firedShot.GetComponent<ExplosiveProjectile>().SetProjectileParameters(projectileSpeed, parentGoliath.transform.eulerAngles.z, projectileDuration);
     }

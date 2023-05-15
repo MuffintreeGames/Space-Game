@@ -71,7 +71,9 @@ public class ExplosivePlanet : MonoBehaviourPun
     void Explode()
     {
         Debug.Log("exploding!");
-        PhotonNetwork.Instantiate(Explosion.name, transform.position, Quaternion.identity);
+
+        if (PhotonNetwork.IsConnected) PhotonNetwork.Instantiate(Explosion.name, transform.position, Quaternion.identity);
+        else Instantiate(Explosion, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
     }
 }

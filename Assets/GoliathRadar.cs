@@ -54,7 +54,10 @@ public class GoliathRadar : MonoBehaviourPun
                     Vector3 targetDirection = targetAbilityPlanet.transform.position - transform.position;
                     float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
                     Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
-                    radarArrows.Add(PhotonNetwork.Instantiate(ArrowTemplate.name, transform.position + (targetDirection.normalized * distanceFromCenter), targetRotation));
+                    GameObject instantiatedArrow;
+                    if (PhotonNetwork.IsConnected) instantiatedArrow = PhotonNetwork.Instantiate(ArrowTemplate.name, transform.position + (targetDirection.normalized * distanceFromCenter), targetRotation);
+                    else instantiatedArrow = PhotonNetwork.Instantiate(ArrowTemplate.name, transform.position + (targetDirection.normalized * distanceFromCenter), targetRotation);
+                    radarArrows.Add(instantiatedArrow);
                 }
             } else
             {

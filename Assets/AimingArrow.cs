@@ -73,7 +73,9 @@ public class AimingArrow : MonoBehaviourPun
                 aimedAttack.enabled = true;
             } else
             {
-                GameObject firedShot = PhotonNetwork.Instantiate(projectile.name, transform.position, Quaternion.identity);
+                GameObject firedShot;
+                if (PhotonNetwork.IsConnected) firedShot = PhotonNetwork.Instantiate(projectile.name, transform.position, Quaternion.identity);
+                else firedShot = Instantiate(projectile, transform.position, Quaternion.identity);
                 Projectile shotScript = firedShot.GetComponent<Projectile>();
                 shotScript.SetProjectileParameters(shotScript.Speed, targetRotation.eulerAngles.z, shotScript.LifeTime);
             }

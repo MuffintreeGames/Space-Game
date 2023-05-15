@@ -53,7 +53,9 @@ public class HostilePlanetController : MonoBehaviourPun
         Vector3 targetDirection = goliathTransform.position - transform.position;
         float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
         Quaternion targetRotation = Quaternion.Euler(new Vector3(0,0,angle));
-        GameObject firedShot = PhotonNetwork.Instantiate(PlanetShot.name, transform.position + (targetDirection.normalized * distanceFromOrigin), Quaternion.identity);
+        GameObject firedShot;
+        if (PhotonNetwork.IsConnected) firedShot = PhotonNetwork.Instantiate(PlanetShot.name, transform.position + (targetDirection.normalized * distanceFromOrigin), Quaternion.identity);
+        else firedShot = PhotonNetwork.Instantiate(PlanetShot.name, transform.position + (targetDirection.normalized * distanceFromOrigin), Quaternion.identity);
         firedShot.GetComponent<Projectile>().SetProjectileParameters(AttackSpeed, targetRotation.eulerAngles.z, AttackDuration);
         attackReady = false;
         timeSinceAttack = 0f;
