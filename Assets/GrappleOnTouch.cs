@@ -29,7 +29,6 @@ public class GrappleOnTouch : MonoBehaviour //if this hits something on an appro
         GameObject hitGameObject = col.gameObject;
         if ((TargetLayers & (1 << hitGameObject.layer)) != 0)
         {
-            Debug.Log("collision check");
             parentGoliath.PerformGrapple(hitGameObject, col.GetContact(0).point);
         }
     }
@@ -45,7 +44,7 @@ public class GrappleOnTouch : MonoBehaviour //if this hits something on an appro
         GameObject hitGameObject = col.gameObject;
         if ((TargetLayers & (1 << hitGameObject.layer)) != 0)
         {
-            Debug.Log("trigger check");
+            //Vector2 colliderPosition = (Vector2)transform.position + (tongueCollider.offset * transform.localScale);
             Vector2 contactPoint = col.GetComponent<Rigidbody2D>().ClosestPoint(transform.position);
             parentGoliath.PerformGrapple(hitGameObject, contactPoint);
         }

@@ -7,10 +7,14 @@ using UnityEngine.SceneManagement;
 
 public class SendToFinalFight : MonoBehaviour
 {
+    private static GameObject goliath;
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (goliath == null)
+        {
+            goliath = GameObject.Find("Goliath");
+        }
     }
 
     // Update is called once per frame
@@ -21,13 +25,19 @@ public class SendToFinalFight : MonoBehaviour
 
     public static void GoToFinalFight()
     {
+<<<<<<< Updated upstream
         if (PhotonNetwork.IsConnected) PhotonNetwork.LoadLevel("FinalFight");
         else SceneManager.LoadSceneAsync(4);
+=======
+        goliath.transform.position = Vector3.zero;
+        goliath.GetComponent<GoliathController>().ResetState();
+        SceneManager.LoadSceneAsync(4);
+>>>>>>> Stashed changes
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Goliath"))
+        if (collision.gameObject == goliath)
         {
             GoToFinalFight();
         }

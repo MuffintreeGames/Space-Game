@@ -13,9 +13,13 @@ GameObject:
   - component: {fileID: 863449428565472954}
   - component: {fileID: 2766326379324577313}
   - component: {fileID: 1644583228205600227}
+<<<<<<< Updated upstream:Assets/Resources/EdgeOfWorld.prefab
   - component: {fileID: 3088236512839933545}
   - component: {fileID: -9142305440518498798}
   m_Layer: 16
+=======
+  m_Layer: 19
+>>>>>>> Stashed changes:Assets/Prefabs/EdgeOfWorld.prefab
   m_Name: EdgeOfWorld
   m_TagString: Untagged
   m_Icon: {fileID: 0}

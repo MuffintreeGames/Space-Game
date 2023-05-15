@@ -96,7 +96,7 @@ public class AttackObject : MonoBehaviour
             {
                 if (hitTargets.ContainsKey(hitGameObject))
                 {
-                    Debug.Log("have already hit this object before");
+                    //Debug.Log("have already hit this object before");
                     return;
                 }
                 hitTargets.Add(hitGameObject, true);

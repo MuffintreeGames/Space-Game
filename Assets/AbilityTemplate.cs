@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+
 public abstract class AbilityTemplate : MonoBehaviour
 {
 
@@ -27,6 +29,7 @@ public abstract class AbilityTemplate : MonoBehaviour
         UpgradeSelf(1);
         enabled = false;
         this.abilityType = abilityType;
+        SceneManager.sceneLoaded += ResetListeners;
     }
 
     public AbilityCategory GetAbilityType()
@@ -41,6 +44,7 @@ public abstract class AbilityTemplate : MonoBehaviour
         {
             if (parentGoliath)
             {
+                Debug.Log("listeners attaching!");
                 GoliathController.GoliathLevelup.AddListener(UpgradeSelf);
                 GoliathController.GoliathFinishAttack.AddListener(ContinueCombo);
                 listenersAttached = true;
@@ -98,6 +102,11 @@ public abstract class AbilityTemplate : MonoBehaviour
         {
             UseNormalAbility();
         }
+    }
+
+    private void ResetListeners(Scene scene, LoadSceneMode mode)   //needed in order to reattach listeners on a scene change
+    {
+        listenersAttached = false;
     }
 
     public virtual void UseNormalAbility()

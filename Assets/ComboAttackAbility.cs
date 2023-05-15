@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ComboAttackAbility : AbilityTemplate //do 3 basic attacks in rapid succession
 {
-    public float swingTime = 0.1f;
+    public float swingTime = 0.15f;
 
     private bool currentlyAttacking = false;
     private int attacksLeft = 0;

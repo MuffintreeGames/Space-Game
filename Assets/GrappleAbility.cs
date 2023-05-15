@@ -6,10 +6,9 @@ public class GrappleAbility : AbilityTemplate //do long stab attack, pulls to ta
 {
     //public float stabTime = 0.1f;
     public float grappleLength = 10f;
+    //public float grappleSpeed = 0.2f;
 
     private bool currentlyAttacking = false;
-    private int totalAttacks = 3;
-    private int attacksLeft = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -37,8 +36,7 @@ public class GrappleAbility : AbilityTemplate //do long stab attack, pulls to ta
     {
         parentGoliath.StartComboAttack();
         currentlyAttacking = true;
-        parentGoliath.StartStabAttack(grappleLength, 0, true);
-        //attacksLeft = totalAttacks - 1;
+        parentGoliath.StartStabAttack(grappleLength, -1, 0, true);
     }
 
     public override void CancelAbility()
@@ -46,6 +44,5 @@ public class GrappleAbility : AbilityTemplate //do long stab attack, pulls to ta
         PrepareToEndAbility();
         currentlyAttacking = false;
         parentGoliath.StopComboAttack();
-        //attacksLeft = 0;
     }
 }
