@@ -25,14 +25,10 @@ public class SendToFinalFight : MonoBehaviour
 
     public static void GoToFinalFight()
     {
-<<<<<<< Updated upstream
-        if (PhotonNetwork.IsConnected) PhotonNetwork.LoadLevel("FinalFight");
-        else SceneManager.LoadSceneAsync(4);
-=======
         goliath.transform.position = Vector3.zero;
         goliath.GetComponent<GoliathController>().ResetState();
-        SceneManager.LoadSceneAsync(4);
->>>>>>> Stashed changes
+        if (PhotonNetwork.IsConnected) PhotonNetwork.LoadLevel("FinalFight");
+        else SceneManager.LoadSceneAsync(4);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

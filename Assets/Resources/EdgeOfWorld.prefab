@@ -12,14 +12,10 @@ GameObject:
   - component: {fileID: 6217226578690984149}
   - component: {fileID: 863449428565472954}
   - component: {fileID: 2766326379324577313}
-  - component: {fileID: 1644583228205600227}
-<<<<<<< Updated upstream:Assets/Resources/EdgeOfWorld.prefab
-  - component: {fileID: 3088236512839933545}
-  - component: {fileID: -9142305440518498798}
-  m_Layer: 16
-=======
+  - component: {fileID: 9090807446383725378}
+  - component: {fileID: -976390647139695689}
+  - component: {fileID: 415822834346492315}
   m_Layer: 19
->>>>>>> Stashed changes:Assets/Prefabs/EdgeOfWorld.prefab
   m_Name: EdgeOfWorld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +79,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.9528302, g: 0.9196029, b: 0.4000089, a: 1}
+  m_Color: {r: 0.9384973, g: 1, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -140,19 +136,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1644583228205600227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 950341768418902669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfe7c0d23411c714b9b85e37d1cd08ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3088236512839933545
+--- !u!114 &9090807446383725378
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -171,11 +155,11 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: -9142305440518498798}
+  - {fileID: -976390647139695689}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &-9142305440518498798
+--- !u!114 &-976390647139695689
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,3 +175,15 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 1
   m_UseLocal: 1
+--- !u!114 &415822834346492315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950341768418902669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe7c0d23411c714b9b85e37d1cd08ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
