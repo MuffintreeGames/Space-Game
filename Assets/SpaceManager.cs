@@ -137,8 +137,7 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
     void CreateEdgeTeleporter(int sectorX, int sectorY)
     {
         Vector3 teleCoords = new Vector3(sectorSize / 2 + (sectorSize * sectorX), sectorSize / 2 + (sectorSize * sectorY), 0);
-        Debug.Log("spawning an edge teleporter at " + sectorX + ", " + sectorY);
-        if (PhotonNetwork.IsConnected) PhotonNetwork.Instantiate(EdgeOfWorld.name, teleCoords, Quaternion.identity);
+        if (PhotonNetwork.IsConnected) { PhotonNetwork.Instantiate(EdgeOfWorld.name, teleCoords, Quaternion.identity); Debug.Log("photon check"); }
         else Instantiate(EdgeOfWorld, teleCoords, Quaternion.identity);
     }
 

@@ -290,7 +290,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9090807446383725378, guid: ea7b1e16fed862f4e8f65f91722f3ad8, type: 3}
       propertyPath: sceneViewId
-      value: 20
+      value: 99992
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2766326379324577313, guid: ea7b1e16fed862f4e8f65f91722f3ad8, type: 3}
@@ -886,7 +886,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4440834064888858382, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: sceneViewId
-      value: 19
+      value: 99997
       objectReference: {fileID: 0}
     - target: {fileID: 950341768418902669, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: m_Name
@@ -1040,7 +1040,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4440834064888858382, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: sceneViewId
-      value: 18
+      value: 99996
       objectReference: {fileID: 0}
     - target: {fileID: 950341768418902669, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: m_Name
@@ -1879,7 +1879,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5344021144505239115, guid: c837f666eb7847b44a7ac0457e9a93be, type: 3}
       propertyPath: sceneViewId
-      value: 16
+      value: 99987
       objectReference: {fileID: 0}
     - target: {fileID: 6088609408505885020, guid: c837f666eb7847b44a7ac0457e9a93be, type: 3}
       propertyPath: m_Name
@@ -2036,7 +2036,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9090807446383725378, guid: ea7b1e16fed862f4e8f65f91722f3ad8, type: 3}
       propertyPath: sceneViewId
-      value: 15
+      value: 99994
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2766326379324577313, guid: ea7b1e16fed862f4e8f65f91722f3ad8, type: 3}
@@ -2991,7 +2991,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2174078447654446560, guid: 6dd47c621d5997d488a13661d405b11c, type: 3}
       propertyPath: sceneViewId
-      value: 13
+      value: 99990
       objectReference: {fileID: 0}
     - target: {fileID: 4182991002916936247, guid: 6dd47c621d5997d488a13661d405b11c, type: 3}
       propertyPath: Damage
@@ -4098,7 +4098,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4279099359413539317, guid: ae4574ab5e6a19342b04f5273f20d7f9, type: 3}
       propertyPath: sceneViewId
-      value: 12
+      value: 99991
       objectReference: {fileID: 0}
     - target: {fileID: 7666590515366956377, guid: ae4574ab5e6a19342b04f5273f20d7f9, type: 3}
       propertyPath: m_RootOrder
@@ -4159,7 +4159,7 @@ GameObject:
   - component: {fileID: 971950200}
   - component: {fileID: 971950201}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: RedZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5503,7 +5503,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 0.4330127
+  m_Mass: 1
   m_LinearDrag: 1
   m_AngularDrag: 0
   m_GravityScale: 0
@@ -6647,7 +6647,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4440834064888858382, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: sceneViewId
-      value: 8
+      value: 99998
       objectReference: {fileID: 0}
     - target: {fileID: 950341768418902669, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: m_Name
@@ -7185,7 +7185,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1953558599150925312, guid: 87c93d704cc1f214baa6841ac3296958, type: 3}
       propertyPath: sceneViewId
-      value: 7
+      value: 99986
       objectReference: {fileID: 0}
     - target: {fileID: 7192721937990158954, guid: 87c93d704cc1f214baa6841ac3296958, type: 3}
       propertyPath: m_RootOrder
@@ -7643,7 +7643,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9010290756549033354, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
       propertyPath: sceneViewId
-      value: 6
+      value: 99988
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
@@ -7989,7 +7989,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9090807446383725378, guid: ea7b1e16fed862f4e8f65f91722f3ad8, type: 3}
       propertyPath: sceneViewId
-      value: 5
+      value: 99995
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2766326379324577313, guid: ea7b1e16fed862f4e8f65f91722f3ad8, type: 3}
@@ -8279,7 +8279,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -34854110394023641, guid: 18cdc0d4eab3b0d42b5d636de93b6b6d, type: 3}
       propertyPath: sceneViewId
-      value: 4
+      value: 99989
       objectReference: {fileID: 0}
     - target: {fileID: 5125687541653416771, guid: 18cdc0d4eab3b0d42b5d636de93b6b6d, type: 3}
       propertyPath: m_RootOrder
@@ -9245,7 +9245,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9090807446383725378, guid: ea7b1e16fed862f4e8f65f91722f3ad8, type: 3}
       propertyPath: sceneViewId
-      value: 2
+      value: 99993
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2766326379324577313, guid: ea7b1e16fed862f4e8f65f91722f3ad8, type: 3}
@@ -9433,7 +9433,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4440834064888858382, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: sceneViewId
-      value: 1
+      value: 99999
       objectReference: {fileID: 0}
     - target: {fileID: 950341768418902669, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: m_Name
@@ -9756,7 +9756,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2142585679
 Transform:
   m_ObjectHideFlags: 0

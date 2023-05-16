@@ -364,6 +364,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
 
     public void StartBasicAttack(float timeToFinish, bool mirrored = false) //activate arm, disable ability to perform further attacks
     {
+        Debug.Log(performingComboAttack);
         if (!canMeleeAttack && !performingComboAttack)  //skip normal cooldown if in combo attack
         {
             Debug.Log("can't attack right now");
@@ -549,6 +550,10 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
 
     void EndGrapple()
     {
+        if (!currentlyGrappling)
+        {
+            return;
+        }
         movementLocked = false;
         currentlyGrappling = false;
         currentBasicAttackCooldown = basicAttackCooldown;
@@ -986,6 +991,13 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
             Debug.Log("busy with " + activeAbility);
             return false;
         }
+
+        if (performingComboAttack)
+        {
+            Debug.Log("doing a persistent attack!");
+            return false;
+        }
+
         AbilityTemplate.AbilityCategory abilityType = ability.GetAbilityType();
         if (abilityType == AbilityTemplate.AbilityCategory.Dash || abilityType == AbilityTemplate.AbilityCategory.Attack)
         {
