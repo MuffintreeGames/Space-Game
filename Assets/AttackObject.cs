@@ -70,7 +70,7 @@ public class AttackObject : MonoBehaviour
         }
     }
 
-    void OnTriggerStay2D(Collider2D col)
+    protected void OnTriggerStay2D(Collider2D col)
     {
         if (!enabled)
         {

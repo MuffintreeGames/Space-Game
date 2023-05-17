@@ -840,7 +840,7 @@ MonoBehaviour:
   numOfCopies: 0
   baseExplosionDamage: 20
   explosionDamagePerLevel: 10
-  timeUntilExplosion: 1
+  timeToExplode: 1
   Explosion: {fileID: 7045386937356173623, guid: 6675c64ba7157eb4cbd2e2be66d0112d, type: 3}
 --- !u!60 &5037213641140449633
 PolygonCollider2D:
@@ -1384,7 +1384,7 @@ GameObject:
   - component: {fileID: 2010076044648051204}
   - component: {fileID: 5900336370818725396}
   - component: {fileID: 5723126282957041203}
-  - component: {fileID: 7808125157596943615}
+  - component: {fileID: 8790279605579039124}
   m_Layer: 10
   m_Name: Laser
   m_TagString: Untagged
@@ -1485,7 +1485,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.4618404}
   m_EdgeRadius: 0
---- !u!114 &7808125157596943615
+--- !u!114 &8790279605579039124
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1494,7 +1494,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8655256350339934643}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 335b45a523558b544b9419aa5b171c17, type: 3}
+  m_Script: {fileID: 11500000, guid: 71af7095f1d5d1e428518a6fcdc58624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 10
@@ -1509,3 +1509,6 @@ MonoBehaviour:
   OverTime: 1
   InvincibilityDuration: 0
   BelongsToGoliath: 1
+  blockingLayers:
+    serializedVersion: 2
+    m_Bits: 0

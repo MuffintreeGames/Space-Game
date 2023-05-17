@@ -8012,7 +8012,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8021426246208686960, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8790279605579039124, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
+      propertyPath: blockingLayers.m_Bits
+      value: 73892800
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
