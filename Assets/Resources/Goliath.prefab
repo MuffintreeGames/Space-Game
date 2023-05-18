@@ -252,6 +252,89 @@ Transform:
   m_Father: {fileID: 5037213641140449663}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+--- !u!1 &4639156825362038738
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7996890631356499210}
+  - component: {fileID: 7158472406026304286}
+  - component: {fileID: 1252754793465629985}
+  m_Layer: 10
+  m_Name: EatHitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &7996890631356499210
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4639156825362038738}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.66, z: 0}
+  m_LocalScale: {x: 0.24661815, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5037213641140449663}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &7158472406026304286
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4639156825362038738}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 4.553872, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &1252754793465629985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4639156825362038738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2504e15714ffab42a374d62f4e0ffe9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damage: 0
+  TargetLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  DamagedLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  DestroyOnHit: 0
+  RepeatedDamage: 0
+  OverTime: 0
+  InvincibilityDuration: 0
+  BelongsToGoliath: 0
 --- !u!1 &5037213640072017041
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,9 +488,11 @@ GameObject:
   - component: {fileID: 5037213641140449644}
   - component: {fileID: 5037213641140449647}
   - component: {fileID: 5037213641140449646}
+  - component: {fileID: 4280886311215512830}
   - component: {fileID: 5037213641140449635}
   - component: {fileID: 2358673018926209516}
   - component: {fileID: 7233324147576907745}
+  - component: {fileID: 4601975241928012411}
   - component: {fileID: 5037213641140449633}
   - component: {fileID: 5452742249911326527}
   - component: {fileID: 8154042598477866167}
@@ -438,6 +523,7 @@ Transform:
   - {fileID: 5037213641387159189}
   - {fileID: 5037213641799357651}
   - {fileID: 942362951699451613}
+  - {fileID: 7996890631356499210}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -508,7 +594,7 @@ MonoBehaviour:
   chargedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   goliathCamera: {fileID: 0}
   Action1: {fileID: 5037213641140449646}
-  Action2: {fileID: 5037213641140449647}
+  Action2: {fileID: 4280886311215512830}
   Action3: {fileID: 5037213641140449643}
   Action4: {fileID: 5037213641140449635}
   damagableLayers:
@@ -784,6 +870,25 @@ MonoBehaviour:
   numOfCopies: 0
   effectDuration: 6
   damageMultiplier: 2
+--- !u!114 &4280886311215512830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5037213641140449660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ff9e0a299c234e40bd9467500167f1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 6
+  icon: {fileID: 21300000, guid: 55ea41ad57badb54993ff2d277cadcad, type: 3}
+  displayName: Refractive Camo
+  numOfCopies: 0
+  effectDuration: 5
+  goliathRenderer: {fileID: 5037213641140449649}
+  transparency: 100
 --- !u!114 &5037213641140449635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -842,6 +947,33 @@ MonoBehaviour:
   explosionDamagePerLevel: 10
   timeToExplode: 1
   Explosion: {fileID: 7045386937356173623, guid: 6675c64ba7157eb4cbd2e2be66d0112d, type: 3}
+--- !u!114 &4601975241928012411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5037213641140449660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f8e5656292cda4da589bfce29cfa93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 0
+  icon: {fileID: 21300000, guid: fce4d1a7f7b145f4eae277818d43f81c, type: 3}
+  displayName: Devour
+  numOfCopies: 0
+  baseProjectileSpeed: 20
+  projectileDuration: 3
+  biteDuration: 0.2
+  baseBiteDamage: 20
+  biteDamagePerLevel: 10
+  baseProjectileDamage: 10
+  projectileDamagePerLevel: 5
+  BiteHitbox: {fileID: 4639156825362038738}
+  SprayShot: {fileID: 7045386937356173623, guid: 316f431e90128fe4ca92a1d1a7cf40cd, type: 3}
+  projectileCount: 11
+  spread: 10
 --- !u!60 &5037213641140449633
 PolygonCollider2D:
   m_ObjectHideFlags: 0

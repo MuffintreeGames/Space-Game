@@ -13,9 +13,9 @@ public class AttackObject : MonoBehaviour
     public float InvincibilityDuration = 0f;    //length of invincibility granted
     public bool BelongsToGoliath = false;   //if true, give Goliath exp when this kills something
 
-    private float damageMultiplier = 1f;    //multiplier to apply to damage
+    protected float damageMultiplier = 1f;    //multiplier to apply to damage
 
-    private Dictionary<GameObject, bool> hitTargets = new Dictionary<GameObject, bool>();
+    protected Dictionary<GameObject, bool> hitTargets = new Dictionary<GameObject, bool>();
 
     // Start is called before the first frame update
     void Start()

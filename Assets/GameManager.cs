@@ -11,7 +11,7 @@ namespace Online
         [Tooltip("The Ui Panel to let the user start game")]
         [SerializeField]
         public static GameManager Instance;
-        private GameObject controlPanel;
+        public GameObject controlPanel;
         #endregion
 
 
@@ -96,7 +96,7 @@ namespace Online
                 Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
                 PhotonNetwork.CurrentRoom.IsOpen = true;
                 PhotonNetwork.CurrentRoom.IsVisible = true;
-                // controlPanel.SetActive(false);
+                controlPanel.SetActive(false);
                 LoadArena();
             }
         }
