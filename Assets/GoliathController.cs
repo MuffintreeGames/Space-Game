@@ -124,6 +124,8 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
     private float paralysisDuration = 2f;   //time that paralysis lasts after being applied
     private float currentParalysisDuration = 0f;    //current time elapsed in paralysis
 
+    private float currentSizeMultiplier = 1f;
+
     private SlowableObject slowComponent;
 
     // Start is called before the first frame update
@@ -770,14 +772,14 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
         {
             case 2:
                 neededExp = level3Exp;
-                goliathTransform.localScale = new Vector3(2f, 2f, 1f);
+                goliathTransform.localScale = new Vector3(2f, 2f, 1f) * currentSizeMultiplier;
                 goliathArmScript.Damage = 20;
                 damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
                 tongueDamage = 40;
                 break;
             case 3:
                 neededExp = level4Exp;
-                goliathTransform.localScale = new Vector3(3f, 3f, 1f);
+                goliathTransform.localScale = new Vector3(3f, 3f, 1f) * currentSizeMultiplier;
                 goliathArmScript.Damage = 30;
                 damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
                 damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
@@ -785,7 +787,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
                 break;
             case 4:
                 neededExp = level5Exp;
-                goliathTransform.localScale = new Vector3(4f, 4f, 1f);
+                goliathTransform.localScale = new Vector3(4f, 4f, 1f) * currentSizeMultiplier;
                 goliathArmScript.Damage = 40;
                 damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
                 damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
@@ -794,7 +796,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
             case 5:
                 neededExp = 1;
                 currentExp = -1;
-                goliathTransform.localScale = new Vector3(5f, 5f, 1f);
+                goliathTransform.localScale = new Vector3(5f, 5f, 1f) * currentSizeMultiplier;
                 goliathArmScript.Damage = 50;
                 damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
                 tongueDamage = 100;
@@ -805,6 +807,32 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
         ramHitboxScript.DamagedLayers = damagableLayers;
         SetCameraZoom();
         GoliathLevelup.Invoke(level);
+    }
+
+    public void ApplySizeMultiplier(float multiplier)
+    {
+        currentSizeMultiplier = multiplier * currentSizeMultiplier;
+        goliathTransform.localScale = goliathTransform.localScale * multiplier;
+    }
+
+    public void ResetToDefaultSize()
+    {
+        currentSizeMultiplier = 1f;
+        switch (level)
+        {
+            case 2:
+                goliathTransform.localScale = new Vector3(2f, 2f, 1f);
+                break;
+            case 3:
+                goliathTransform.localScale = new Vector3(3f, 3f, 1f);
+                break;
+            case 4:
+                goliathTransform.localScale = new Vector3(4f, 4f, 1f);
+                break;
+            case 5:
+                goliathTransform.localScale = new Vector3(5f, 5f, 1f);
+                break;
+        }
     }
 
     public void GainAbility(AbilityTemplate newAbility)
