@@ -53,7 +53,7 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
     {
         if (PhotonNetwork.IsConnected)
         {
-            RoleManager.isGoliath = (bool)PhotonNetwork.LocalPlayer.CustomProperties["isGoliath"];
+            // RoleManager.isGoliath = (bool)PhotonNetwork.LocalPlayer.CustomProperties["isGoliath"];
             if (!PhotonNetwork.IsMasterClient) return;
         }
         ModifiedAbilityPool = new List<AbilityTemplate>(AbilityPool);
