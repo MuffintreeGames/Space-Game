@@ -493,6 +493,8 @@ GameObject:
   - component: {fileID: 2358673018926209516}
   - component: {fileID: 7233324147576907745}
   - component: {fileID: 4601975241928012411}
+  - component: {fileID: 1237007286403887512}
+  - component: {fileID: 9218925101054152903}
   - component: {fileID: 5037213641140449633}
   - component: {fileID: 5452742249911326527}
   - component: {fileID: 8154042598477866167}
@@ -968,13 +970,57 @@ MonoBehaviour:
   biteDuration: 0.2
   baseBiteDamage: 20
   biteDamagePerLevel: 10
-  chewDuration: 0.3
+  chewDuration: 0.2
   baseProjectileDamage: 10
   projectileDamagePerLevel: 5
   BiteHitbox: {fileID: 4639156825362038738}
   SprayShot: {fileID: 7045386937356173623, guid: 316f431e90128fe4ca92a1d1a7cf40cd, type: 3}
   projectileCount: 11
   spread: 10
+--- !u!114 &1237007286403887512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5037213641140449660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48e492b1303bbb34b88a1896519a7ec5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 0
+  icon: {fileID: 0}
+  displayName: 
+  numOfCopies: 0
+  baseProjectileSpeed: 8
+  projectileDuration: 0.2
+  baseProjectileDamage: 10
+  damagePerLevel: 5
+  GoliathShot: {fileID: 0}
+  duration: 3
+  timeBetweenShots: 0.1
+  shotsPerSweep: 5
+  spread: 10
+--- !u!114 &9218925101054152903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5037213641140449660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c244100f36e662048be253e189de2ac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 0
+  icon: {fileID: 21300000, guid: 638d90c38c7325b44a058336210217aa, type: 3}
+  displayName: Condense Form
+  numOfCopies: 0
+  effectDuration: 6
+  damageMultiplier: 0.6
+  sizeMultiplier: 0.2
 --- !u!60 &5037213641140449633
 PolygonCollider2D:
   m_ObjectHideFlags: 0

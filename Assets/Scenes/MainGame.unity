@@ -7674,26 +7674,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4646cc1a7a5c17e4d8e72225b0013002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2066655007 stripped
+--- !u!114 &2066655031 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2358673018926209516, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
+  m_CorrespondingSourceObject: {fileID: 1237007286403887512, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
   m_PrefabInstance: {fileID: 5037213640751781497}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 814a485fecd83304bba9b20f0a1cd5c4, type: 3}
+  m_Script: {fileID: 11500000, guid: 48e492b1303bbb34b88a1896519a7ec5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2066655027 stripped
+--- !u!114 &2066655048 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4601975241928012411, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
+  m_CorrespondingSourceObject: {fileID: 9218925101054152903, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
   m_PrefabInstance: {fileID: 5037213640751781497}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92f8e5656292cda4da589bfce29cfa93, type: 3}
+  m_Script: {fileID: 11500000, guid: c244100f36e662048be253e189de2ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2092784773
@@ -7919,6 +7919,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1445052267}
     m_Modifications:
+    - target: {fileID: 1237007286403887512, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
+      propertyPath: icon
+      value: 
+      objectReference: {fileID: 21300000, guid: 74fa2cca9d8dd3645817bb3c3b4599e8, type: 3}
+    - target: {fileID: 1237007286403887512, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
+      propertyPath: spread
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1237007286403887512, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
+      propertyPath: GoliathShot
+      value: 
+      objectReference: {fileID: 7045386937356173623, guid: 316f431e90128fe4ca92a1d1a7cf40cd, type: 3}
+    - target: {fileID: 1237007286403887512, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
+      propertyPath: displayName
+      value: Flame Breath
+      objectReference: {fileID: 0}
+    - target: {fileID: 1237007286403887512, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
+      propertyPath: timeBetweenShots
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 1252754793465629985, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
       propertyPath: Damage
       value: 50
@@ -7986,11 +8006,11 @@ PrefabInstance:
     - target: {fileID: 5037213641140449662, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
       propertyPath: Action1
       value: 
-      objectReference: {fileID: 2066655007}
+      objectReference: {fileID: 2066655031}
     - target: {fileID: 5037213641140449662, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
       propertyPath: Action2
       value: 
-      objectReference: {fileID: 2066655027}
+      objectReference: {fileID: 2066655048}
     - target: {fileID: 5037213641140449662, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
       propertyPath: goliathCamera
       value: 
