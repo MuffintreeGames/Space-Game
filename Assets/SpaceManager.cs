@@ -51,6 +51,7 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
     // Start is called before the first frame update
     void Start()    //divide space up into several sectors, which are then broken up into smaller chunks which can each contain a max of 1 object
     {
+        RoleManager.isGoliath = (bool)PhotonNetwork.LocalPlayer.CustomProperties["isGoliath"];
         if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) return;
         ModifiedAbilityPool = new List<AbilityTemplate>(AbilityPool);
         sectorSize = chunkSize * sectorDimensions;
@@ -288,24 +289,20 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
     Color PickPlanetColor()
     {
         int colorNumber = 0;
-        if (PhotonNetwork.IsConnected) { colorNumber = Random.Range(1, 8); }
-        else colorNumber = Random.Range(1, 8);
+        if (PhotonNetwork.IsConnected) { colorNumber = Random.Range(1, 6); }
+        else colorNumber = Random.Range(1, 6);
         switch (colorNumber) {
             case 1:
-                return Color.red;
-            case 2:
                 return Color.blue;
-            case 3:
+            case 2:
                 return Color.green;
-            case 4:
+            case 3:
                 return Color.yellow;
-            case 5:
+            case 4:
                 return new Color(156, 0, 255, 255);
-            case 6:
-                return new Color(255, 133, 0, 255);
-            case 7:
+            case 5:
                 return Color.cyan;
-            case 8:
+            case 6:
                 return Color.magenta;
         }
         return Color.white;

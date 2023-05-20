@@ -175,6 +175,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
 
     void SetGoliathRotation()
     {
+        if (PhotonNetwork.IsConnected && RoleManager.isGoliath)
         if (performingBasicAttack || performingStabAttack)  //lock rotation while attacking
         {
             return;

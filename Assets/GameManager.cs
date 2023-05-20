@@ -43,24 +43,22 @@ namespace Online
 
         public void StartGameGoliath()
         {
+            SetCustomPlayerProperties(PhotonNetwork.IsMasterClient);
             if (!PhotonNetwork.IsMasterClient) return;
-            RoleManager.isGoliath = true;
-            SetCustomRoomProperties();
             PhotonNetwork.LoadLevel("MainGame");
         }
 
         public void StartGameGod()
         {
+            SetCustomPlayerProperties(!PhotonNetwork.IsMasterClient);
             if (!PhotonNetwork.IsMasterClient) return;
-            RoleManager.isGoliath = false;
-            SetCustomRoomProperties();
             PhotonNetwork.LoadLevel("MainGame");
         }
 
-        public void SetCustomRoomProperties()
+        public void SetCustomPlayerProperties(bool isGoliath)
         {
-            Hashtable properties = new Hashtable() { { "Seed", Random.Range(1, float.MaxValue) }, { "isGoliath", RoleManager.isGoliath } };
-            PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+            Hashtable properties = new Hashtable() { { "Seed", Random.Range(1, float.MaxValue) }, { "isGoliath", isGoliath } };
+            PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
         }
 
         #endregion
