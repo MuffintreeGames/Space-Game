@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 943252511900317141}
   - component: {fileID: 750646069681544338}
   - component: {fileID: 2028998790794680017}
-  - component: {fileID: 2991912379006428400}
-  - component: {fileID: 7408380058102600335}
   m_Layer: 0
   m_Name: SlingshotCrosshair
   m_TagString: Untagged
@@ -119,42 +117,3 @@ MonoBehaviour:
   AimingArrow: {fileID: 5783904702962982225, guid: 49e2e86cbc959f545bb2131490ed8094, type: 3}
   helpText: Left-click on planet to target it. Right-click to cancel.
   parentAbility: {fileID: 0}
---- !u!114 &2991912379006428400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5039469841758836263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: 7408380058102600335}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &7408380058102600335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5039469841758836263}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 1
-  m_UseLocal: 1

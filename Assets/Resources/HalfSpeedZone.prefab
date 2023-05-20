@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 5500895187368971775}
   - component: {fileID: 3311063292842051541}
   - component: {fileID: 8912495376182188789}
-  - component: {fileID: 4279099359413539317}
-  - component: {fileID: -3841399549371653512}
   m_Layer: 0
   m_Name: HalfSpeedZone
   m_TagString: Untagged
@@ -116,42 +114,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3ea53eb698e9d640917439601b3de4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4279099359413539317
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3422372127590778827}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: -3841399549371653512}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &-3841399549371653512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3422372127590778827}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 1
-  m_UseLocal: 1

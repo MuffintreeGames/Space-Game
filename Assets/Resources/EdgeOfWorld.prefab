@@ -12,9 +12,7 @@ GameObject:
   - component: {fileID: 6217226578690984149}
   - component: {fileID: 863449428565472954}
   - component: {fileID: 2766326379324577313}
-  - component: {fileID: -976390647139695689}
   - component: {fileID: 415822834346492315}
-  - component: {fileID: 2777591044805351878}
   m_Layer: 19
   m_Name: EdgeOfWorld
   m_TagString: Untagged
@@ -136,22 +134,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &-976390647139695689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 950341768418902669}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 1
-  m_UseLocal: 1
 --- !u!114 &415822834346492315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,26 +146,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfe7c0d23411c714b9b85e37d1cd08ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2777591044805351878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 950341768418902669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: -976390647139695689}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0

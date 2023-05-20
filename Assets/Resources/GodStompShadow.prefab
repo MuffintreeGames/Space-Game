@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 1521896339236846246}
   - component: {fileID: 7073289442833348216}
   - component: {fileID: 2580521069825428664}
-  - component: {fileID: -7455867227381969863}
-  - component: {fileID: -5695858598935697176}
   m_Layer: 19
   m_Name: GodStompShadow
   m_TagString: Untagged
@@ -101,42 +99,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnedObject: {fileID: 7045386937356173623, guid: f1a1e05276c73e1458e590dfbd7b9191, type: 3}
   timeToSpawn: 1
---- !u!114 &-7455867227381969863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7045386937356173623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: -5695858598935697176}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &-5695858598935697176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7045386937356173623}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 1
-  m_UseLocal: 1
