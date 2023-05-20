@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,7 +35,7 @@ public class CamoAbility : BuffAbility  //turn invisible; goliath player can sti
     {
         currentDuration = 0f;
         currentlyInvisible = true;
-        if (RoleManager.isGoliath)
+        if (PhotonNetwork.IsConnected && RoleManager.isGoliath)
         {
             goliathRenderer.color = new Color(goliathRenderer.color.r, goliathRenderer.color.g, goliathRenderer.color.b, transparency);
         } else

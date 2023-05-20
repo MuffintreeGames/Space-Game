@@ -676,6 +676,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
     // Update is called once per frame
     void Update()
     {
+        if (PhotonNetwork.IsConnected && !RoleManager.isGoliath) return;
         if (!abilitySelectionMode)
         {
             CheckAbilityUsage();

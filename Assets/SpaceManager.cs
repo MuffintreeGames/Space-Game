@@ -272,7 +272,7 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
         GameObject newPlanet;
         if (PhotonNetwork.IsConnected) newPlanet = PhotonNetwork.Instantiate(planetTemplate.name, planetCoords, Quaternion.identity);
         else newPlanet = Instantiate(planetTemplate, planetCoords, Quaternion.identity);
-        newPlanet.GetComponent<SpriteRenderer>().color = PickPlanetColor(planetXCoords, planetYCoords);
+        newPlanet.GetComponent<SpriteRenderer>().color = PickPlanetColor();
         sectorMap[chunkX][chunkY] = newPlanet;
     }
 
@@ -285,19 +285,27 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
         newBarrier.GetComponent<SectorWall>().SetParameters(sectorX, sectorY);
     }
 
-    Color PickPlanetColor(float X, float Y)
+    Color PickPlanetColor()
     {
         int colorNumber = 0;
-        if (X % 2 == 0) { colorNumber += 0; } else { colorNumber += 2; }
-        if (Y % 2 == 0) { colorNumber += 1; } else { colorNumber += 2; }
+        if (PhotonNetwork.IsConnected) { colorNumber = Random.Range(1, 8); }
+        else colorNumber = Random.Range(1, 8);
         switch (colorNumber) {
             case 1:
-                return Color.blue;
+                return Color.red;
             case 2:
-                return Color.green;
+                return Color.blue;
             case 3:
-                return new Color(165, 42, 42, 255);
+                return Color.green;
             case 4:
+                return Color.yellow;
+            case 5:
+                return new Color(156, 0, 255, 255);
+            case 6:
+                return new Color(255, 133, 0, 255);
+            case 7:
+                return Color.cyan;
+            case 8:
                 return Color.magenta;
         }
         return Color.white;
