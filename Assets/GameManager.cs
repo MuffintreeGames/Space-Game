@@ -57,7 +57,9 @@ namespace Online
 
         public void SetCustomPlayerProperties(bool isGoliath)
         {
-            Hashtable properties = new Hashtable() { { "Seed", Random.Range(1, float.MaxValue) }, { "isGoliath", isGoliath } };
+            Hashtable properties = new Hashtable();
+            properties.Add("Seed", Random.Range(1, float.MaxValue));
+            properties.Add("isGoliath", isGoliath);
             PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
         }
 

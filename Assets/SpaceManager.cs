@@ -51,8 +51,11 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
     // Start is called before the first frame update
     void Start()    //divide space up into several sectors, which are then broken up into smaller chunks which can each contain a max of 1 object
     {
-        RoleManager.isGoliath = (bool)PhotonNetwork.LocalPlayer.CustomProperties["isGoliath"];
-        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) return;
+        if (PhotonNetwork.IsConnected)
+        {
+            RoleManager.isGoliath = (bool)PhotonNetwork.LocalPlayer.CustomProperties["isGoliath"];
+            if (!PhotonNetwork.IsMasterClient) return;
+        }
         ModifiedAbilityPool = new List<AbilityTemplate>(AbilityPool);
         sectorSize = chunkSize * sectorDimensions;
         smallPlanetCollider = SmallPlanet.GetComponent<CircleCollider2D>();
