@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 namespace Online
 {
@@ -40,10 +41,26 @@ namespace Online
             PhotonNetwork.LeaveRoom();
         }
 
-        public void StartGame()
+        public void StartGameGoliath()
         {
-
+            if (!PhotonNetwork.IsMasterClient) return;
+            RoleManager.isGoliath = true;
+            SetCustomRoomProperties();
             PhotonNetwork.LoadLevel("MainGame");
+        }
+
+        public void StartGameGod()
+        {
+            if (!PhotonNetwork.IsMasterClient) return;
+            RoleManager.isGoliath = false;
+            SetCustomRoomProperties();
+            PhotonNetwork.LoadLevel("MainGame");
+        }
+
+        public void SetCustomRoomProperties()
+        {
+            Hashtable properties = new Hashtable() { { "Seed", Random.Range(1, float.MaxValue) }, { "isGoliath", RoleManager.isGoliath } };
+            PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
         }
 
         #endregion

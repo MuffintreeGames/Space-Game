@@ -51,7 +51,7 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
     // Start is called before the first frame update
     void Start()    //divide space up into several sectors, which are then broken up into smaller chunks which can each contain a max of 1 object
     {
-        //if (!PhotonNetwork.IsMasterClient) return;
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) return;
         ModifiedAbilityPool = new List<AbilityTemplate>(AbilityPool);
         sectorSize = chunkSize * sectorDimensions;
         smallPlanetCollider = SmallPlanet.GetComponent<CircleCollider2D>();
@@ -272,7 +272,7 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
         GameObject newPlanet;
         if (PhotonNetwork.IsConnected) newPlanet = PhotonNetwork.Instantiate(planetTemplate.name, planetCoords, Quaternion.identity);
         else newPlanet = Instantiate(planetTemplate, planetCoords, Quaternion.identity);
-        newPlanet.GetComponent<SpriteRenderer>().color = PickRandomPlanetColor();
+        newPlanet.GetComponent<SpriteRenderer>().color = PickPlanetColor(planetXCoords, planetYCoords);
         sectorMap[chunkX][chunkY] = newPlanet;
     }
 
@@ -285,25 +285,19 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
         newBarrier.GetComponent<SectorWall>().SetParameters(sectorX, sectorY);
     }
 
-    Color PickRandomPlanetColor()
+    Color PickPlanetColor(float X, float Y)
     {
-        int randomNumber = Random.Range(1, 8);
-        switch (randomNumber) {
+        int colorNumber = 0;
+        if (X % 2 == 0) { colorNumber += 0; } else { colorNumber += 2; }
+        if (Y % 2 == 0) { colorNumber += 1; } else { colorNumber += 2; }
+        switch (colorNumber) {
             case 1:
-                return Color.red;
-            case 2:
                 return Color.blue;
-            case 3:
+            case 2:
                 return Color.green;
+            case 3:
+                return new Color(165, 42, 42, 255);
             case 4:
-                return Color.yellow;
-            case 5:
-                return new Color(156, 0, 255, 255);
-            case 6:
-                return new Color(255, 133, 0, 255);
-            case 7:
-                return Color.cyan;
-            case 8:
                 return Color.magenta;
         }
         return Color.white;

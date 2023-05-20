@@ -968,6 +968,7 @@ MonoBehaviour:
   biteDuration: 0.2
   baseBiteDamage: 20
   biteDamagePerLevel: 10
+  chewDuration: 0.3
   baseProjectileDamage: 10
   projectileDamagePerLevel: 5
   BiteHitbox: {fileID: 4639156825362038738}
