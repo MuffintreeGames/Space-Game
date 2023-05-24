@@ -1,7 +1,10 @@
+using Online;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AvatarController : Killable    //script to manage AI for god avatar
 {
@@ -375,5 +378,18 @@ public class AvatarController : Killable    //script to manage AI for god avatar
         }
         Debug.Log("damage taken in pattern: " + damageTakenInPattern);
         return true;
+    }
+
+    private void OnDestroy()
+    {
+        if (PhotonNetwork.IsConnected) GameManager.Instance.LeaveRoom();
+        if (RoleManager.isGoliath)  //go to win screen if goliath, otherwise go to lose screen
+        {
+            SceneManager.LoadSceneAsync(5);
+        }
+        else
+        {
+            SceneManager.LoadSceneAsync(6);
+        }
     }
 }

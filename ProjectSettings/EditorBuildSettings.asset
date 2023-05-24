@@ -23,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/FinalFight.unity
     guid: e302d5fd2434abe41a16582786c6fa43
+  - enabled: 1
+    path: Assets/Scenes/WinScreen.unity
+    guid: 4a0c8979a9fb8134094639703b4e1f0d
+  - enabled: 1
+    path: Assets/Scenes/LoseScreen.unity
+    guid: 3e57ddb6ceb0f1643bc9a4847d1386cf
   m_configObjects: {}

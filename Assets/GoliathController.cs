@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class GoliathLevelupEvent : UnityEvent<int>
@@ -1125,6 +1126,13 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
     private void OnDestroy()
     {
         if (PhotonNetwork.IsConnected) GameManager.Instance.LeaveRoom();
+        if (RoleManager.isGoliath)  //go to lose screen if goliath, otherwise go to win screen
+        {
+            SceneManager.LoadSceneAsync(6);
+        } else
+        {
+            SceneManager.LoadSceneAsync(5);
+        }
     }
 
 }
