@@ -33,8 +33,8 @@ public class GodChoosePushTarget : MonoBehaviourPun   //select where to create p
             if (canPlace)
             {
                 GameObject newArrow;
-                if (PhotonNetwork.IsConnected) newArrow = PhotonNetwork.Instantiate(AimingArrow.name, mouseCoords, Quaternion.identity);
-                else newArrow = Instantiate(AimingArrow, mouseCoords, Quaternion.identity);
+                /*if (PhotonNetwork.IsConnected) newArrow = PhotonNetwork.Instantiate(AimingArrow.name, mouseCoords, Quaternion.identity);
+                else */newArrow = Instantiate(AimingArrow, mouseCoords, Quaternion.identity);
                 AimingArrow arrowScript = newArrow.GetComponent<AimingArrow>();
                 arrowScript.parentAbility = parentAbility;
                 HUDManager.UpdateGodAbilityHelpText.Invoke("");

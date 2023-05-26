@@ -24,8 +24,8 @@ public class GodLaunchPlanetAbility : GodAbilityTemplate    //slingshot a planet
     {
         Vector2 mouseCoords = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         GameObject newCrosshair;
-        if (PhotonNetwork.IsConnected) newCrosshair = PhotonNetwork.Instantiate(crosshair.name, mouseCoords, Quaternion.identity);
-        else newCrosshair = Instantiate(crosshair, mouseCoords, Quaternion.identity);
+        /*if (PhotonNetwork.IsConnected) newCrosshair = PhotonNetwork.Instantiate(crosshair.name, mouseCoords, Quaternion.identity);
+        else */newCrosshair = Instantiate(crosshair, mouseCoords, Quaternion.identity);
         newCrosshair.GetComponent<GodChooseSlingshotTarget>().parentAbility = this;
     }
 }

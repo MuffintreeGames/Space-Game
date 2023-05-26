@@ -43,24 +43,82 @@ namespace Online
 
         public void StartGameGoliath()
         {
-            SetCustomPlayerProperties(PhotonNetwork.IsMasterClient);
             if (!PhotonNetwork.IsMasterClient) return;
-            PhotonNetwork.LoadLevel("MainGame");
+            SetCustomPlayerProperties(PhotonNetwork.IsMasterClient);
         }
 
         public void StartGameGod()
         {
-            SetCustomPlayerProperties(!PhotonNetwork.IsMasterClient);
             if (!PhotonNetwork.IsMasterClient) return;
-            PhotonNetwork.LoadLevel("MainGame");
+            SetCustomPlayerProperties(!PhotonNetwork.IsMasterClient);
+        }
+
+        bool ready = false;
+        bool opponentReady = false;
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        {
+            if (PhotonNetwork.LocalPlayer != targetPlayer)
+            {
+                return;
+            }
+
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                if (changedProps.ContainsKey("isGoliath"))
+                {
+                    Hashtable roomProperties = new Hashtable();
+                    roomProperties.Add("opponentReady", true);
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(roomProperties);
+                }
+                return;
+            }
+
+            if (!ready) {
+                if (changedProps.ContainsKey("isGoliath"))
+                {
+                    ready = true;
+                }
+            }
+
+            if (ready && opponentReady)
+            {
+                PhotonNetwork.LoadLevel("MainGame");
+            }
+        }
+
+        public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
+        {
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                return;
+            }
+
+            if (!opponentReady)
+            {
+                if (propertiesThatChanged.ContainsKey("opponentReady"))
+                {
+                    opponentReady = true;
+                }
+            }
+
+            if (ready && opponentReady)
+            {
+                PhotonNetwork.LoadLevel("MainGame");
+            }
         }
 
         public void SetCustomPlayerProperties(bool isGoliath)
         {
-            Hashtable properties = new Hashtable();
-            properties.Add("Seed", Random.Range(1, float.MaxValue));
-            properties.Add("isGoliath", isGoliath);
-            PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+            Hashtable localProperties = new Hashtable();
+            int seed = Random.Range(1, int.MaxValue);
+            localProperties.Add("Seed", seed);
+            localProperties.Add("isGoliath", isGoliath);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(localProperties);
+
+            Hashtable opponentProperties = new Hashtable();
+            opponentProperties.Add("Seed", seed);
+            opponentProperties.Add("isGoliath", !isGoliath);
+            PhotonNetwork.PlayerList[1].SetCustomProperties(opponentProperties);
         }
 
         #endregion
