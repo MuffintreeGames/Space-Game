@@ -1,7 +1,9 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ExitGames.Client.Photon;
 
 public struct SectorCoordinates
 {
@@ -15,7 +17,7 @@ public struct SectorCoordinates
     }
 }
 
-public class SpaceManager : MonoBehaviourPun   //script to generate space map
+public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate space map
 {
 
     public GameObject SmallPlanet;
@@ -42,11 +44,16 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
 
     private static CircleCollider2D smallPlanetCollider;
 
-    private static GameObject[][][][] WorldMap;   //map of all the sectors
+    public static GameObject[][][][] WorldMap;   //map of all the sectors
     private static GameObject[][] AbilityMap;  //map of all the ability planets contained in the sectors
 
     
     private static bool bigBangSpawned = false;
+
+    private void Awake()
+    {
+
+    }
 
     // Start is called before the first frame update
     void Start()    //divide space up into several sectors, which are then broken up into smaller chunks which can each contain a max of 1 object
@@ -55,7 +62,23 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
         {
             RoleManager.isGoliath = (bool)PhotonNetwork.LocalPlayer.CustomProperties["isGoliath"];
             Random.InitState((int)PhotonNetwork.LocalPlayer.CustomProperties["Seed"]);
-            //if (!PhotonNetwork.IsMasterClient) return;
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                WorldMap = new GameObject[worldSize][][][];
+                for (int x = 0; x < worldSize; x++)
+                {
+                    WorldMap[x] = new GameObject[worldSize][][];
+                    for (int y = 0; y < worldSize; y++)
+                    {
+                        WorldMap[x][y] = new GameObject[sectorDimensions][];
+                        for (int z = 0; z < sectorDimensions; z++)
+                        {
+                            WorldMap[x][y][z] = new GameObject[sectorDimensions];
+                        }
+                    }
+                }
+                return;
+            }
         }
         ModifiedAbilityPool = new List<AbilityTemplate>(AbilityPool);
         sectorSize = chunkSize * sectorDimensions;
@@ -86,7 +109,8 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
                 if (sectorX >= 0)
                 {
                     distanceX = sectorX + 1;
-                } else
+                }
+                else
                 {
                     distanceX = Mathf.Abs(sectorX);
                 }
@@ -104,20 +128,22 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
                 if (totalDistance <= 2) //starting sectors
                 {
                     WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, null);
-                } else if (totalDistance <= 3)
+                }
+                else if (totalDistance <= 3)
                 {
                     WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, Level1Barrier);
-                } else if (totalDistance <= 5)
+                }
+                else if (totalDistance <= 5)
                 {
                     WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, Level2Barrier);
-                } else
+                }
+                else
                 {
                     WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, Level3Barrier);
                 }
             }
         }
         SectorWall.UnlockSector.AddListener(ActivateSector);
-        
         //set up edge of world
         for (int y = -1; y < worldSize + 1; y++)
         {
@@ -138,13 +164,41 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
         {
             CreateEdgeTeleporter(x - centerIndex, centerIndex);
         }
+
+
+        if (PhotonNetwork.IsConnected)
+        {
+            ExitGames.Client.Photon.Hashtable roomProperties = new ExitGames.Client.Photon.Hashtable();
+
+            string[][][][] stringMap = new string[worldSize][][][];
+            for (int x = 0; x < worldSize; x++)
+            {
+                stringMap[x] = new string[worldSize][][];
+                for (int y = 0; y < worldSize; y++)
+                {
+                    stringMap[x][y] = new string[sectorDimensions][];
+                    for (int z = 0; z < sectorDimensions; z++)
+                    {
+                        stringMap[x][y][z] = new string[sectorDimensions];
+                        for (int a = 0; a < sectorDimensions; a++)
+                        {
+                            stringMap[x][y][z][a] = WorldMap[x][y][z][a].name;
+                        }
+                    }
+                }
+            }
+
+            roomProperties.Add("Map", stringMap);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(roomProperties);
+            Debug.Log("host sent message!");
+        }
     }
 
     void CreateEdgeTeleporter(int sectorX, int sectorY)
     {
         Vector3 teleCoords = new Vector3(sectorSize / 2 + (sectorSize * sectorX), sectorSize / 2 + (sectorSize * sectorY), 0);
-        /*if (PhotonNetwork.IsConnected) { PhotonNetwork.Instantiate(EdgeOfWorld.name, teleCoords, Quaternion.identity); Debug.Log("photon check"); }
-        else */Instantiate(EdgeOfWorld, teleCoords, Quaternion.identity);
+        if (PhotonNetwork.IsConnected) { PhotonNetwork.Instantiate(EdgeOfWorld.name, teleCoords, Quaternion.identity); Debug.Log("photon check"); }
+        else Instantiate(EdgeOfWorld, teleCoords, Quaternion.identity);
     }
 
     GameObject[][] BuildSector(int MediumMin, int MediumMax, int LargeMin, int LargeMax, int MassiveMin, int MassiveMax, int sectorX, int sectorY, int arrayX, int arrayY, GameObject barrier)
@@ -169,9 +223,9 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
                 {
                     PlacePlanetInChunk(x, y, SmallPlanet, smallPlanetCollider, sectorMap, sectorX, sectorY);
                 }
-                if (barrier != null && sectorMap[x][y] != AbilityMap[arrayX][arrayY])
+                if (barrier == null/* && sectorMap[x][y] != AbilityMap[arrayX][arrayY]*/)
                 {
-                    sectorMap[x][y].SetActive(false);   //disable any object that spawns behind a barrier
+                    sectorMap[x][y].SetActive(true);   //enable any object not behind a barrier
                 }
             }
         }
@@ -195,7 +249,7 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
             for (int y = 0; y < sectorDimensions; y++)
             {
                 GameObject chunkContents = sectorMap[x][y];
-                chunkContents.SetActive(true);
+                chunkContents.SetActive(true);   //enable any object not behind a barrier
             }
         }
     }
@@ -206,8 +260,8 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
         int randY = Random.Range(Mathf.RoundToInt((float)(sectorDimensions * 0.4)), Mathf.RoundToInt((float)(sectorDimensions * 0.7)));
         Vector3 planetCoords = new Vector3(randX * chunkSize + chunkSize/2 + (sectorSize * sectorX), randY * chunkSize + chunkSize/2 + (sectorSize * sectorY), 0);
         GameObject newPlanet;
-        //if (PhotonNetwork.IsConnected) newPlanet = PhotonNetwork.Instantiate(AbilityPlanet.name, planetCoords, Quaternion.identity);
-        /*else*/ newPlanet = Instantiate(AbilityPlanet, planetCoords, Quaternion.identity);
+        if (PhotonNetwork.IsConnected) newPlanet = PhotonNetwork.Instantiate(AbilityPlanet.name, planetCoords, Quaternion.identity);
+        else newPlanet = Instantiate(AbilityPlanet, planetCoords, Quaternion.identity);
         Debug.Log(newPlanet);
         newPlanet.GetComponent<GrantAbility>().GrantedAbility = SelectAbility();
         sectorMap[randX][randY] = newPlanet;
@@ -264,7 +318,6 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
             }
         }
     }
-
     void PlacePlanetInChunk(int chunkX, int chunkY, GameObject planetTemplate, CircleCollider2D templateCollider, GameObject[][] sectorMap, int sectorX, int sectorY)
     {
         float planetRadius = templateCollider.radius * planetTemplate.transform.localScale.x;
@@ -276,8 +329,16 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
         float planetYCoords = Random.Range(bottomChunkLimit, topChunkLimit);
         Vector3 planetCoords = new Vector3(planetXCoords + (sectorSize * sectorX), planetYCoords + (sectorSize * sectorY), 0);
         GameObject newPlanet;
-        /*if (PhotonNetwork.IsConnected) newPlanet = PhotonNetwork.Instantiate(planetTemplate.name, planetCoords, Quaternion.identity);
-        else */newPlanet = Instantiate(planetTemplate, planetCoords, Quaternion.identity);
+        if (PhotonNetwork.IsConnected)
+        {
+            object[] instantiateParameters = new object[4];
+            instantiateParameters[0] = sectorX + (worldSize/2);
+            instantiateParameters[1] = sectorY + (worldSize / 2);
+            instantiateParameters[2] = chunkX;
+            instantiateParameters[3] = chunkY;
+            newPlanet = PhotonNetwork.Instantiate(planetTemplate.name, planetCoords, Quaternion.identity, 0, instantiateParameters);
+        }
+        else newPlanet = Instantiate(planetTemplate, planetCoords, Quaternion.identity);
         newPlanet.GetComponent<SpriteRenderer>().color = PickPlanetColor();
         sectorMap[chunkX][chunkY] = newPlanet;
     }
@@ -286,8 +347,8 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
     {
         Vector3 barrierCoords = new Vector3(sectorSize / 2 + (sectorSize * sectorX), sectorSize / 2 + (sectorSize * sectorY), 0);
         GameObject newBarrier;
-        /*if (PhotonNetwork.IsConnected) newBarrier = PhotonNetwork.Instantiate(barrier.name, barrierCoords, Quaternion.identity);
-        else */newBarrier = Instantiate(barrier, barrierCoords, Quaternion.identity);
+        if (PhotonNetwork.IsConnected) newBarrier = PhotonNetwork.Instantiate(barrier.name, barrierCoords, Quaternion.identity);
+        else newBarrier = Instantiate(barrier, barrierCoords, Quaternion.identity);
         newBarrier.GetComponent<SectorWall>().SetParameters(sectorX, sectorY);
     }
 
@@ -390,4 +451,105 @@ public class SpaceManager : MonoBehaviourPun   //script to generate space map
 
         return returnList;
     }
+
+    /*void DeactivateWorld()  //disable everything outside of the initial sectors
+    {
+        int distanceToCenter = (worldSize / 2) - 1;
+        for (int a = 0; a < worldSize; a++)
+        {
+            for (int b = 0; b < worldSize; b++)
+            {
+                if ((a == distanceToCenter || a == distanceToCenter - 1) && (b == distanceToCenter || b == distanceToCenter - 1))
+                {
+                    continue;
+                }
+                for (int c = 0; c < sectorDimensions; c++)
+                {
+                    for (int  d = 0; d < sectorDimensions; d++)
+                    {
+                        WorldMap[a][b][c][d].SetActive(false);
+                    }
+                }
+            }
+        }
+    }*/
+
+    void ActivateWorld()  //enable everything in initial sectors
+    {
+        int distanceToCenter = (worldSize / 2) - 1;
+        for (int a = 0; a < worldSize; a++)
+        {
+            for (int b = 0; b < worldSize; b++)
+            {
+                if ((a == distanceToCenter || a == distanceToCenter - 1) && (b == distanceToCenter || b == distanceToCenter - 1))
+                {
+                    for (int c = 0; c < sectorDimensions; c++)
+                    {
+                        for (int d = 0; d < sectorDimensions; d++)
+                        {
+
+                            WorldMap[a][b][c][d].SetActive(true);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static bool CoordsInStartingSector(int sectorX, int sectorY)
+    {
+        int distanceToCenter = (worldSize / 2) - 1;
+        return ((sectorX == distanceToCenter || sectorX == distanceToCenter + 1) && (sectorY == distanceToCenter || sectorY == distanceToCenter + 1));
+    }
+
+    /*public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable propertiesThatChanged)    //for non-host player, need to receive world map and then perform any local changes that require it
+    {
+        Debug.Log("player update received!");
+        if (targetPlayer != PhotonNetwork.LocalPlayer)
+        {
+            return;
+        }
+        if (propertiesThatChanged.ContainsKey("Map"))
+        {
+            string[][][][] stringMap = (string[][][][])propertiesThatChanged["Map"];
+            for (int a = 0; a < worldSize; a++)
+            {
+                for (int b = 0; b < worldSize; b++)
+                {
+                    for (int c = 0; c < sectorDimensions; c++)
+                    {
+                        for (int d = 0; d < sectorDimensions; d++)
+                        {
+                            WorldMap[a][b][c][d] = GameObject.Find(stringMap[a][b][c][d]);
+                        }
+                    }
+                }
+            }
+            ActivateWorld();
+        }
+    }*/
+
+    /*public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)    //for non-host player, need to receive world map and then perform any local changes that require it
+    {
+        Debug.Log("room update received: " + propertiesThatChanged);
+        if (propertiesThatChanged.ContainsKey("Map"))
+        {
+            string[][][][] stringMap = (string[][][][])propertiesThatChanged["Map"];
+            for (int a = 0; a < worldSize; a++)
+            {
+                for (int b = 0; b < worldSize; b++)
+                {
+                    for (int c = 0; c < sectorDimensions; c++)
+                    {
+                        for (int d = 0; d < sectorDimensions; d++)
+                        {
+                            Debug.Log("looking for " + stringMap[a][b][c][d]);
+                            WorldMap[a][b][c][d] = GameObject.Find(stringMap[a][b][c][d]);
+                        }
+                    }
+                }
+            }
+            ActivateWorld();
+        }
+    }*/
 }

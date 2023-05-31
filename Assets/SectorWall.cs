@@ -16,7 +16,7 @@ public class SectorWall : MonoBehaviour
 
     public static SectorUnlockedEvent UnlockSector;
 
-    void Start()
+    void Awake()
     {
         if (UnlockSector == null)
         {

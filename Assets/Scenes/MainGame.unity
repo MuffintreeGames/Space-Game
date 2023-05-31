@@ -3917,17 +3917,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7192721937990158954, guid: c1c29dc09245f56429a2dba1e8e8695c, type: 3}
   m_PrefabInstance: {fileID: 1466978419}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1052128518 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -976390647139695689, guid: c1c29dc09245f56429a2dba1e8e8695c, type: 3}
-  m_PrefabInstance: {fileID: 1466978419}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1063311177
 GameObject:
   m_ObjectHideFlags: 0
@@ -5078,6 +5067,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1497565863}
     m_Modifications:
+    - target: {fileID: -3870835759722494029, guid: 87c93d704cc1f214baa6841ac3296958, type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 950341768418902669, guid: 87c93d704cc1f214baa6841ac3296958, type: 3}
       propertyPath: m_Name
       value: SectorWallWeak
@@ -5746,7 +5739,11 @@ PrefabInstance:
     - target: {fileID: 984709647032186193, guid: c1c29dc09245f56429a2dba1e8e8695c, type: 3}
       propertyPath: ObservedComponents.Array.data[0]
       value: 
-      objectReference: {fileID: 1052128518}
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076866493020626593, guid: c1c29dc09245f56429a2dba1e8e8695c, type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2777591044805351878, guid: c1c29dc09245f56429a2dba1e8e8695c, type: 3}
       propertyPath: sceneViewId
       value: 8
@@ -5808,6 +5805,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1497565863}
     m_Modifications:
+    - target: {fileID: -9074586135957924855, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4163616721154348905, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
       propertyPath: m_DrawMode
       value: 0
