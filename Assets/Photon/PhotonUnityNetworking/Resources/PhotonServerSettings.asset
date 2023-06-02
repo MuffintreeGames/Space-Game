@@ -39,6 +39,13 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - EndSwingAttack
+  - StartSwingAttack
+  - Killed
+  - EndChargedAttack
+  - StartChargedAttack
+  - RpcUseEvolvedAbility
+  - RpcUseNormalAbility
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

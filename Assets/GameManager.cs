@@ -41,20 +41,28 @@ namespace Online
             PhotonNetwork.LeaveRoom();
         }
 
+        bool shouldSwapMaster = false;
         public void StartGameGoliath()
         {
             if (!PhotonNetwork.IsMasterClient) return;
-            SetCustomPlayerProperties(PhotonNetwork.IsMasterClient);
+            SetCustomPlayerProperties(true);
         }
 
         public void StartGameGod()
         {
             if (!PhotonNetwork.IsMasterClient) return;
-            SetCustomPlayerProperties(!PhotonNetwork.IsMasterClient);
+            if (PhotonNetwork.LocalPlayer == PhotonNetwork.PlayerList[0])
+            {
+                PhotonNetwork.SetMasterClient(PhotonNetwork.PlayerList[1]); //swap master client so that goliath is always the master
+            } else
+            {
+                PhotonNetwork.SetMasterClient(PhotonNetwork.PlayerList[0]);
+            }
         }
 
         bool ready = false;
         bool opponentReady = false;
+        
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
         {
             if (PhotonNetwork.LocalPlayer != targetPlayer)
@@ -79,7 +87,7 @@ namespace Online
                     ready = true;
                 }
             }
-
+            Debug.Log("status after player update: " + ready + ", " + opponentReady);
             if (ready && opponentReady)
             {
                 PhotonNetwork.LoadLevel("MainGame");
@@ -100,10 +108,27 @@ namespace Online
                     opponentReady = true;
                 }
             }
-
+            Debug.Log("status after room update: " + ready + ", " +  opponentReady);
             if (ready && opponentReady)
             {
                 PhotonNetwork.LoadLevel("MainGame");
+            }
+        }
+
+        public override void OnMasterClientSwitched(Player newMasterClient)
+        {
+            base.OnMasterClientSwitched(newMasterClient);
+            Debug.Log("master swapped");
+            if (PhotonNetwork.LocalPlayer != newMasterClient)
+            {
+                return;
+            }
+
+            if (PhotonNetwork.PlayerList.Length >= 2)
+            {
+                Debug.Log("setting properties");
+                shouldSwapMaster = false;
+                SetCustomPlayerProperties(true);
             }
         }
 
@@ -118,7 +143,14 @@ namespace Online
             Hashtable opponentProperties = new Hashtable();
             opponentProperties.Add("Seed", seed);
             opponentProperties.Add("isGoliath", !isGoliath);
-            PhotonNetwork.PlayerList[1].SetCustomProperties(opponentProperties);
+            if (PhotonNetwork.LocalPlayer == PhotonNetwork.PlayerList[0])
+            {
+                PhotonNetwork.PlayerList[1].SetCustomProperties(opponentProperties);
+            }
+            else
+            {
+                PhotonNetwork.PlayerList[0].SetCustomProperties(opponentProperties);
+            }
         }
 
         #endregion

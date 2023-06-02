@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2481226301265193491}
   - component: {fileID: 6562920597452052819}
   - component: {fileID: 2355012547024276978}
+  - component: {fileID: 7985296195206788324}
   m_Layer: 19
   m_Name: Aura
   m_TagString: Untagged
@@ -115,6 +116,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &7985296195206788324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6824912912796573445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81c453362c837794f863d0894be19cd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7415390140728296721
 GameObject:
   m_ObjectHideFlags: 0

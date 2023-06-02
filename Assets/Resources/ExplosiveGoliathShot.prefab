@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 2052872467683786552}
   - component: {fileID: -1349071475621524675}
   - component: {fileID: 293565293068963107}
+  - component: {fileID: 9171752409078275414}
   m_Layer: 20
   m_Name: ExplosiveGoliathShot
   m_TagString: Untagged
@@ -221,3 +222,15 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 1
   m_UseLocal: 1
+--- !u!114 &9171752409078275414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7045386937356173623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81c453362c837794f863d0894be19cd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

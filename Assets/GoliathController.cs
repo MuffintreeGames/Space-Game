@@ -129,6 +129,8 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
 
     private SlowableObject slowComponent;
 
+    public PhotonView goliathPhoton;
+
     // Start is called before the first frame update
 
     void Awake()
@@ -172,107 +174,116 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
         grappleNonAdjustLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
         grappleNonAdjustLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
         grappleNonAdjustLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
+
+        goliathPhoton = PhotonView.Get(this);
+        if (PhotonNetwork.IsConnected && !RoleManager.isGoliath)
+        {
+            goliathArmScript.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            goliathTongueScript.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        }
     }
 
     void SetGoliathRotation()
     {
-        if (PhotonNetwork.IsConnected && RoleManager.isGoliath)
-        if (performingBasicAttack || performingStabAttack)  //lock rotation while attacking
+        if (!PhotonNetwork.IsConnected || RoleManager.isGoliath)
         {
-            return;
-        }
-
-        if (movementLocked)
-        {
-            return;
-        }
-
-
-
-        float horizontalDirection = Input.GetAxisRaw("Horizontal");
-        float verticalDirection = Input.GetAxisRaw("Vertical");
-
-        float targetRotation = goliathRigid.rotation;
-        float currentRotation = goliathRigid.rotation;
-
-        if (horizontalDirection > 0f)   //moving right
-        {
-            if (verticalDirection > 0f)
+            if (performingBasicAttack || performingStabAttack)  //lock rotation while attacking
             {
-                targetRotation = 315f;
+                return;
             }
-            else if (verticalDirection < 0f)
+
+            if (movementLocked)
             {
-                targetRotation = 225f;
+                return;
+            }
+
+
+
+            float horizontalDirection = Input.GetAxisRaw("Horizontal");
+            float verticalDirection = Input.GetAxisRaw("Vertical");
+
+            float targetRotation = goliathRigid.rotation;
+            float currentRotation = goliathRigid.rotation;
+
+            if (horizontalDirection > 0f)   //moving right
+            {
+                if (verticalDirection > 0f)
+                {
+                    targetRotation = 315f;
+                }
+                else if (verticalDirection < 0f)
+                {
+                    targetRotation = 225f;
+                }
+                else
+                {
+                    targetRotation = 270f;
+                }
+            }
+            else if (horizontalDirection < 0f)  //moving left
+            {
+                if (verticalDirection > 0f)
+                {
+                    targetRotation = 45f;
+                }
+                else if (verticalDirection < 0f)
+                {
+                    targetRotation = 135f;
+                }
+                else
+                {
+                    targetRotation = 90f;
+                }
             }
             else
-            {
-                targetRotation = 270f;
+            {    //moving vertically
+                if (verticalDirection > 0f)
+                {
+                    targetRotation = 360f;
+                }
+                else if (verticalDirection < 0f)
+                {
+                    targetRotation = 180f;
+                }
             }
-        }
-        else if (horizontalDirection < 0f)  //moving left
-        {
-            if (verticalDirection > 0f)
-            {
-                targetRotation = 45f;
-            }
-            else if (verticalDirection < 0f)
-            {
-                targetRotation = 135f;
-            }
-            else
-            {
-                targetRotation = 90f;
-            }
-        }
-        else
-        {    //moving vertically
-            if (verticalDirection > 0f)
-            {
-                targetRotation = 360f;
-            }
-            else if (verticalDirection < 0f)
-            {
-                targetRotation = 180f;
-            }
-        }
 
-        if (currentRotation < 0f)
-        {
-            currentRotation += 360f;
-        }
-        else if (currentRotation >= 360f)
-        {
-            currentRotation -= 360f;
-        }
+            if (currentRotation < 0f)
+            {
+                currentRotation += 360f;
+            }
+            else if (currentRotation >= 360f)
+            {
+                currentRotation -= 360f;
+            }
 
-        float gapBetweenRotations = targetRotation - currentRotation;
-        if (Mathf.Abs(gapBetweenRotations) > 180f)
-        {
-            if (currentRotation > 180f)
+            float gapBetweenRotations = targetRotation - currentRotation;
+            if (Mathf.Abs(gapBetweenRotations) > 180f)
             {
-                currentRotation = -(360f - currentRotation);
+                if (currentRotation > 180f)
+                {
+                    currentRotation = -(360f - currentRotation);
+                }
+                else
+                {
+                    targetRotation = -(360f - targetRotation);
+                }
             }
-            else
-            {
-                targetRotation = -(360f - targetRotation);
-            }
-        }
 
-        if (currentRotation != targetRotation)
-        {
-            float smoothRotation = currentRotation;
-            if (currentRotation > targetRotation)
+            if (currentRotation != targetRotation)
             {
-                smoothRotation -= rotationSpeed * Time.deltaTime;
-                smoothRotation = Mathf.Max(smoothRotation, targetRotation);
+                float smoothRotation = currentRotation;
+                if (currentRotation > targetRotation)
+                {
+                    smoothRotation -= rotationSpeed * Time.deltaTime;
+                    smoothRotation = Mathf.Max(smoothRotation, targetRotation);
+                }
+                else
+                {
+                    smoothRotation += rotationSpeed * Time.deltaTime * (1f - paralysisLevel);
+                    smoothRotation = Mathf.Min(smoothRotation, targetRotation);
+                }
+                goliathRigid.SetRotation(smoothRotation);
             }
-            else
-            {
-                smoothRotation += rotationSpeed * Time.deltaTime * (1f - paralysisLevel);
-                smoothRotation = Mathf.Min(smoothRotation, targetRotation);
-            }
-            goliathRigid.SetRotation(smoothRotation);
         }
     }
 
@@ -374,7 +385,11 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
             Debug.Log("can't attack right now");
             return;
         }
-
+        if (PhotonNetwork.IsConnected)
+        {
+            goliathPhoton.RPC("StartSwingAttack", RpcTarget.All, timeToFinish, mirrored);
+            return;
+        }
         goliathArm.SetActive(true);
         currentSwingTime = 0f;
         currentFullSwingTime = timeToFinish;
@@ -422,6 +437,12 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
     void EndBasicAttack()   //disable arm, start cooldown
     {
         Debug.Log("ending attack sequence");
+        
+        if (PhotonNetwork.IsConnected)
+        {
+            goliathPhoton.RPC("EndSwingAttack", RpcTarget.All);
+            return;
+        }
         goliathArm.transform.GetChild(0).gameObject.GetComponent<AttackObject>().ClearHitTargets();
         goliathArm.SetActive(false);
         currentBasicAttackCooldown = basicAttackCooldown;
@@ -437,7 +458,11 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
             Debug.Log("can't attack right now");
             return;
         }
-
+        if (PhotonNetwork.IsConnected)
+        {
+            goliathPhoton.RPC("StartChargedAttack", RpcTarget.All, maxLength, specialTime, specialDamage, grapple);
+            return;
+        }
         goliathTongue.SetActive(true);
         //goliathTongueHitbox.SetActive(true);
         currentStabTime = 0f;
@@ -490,6 +515,11 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
     void EndStabAttack()   //disable tongue, start cooldown
     {
         Debug.Log("ending stab sequence");
+        if (PhotonNetwork.IsConnected)
+        {
+            goliathPhoton.RPC("EndChargedAttack", RpcTarget.All);
+            return;
+        }
         goliathTongueScript.ClearHitTargets();
         goliathTongue.transform.localScale = new Vector3(goliathTongue.transform.localScale.x, 0f, goliathTongue.transform.localScale.z);
         //goliathTongueHitbox.GetComponent<Rigidbody2D>().MovePosition(transform.position);
@@ -574,44 +604,49 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
     }
 
     void CheckAbilityUsage()
+    {
+
+        if (PhotonNetwork.IsConnected && !RoleManager.isGoliath)
         {
+            return;
+        }
         if (abilitiesLocked)
         {
             return;
         }
 
-            if (Input.GetButtonDown("Action1") && Action1 != null)
+        if (Input.GetButtonDown("Action1") && Action1 != null)
+        {
+            if (Action1.IsOffCooldown())
             {
-                if (Action1.IsOffCooldown())
-                {
-                    Action1.UseAbility();
-                }
-            }
-
-            if (Input.GetButtonDown("Action2") && Action2 != null)
-            {
-                if (Action2.IsOffCooldown())
-                {
-                    Action2.UseAbility();
-                }
-            }
-
-            if (Input.GetButtonDown("Action3") && Action3 != null)
-            {
-                if (Action3.IsOffCooldown())
-                {
-                    Action3.UseAbility();
-                }
-            }
-
-            if (Input.GetButtonDown("Action4") && Action4 != null)
-            {
-                if (Action4.IsOffCooldown())
-                {
-                    Action4.UseAbility();
-                }
+                Action1.UseAbility();
             }
         }
+
+        if (Input.GetButtonDown("Action2") && Action2 != null)
+        {
+            if (Action2.IsOffCooldown())
+            {
+                Action2.UseAbility();
+            }
+        }
+
+        if (Input.GetButtonDown("Action3") && Action3 != null)
+        {
+            if (Action3.IsOffCooldown())
+            {
+                Action3.UseAbility();
+            }
+        }
+
+        if (Input.GetButtonDown("Action4") && Action4 != null)
+        {
+            if (Action4.IsOffCooldown())
+            {
+                Action4.UseAbility();
+            }
+        }
+    }
 
     void CheckAbilityReplacement()  //if player presses an ability key, assign the new ability to that
     {
@@ -1135,4 +1170,71 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
         }
     }
 
+    [PunRPC]
+    void StartSwingAttack(float timeToFinish, bool mirrored)
+    {
+        goliathArm.SetActive(true);
+        currentSwingTime = 0f;
+        currentFullSwingTime = timeToFinish;
+        canMeleeAttack = false;
+        mirroredAttack = mirrored;
+        performingBasicAttack = true;
+        ContinueBasicAttack();
+    }
+
+    [PunRPC]
+    void EndSwingAttack()
+    {
+        goliathArm.transform.GetChild(0).gameObject.GetComponent<AttackObject>().ClearHitTargets();
+        goliathArm.SetActive(false);
+        currentBasicAttackCooldown = basicAttackCooldown;
+        inBasicAttackCooldown = true;
+        performingBasicAttack = false;
+        GoliathFinishAttack.Invoke();
+    }
+
+    [PunRPC]
+    void StartChargedAttack(float maxLength, float specialTime, int specialDamage, bool grapple)
+    {
+        goliathTongue.SetActive(true);
+        //goliathTongueHitbox.SetActive(true);
+        currentStabTime = 0f;
+        canMeleeAttack = false;
+        performingStabAttack = true;
+        currentMaxLength = maxLength;
+
+        if (specialDamage >= 0) //using non-standard damage; otherwise, use default stab damage
+        {
+            goliathTongueScript.Damage = specialDamage;
+        }
+        else
+        {
+            goliathTongueScript.Damage = tongueDamage;
+        }
+
+        goliathTongueGrappleScript.enabled = grapple;
+        if (grapple)
+        {
+            currentTongueExtendTime = grappleExtendTime;
+        }
+        else
+        {
+            currentTongueExtendTime = tongueExtendTime;
+        }
+        ContinueStabAttack();
+    }
+
+    [PunRPC]
+    void EndChargedAttack()
+    {
+        goliathTongueScript.ClearHitTargets();
+        goliathTongue.transform.localScale = new Vector3(goliathTongue.transform.localScale.x, 0f, goliathTongue.transform.localScale.z);
+        //goliathTongueHitbox.GetComponent<Rigidbody2D>().MovePosition(transform.position);
+        goliathTongue.SetActive(false);
+        //goliathTongueHitbox.SetActive(false);
+        currentBasicAttackCooldown = basicAttackCooldown;
+        inBasicAttackCooldown = true;
+        performingStabAttack = false;
+        GoliathFinishAttack.Invoke();
+    }
 }

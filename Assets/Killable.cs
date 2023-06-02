@@ -134,15 +134,6 @@ public class Killable : MonoBehaviourPun
 
         if (currentHealth <= 0)
         {
-            if (fromGoliath && expScript != null)
-            {
-                expScript.KilledByGoliath();    //used to grant exp to the goliath if killed by something controlled by the goliath
-            }
-
-            if (fromGoliath && abilityScript != null)
-            {
-                abilityScript.KilledByGoliath();    //used to grant ability to the goliath if killed by something controlled by the goliath. Note that objects that grant abilities shouldn't be killable by non-goliath things
-            }
 
             if (SpawnedOnDeath != null)
             {
@@ -156,7 +147,24 @@ public class Killable : MonoBehaviourPun
                 else Instantiate(SpawnedOnGoliathKill, transform.position, Quaternion.identity);
             }
 
-            Destroy(this.gameObject);
+            if (PhotonNetwork.IsConnected)
+            {
+                PhotonView.Get(this).RPC("Killed", RpcTarget.All, fromGoliath);
+            }
+            else
+            {
+                if (fromGoliath && expScript != null)
+                {
+                    expScript.KilledByGoliath();    //used to grant exp to the goliath if killed by something controlled by the goliath
+                }
+
+                if (fromGoliath && abilityScript != null)
+                {
+                    abilityScript.KilledByGoliath();    //used to grant ability to the goliath if killed by something controlled by the goliath. Note that objects that grant abilities shouldn't be killable by non-goliath things
+                }
+
+                Destroy(this.gameObject);
+            }
         }
 
         if (!flashing) {
@@ -174,5 +182,24 @@ public class Killable : MonoBehaviourPun
             invincible = true;
         }
         return true;
+    }
+
+    [PunRPC]
+    void Killed(bool fromGoliath)
+    {
+        if (fromGoliath && expScript != null)
+        {
+            expScript.KilledByGoliath();    //used to grant exp to the goliath if killed by something controlled by the goliath
+        }
+
+        if (fromGoliath && abilityScript != null)
+        {
+            abilityScript.KilledByGoliath();    //used to grant ability to the goliath if killed by something controlled by the goliath. Note that objects that grant abilities shouldn't be killable by non-goliath things
+        }
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.Destroy(PhotonView.Get(this));
+        }
     }
 }

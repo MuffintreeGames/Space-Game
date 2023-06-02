@@ -602,6 +602,7 @@ MonoBehaviour:
   damagableLayers:
     serializedVersion: 2
     m_Bits: 2105408
+  goliathPhoton: {fileID: 0}
 --- !u!50 &5037213641140449648
 Rigidbody2D:
   serializedVersion: 4
@@ -671,6 +672,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: aad9f1cb27a06f149bbd3db8a2a8c714, type: 3}
   displayName: Dash
   numOfCopies: 2
+  ID: 0
   dashSpeed: 25
   dashDuration: 0.4
   exitSpeed: 6
@@ -690,6 +692,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 227c147d40291d2438e5e6d21b277d28, type: 3}
   displayName: Shot
   numOfCopies: 1
+  ID: 0
   baseProjectileSpeed: 20
   projectileDuration: 1.5
   baseProjectileDamage: 10
@@ -711,6 +714,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: aad9f1cb27a06f149bbd3db8a2a8c714, type: 3}
   displayName: Shed Skin
   numOfCopies: 0
+  ID: 0
   effectDuration: 4
   speedMultiplier: 2
   damageMultiplier: 1.2
@@ -730,6 +734,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 227c147d40291d2438e5e6d21b277d28, type: 3}
   displayName: Spray Goo
   numOfCopies: 0
+  ID: 0
   baseProjectileSpeed: 15
   projectileDuration: 3
   baseProjectileDamage: 2
@@ -755,6 +760,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: aad9f1cb27a06f149bbd3db8a2a8c714, type: 3}
   displayName: Ram
   numOfCopies: 0
+  ID: 0
   dashSpeed: 25
   dashDuration: 0.4
   exitSpeed: 6
@@ -776,6 +782,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: b37ea4813193ec140b76645199b562d7, type: 3}
   displayName: Frenzy Swing
   numOfCopies: 0
+  ID: 0
   swingTime: 0.1
 --- !u!114 &5037213641140449642
 MonoBehaviour:
@@ -793,6 +800,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: af10dd29dd1d7574a9ee019b3f35b001, type: 3}
   displayName: Stab Flurry
   numOfCopies: 0
+  ID: 0
   minStabLength: 2
   maxStabLength: 5
 --- !u!114 &5037213641140449645
@@ -811,6 +819,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 8025837bc2a2bd04cad9d62254c814da, type: 3}
   displayName: Burst Shard
   numOfCopies: 0
+  ID: 0
   baseProjectileSpeed: 5
   projectileDuration: 2
   baseProjectileDamage: 5
@@ -834,6 +843,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 335b1dd03a408f1419cb4398e120a3c3, type: 3}
   displayName: Energy Barrier
   numOfCopies: 0
+  ID: 0
   effectDuration: 1.5
   shield: {fileID: 5037213641387159186}
 --- !u!114 &5037213641140449647
@@ -852,6 +862,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 4f35f34c4c4f7b9418a75565f5eeab1d, type: 3}
   displayName: Bubble Shield
   numOfCopies: 0
+  ID: 0
   effectDuration: 4
   shield: {fileID: 5037213641799357649}
 --- !u!114 &5037213641140449646
@@ -870,6 +881,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 06d3565506e90574abb67d2d05f79681, type: 3}
   displayName: Berserk
   numOfCopies: 0
+  ID: 0
   effectDuration: 6
   damageMultiplier: 2
 --- !u!114 &4280886311215512830
@@ -888,6 +900,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 55ea41ad57badb54993ff2d277cadcad, type: 3}
   displayName: Refractive Camo
   numOfCopies: 0
+  ID: 0
   effectDuration: 5
   goliathRenderer: {fileID: 5037213641140449649}
   transparency: 100
@@ -907,6 +920,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 72a28cd85c4f74642a37a75e1b275ec9, type: 3}
   displayName: Grapple
   numOfCopies: 0
+  ID: 0
   grappleLength: 10
 --- !u!114 &2358673018926209516
 MonoBehaviour:
@@ -924,6 +938,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 3b439e4f809e9dc40953623774387240, type: 3}
   displayName: Eye Beam
   numOfCopies: 0
+  ID: 0
   baseProjectileSpeed: 20
   projectileDuration: 3
   baseProjectileDamage: 1
@@ -945,6 +960,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 04d598bd53c15c7449e99fda917bf1d3, type: 3}
   displayName: Explosive Rage
   numOfCopies: 0
+  ID: 0
   baseExplosionDamage: 20
   explosionDamagePerLevel: 10
   timeToExplode: 1
@@ -965,6 +981,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: fce4d1a7f7b145f4eae277818d43f81c, type: 3}
   displayName: Devour
   numOfCopies: 0
+  ID: 0
   baseProjectileSpeed: 20
   projectileDuration: 3
   biteDuration: 0.2
@@ -993,6 +1010,7 @@ MonoBehaviour:
   icon: {fileID: 0}
   displayName: 
   numOfCopies: 0
+  ID: 0
   baseProjectileSpeed: 8
   projectileDuration: 0.2
   baseProjectileDamage: 10
@@ -1018,6 +1036,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 638d90c38c7325b44a058336210217aa, type: 3}
   displayName: Condense Form
   numOfCopies: 0
+  ID: 0
   effectDuration: 6
   damageMultiplier: 0.6
   sizeMultiplier: 0.2
@@ -1564,6 +1583,7 @@ GameObject:
   - component: {fileID: 5900336370818725396}
   - component: {fileID: 5723126282957041203}
   - component: {fileID: 8790279605579039124}
+  - component: {fileID: 664780740323003633}
   m_Layer: 10
   m_Name: Laser
   m_TagString: Untagged
@@ -1691,3 +1711,15 @@ MonoBehaviour:
   blockingLayers:
     serializedVersion: 2
     m_Bits: 0
+--- !u!114 &664780740323003633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8655256350339934643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81c453362c837794f863d0894be19cd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

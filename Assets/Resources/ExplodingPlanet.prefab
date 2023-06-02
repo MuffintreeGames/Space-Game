@@ -17,6 +17,8 @@ GameObject:
   - component: {fileID: 3018412454711296892}
   - component: {fileID: 468945473847152606}
   - component: {fileID: 1168495005155902471}
+  - component: {fileID: 6590494237418574998}
+  - component: {fileID: 7705981857484438748}
   m_Layer: 7
   m_Name: ExplodingPlanet
   m_TagString: Untagged
@@ -212,3 +214,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8442664667273644091fd3466e659585, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6590494237418574998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6088609408505885020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
+--- !u!114 &7705981857484438748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6088609408505885020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 6590494237418574998}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

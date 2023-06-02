@@ -34,6 +34,7 @@ public class LaserAbility : AbilityTemplate  //long range, piercing, low damage 
         base.ManageCooldown();
         if (performingLaser)
         {
+            Debug.Log("performing laser");
             projectileTime += Time.deltaTime;
             if (projectileTime > projectileDuration)
             {
@@ -47,6 +48,7 @@ public class LaserAbility : AbilityTemplate  //long range, piercing, low damage 
 
     public override void UseNormalAbility()
     {
+        Debug.Log("firing laser");
         parentGoliath.StartComboAttack();
         Laser.SetActive(true);
         projectileTime = 0f;
@@ -64,6 +66,7 @@ public class LaserAbility : AbilityTemplate  //long range, piercing, low damage 
             return;
         }
         laserLength += Time.deltaTime * projectileSpeed;
+
         Laser.transform.localScale = new Vector2(Laser.transform.localScale.x, laserLength);
     }
 

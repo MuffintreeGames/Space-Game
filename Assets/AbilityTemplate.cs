@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
 public abstract class AbilityTemplate : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public abstract class AbilityTemplate : MonoBehaviour
     protected AbilityCategory abilityType;    //should be chosen by the class that inherits this
 
     public int numOfCopies = 0;
+
+    public int ID;
 
     protected void InitializeAbility(AbilityCategory abilityType)
     {
@@ -97,10 +100,23 @@ public abstract class AbilityTemplate : MonoBehaviour
 
         if (numOfCopies > 1)
         {
-            UseEvolvedAbility();
+            if (PhotonNetwork.IsConnected)
+            {
+                PhotonView.Get(this).RPC("RpcUseEvolvedAbility", RpcTarget.All, displayName);
+            }
+            else
+            {
+                UseEvolvedAbility();
+            }
         } else
         {
-            UseNormalAbility();
+            if (PhotonNetwork.IsConnected)
+            {
+                PhotonView.Get(this).RPC("RpcUseNormalAbility", RpcTarget.All, displayName);
+            } else
+            {
+                UseNormalAbility();
+            }
         }
     }
 
@@ -114,10 +130,32 @@ public abstract class AbilityTemplate : MonoBehaviour
         
     }
 
+    [PunRPC]
+    public void RpcUseNormalAbility(string abilityName)
+    {
+        if (abilityName == displayName) //needed to avoid calling every ability simultaneously
+        {
+            if (!enabled)
+            {   //if for whatever reason the ability has been used without being activated properly, just activate it
+                enabled = true;
+            }
+            UseNormalAbility();
+        }
+    }
+
     public void UseEvolvedAbility() //by default, halve the cooldown
     {
         UseNormalAbility();
         tickingCooldown = tickingCooldown / 2;
+    }
+
+    [PunRPC]
+    public void RpcUseEvolvedAbility(string abilityName)
+    {
+        if (abilityName == displayName) //needed to avoid calling every ability simultaneously
+        {
+            UseEvolvedAbility();
+        }
     }
 
     public void DisableAbility()

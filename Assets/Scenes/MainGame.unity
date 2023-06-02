@@ -6016,21 +6016,21 @@ MonoBehaviour:
   AbilityPool:
   - {fileID: 2066654989}
   - {fileID: 2066654988}
-  - {fileID: 2066654989}
-  - {fileID: 2066654989}
-  - {fileID: 2066654989}
-  - {fileID: 2066654989}
-  - {fileID: 2066654989}
-  - {fileID: 2066654989}
-  - {fileID: 2066654989}
-  - {fileID: 2066654989}
-  - {fileID: 2066654989}
-  - {fileID: 2066654989}
-  - {fileID: 2066654989}
-  - {fileID: 2066654989}
-  - {fileID: 2066654989}
-  - {fileID: 2066654989}
-  - {fileID: 2066654989}
+  - {fileID: 2066654988}
+  - {fileID: 2066654988}
+  - {fileID: 2066654988}
+  - {fileID: 2066655054}
+  - {fileID: 2066655054}
+  - {fileID: 2066655054}
+  - {fileID: 2066655053}
+  - {fileID: 2066655053}
+  - {fileID: 2066655053}
+  - {fileID: 2066655052}
+  - {fileID: 2066655052}
+  - {fileID: 2066655052}
+  - {fileID: 2066655060}
+  - {fileID: 2066655060}
+  - {fileID: 2066655060}
   - {fileID: 2066654989}
   - {fileID: 2066654989}
   - {fileID: 2066654989}
@@ -6444,6 +6444,10 @@ PrefabInstance:
     - target: {fileID: 6088609408505885020, guid: 18cdc0d4eab3b0d42b5d636de93b6b6d, type: 3}
       propertyPath: m_Name
       value: ExplodingPlanet
+      objectReference: {fileID: 0}
+    - target: {fileID: 7705981857484438748, guid: 18cdc0d4eab3b0d42b5d636de93b6b6d, type: 3}
+      propertyPath: sceneViewId
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18cdc0d4eab3b0d42b5d636de93b6b6d, type: 3}
@@ -7708,6 +7712,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 814a485fecd83304bba9b20f0a1cd5c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2066655060 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5037213641140449635, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
+  m_PrefabInstance: {fileID: 5037213640751781497}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c9b4e83be4891a4a90cd7985bda079c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2092784773
 GameObject:
   m_ObjectHideFlags: 0
@@ -7931,6 +7946,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1445052267}
     m_Modifications:
+    - target: {fileID: 664780740323003633, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
+      propertyPath: DisableAttack
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1237007286403887512, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
       propertyPath: icon
       value: 
@@ -7983,6 +8002,14 @@ PrefabInstance:
       propertyPath: Laser
       value: 
       objectReference: {fileID: 44518071}
+    - target: {fileID: 0}
+      propertyPath: sceneViewId
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4280886311215512830, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
       propertyPath: transparency
       value: 0.5
@@ -8011,9 +8038,17 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_SynchronizeScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5037213641140449660, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
       propertyPath: m_Name
       value: Goliath
+      objectReference: {fileID: 0}
+    - target: {fileID: 5037213641140449660, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5037213641140449662, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
       propertyPath: Action1
@@ -8113,3 +8148,47 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
+--- !u!1 &5037213640751781498 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 682704415037348625, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
+  m_PrefabInstance: {fileID: 5037213640751781497}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5037213640751781499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5037213640751781498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 1
+  m_UseLocal: 1
+--- !u!114 &5037213640751781500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5037213640751781498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 5037213640751781499}
+  sceneViewId: 4
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

@@ -80,6 +80,11 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
                 return;
             }
         }
+
+        for (int x = 0; x < AbilityPool.Count; x++)
+        {
+            AbilityPool[x].ID = x;  //assign ID here so that we can easily sync up client end
+        }
         ModifiedAbilityPool = new List<AbilityTemplate>(AbilityPool);
         sectorSize = chunkSize * sectorDimensions;
         smallPlanetCollider = SmallPlanet.GetComponent<CircleCollider2D>();
@@ -260,10 +265,22 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
         int randY = Random.Range(Mathf.RoundToInt((float)(sectorDimensions * 0.4)), Mathf.RoundToInt((float)(sectorDimensions * 0.7)));
         Vector3 planetCoords = new Vector3(randX * chunkSize + chunkSize/2 + (sectorSize * sectorX), randY * chunkSize + chunkSize/2 + (sectorSize * sectorY), 0);
         GameObject newPlanet;
-        if (PhotonNetwork.IsConnected) newPlanet = PhotonNetwork.Instantiate(AbilityPlanet.name, planetCoords, Quaternion.identity);
-        else newPlanet = Instantiate(AbilityPlanet, planetCoords, Quaternion.identity);
-        Debug.Log(newPlanet);
-        newPlanet.GetComponent<GrantAbility>().GrantedAbility = SelectAbility();
+        if (PhotonNetwork.IsConnected)
+        {
+            object[] instantiateParameters = new object[5];
+            AbilityTemplate chosenAbility = SelectAbility();
+            instantiateParameters[0] = chosenAbility.ID;
+            instantiateParameters[1] = sectorX + (worldSize / 2);
+            instantiateParameters[2] = sectorY + (worldSize / 2);
+            instantiateParameters[3] = randX;
+            instantiateParameters[4] = randY;
+            newPlanet = PhotonNetwork.Instantiate(AbilityPlanet.name, planetCoords, Quaternion.identity, 0, instantiateParameters);
+        }
+        else
+        {
+            newPlanet = Instantiate(AbilityPlanet, planetCoords, Quaternion.identity);
+            newPlanet.GetComponent<GrantAbility>().GrantedAbility = SelectAbility();
+        }
         sectorMap[randX][randY] = newPlanet;
         return newPlanet;
     }
