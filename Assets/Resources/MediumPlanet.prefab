@@ -17,8 +17,8 @@ GameObject:
   - component: {fileID: 881780009766519083}
   - component: {fileID: 1751543753364035466}
   - component: {fileID: 8819743012338082981}
-  - component: {fileID: 1752777808688840569}
   - component: {fileID: 5932119073981357833}
+  - component: {fileID: 5873548823048074923}
   m_Layer: 7
   m_Name: MediumPlanet
   m_TagString: Untagged
@@ -219,26 +219,10 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 1752777808688840569}
+  - {fileID: 5873548823048074923}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &1752777808688840569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6088609408505885020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!114 &5932119073981357833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,3 +235,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a1f1400fb5c1a419092fe9f406e4c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5873548823048074923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6088609408505885020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e7cb724808c322458aa4d15f5035fa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 1
+  m_TeleportIfDistanceGreaterThan: 3

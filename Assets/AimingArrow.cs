@@ -69,8 +69,17 @@ public class AimingArrow : MonoBehaviourPun
                 Rigidbody2D aimedRigid = aimedObject.gameObject.GetComponent<Rigidbody2D>();
                 SlowableObject slowComponent = aimedObject.gameObject.GetComponent<SlowableObject>();   //apply slowdown if relevant
                 aimedRigid.AddForce(targetDirection.normalized * launchForce * aimedRigid.mass / slowComponent.GetSlowFactor(), ForceMode2D.Impulse);
-                SpeedAttackObject aimedAttack = aimedObject.GetComponent<SpeedAttackObject>();
-                aimedAttack.enabled = true;
+                if (PhotonNetwork.IsConnected) {
+                    PhotonView aimedView = aimedObject.GetComponent<PhotonView>();
+                    //aimedView.RequestOwnership();
+                    aimedView.RPC("LaunchSpeedAttackObject", RpcTarget.All, (Vector2)targetDirection.normalized * launchForce * aimedRigid.mass / slowComponent.GetSlowFactor());
+                }
+                else
+                {
+
+                    SpeedAttackObject aimedAttack = aimedObject.GetComponent<SpeedAttackObject>();
+                    aimedAttack.enabled = true;
+                }
             } else
             {
                 GameObject firedShot;

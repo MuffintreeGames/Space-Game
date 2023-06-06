@@ -27,7 +27,10 @@ public class GodController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (PhotonNetwork.IsConnected && RoleManager.isGoliath) canUseAbilities = false;
+        if (PhotonNetwork.IsConnected && RoleManager.isGoliath) {
+            Debug.Log("disabling abilities");
+            canUseAbilities = false; 
+        }
         SectorWall.UnlockSector.AddListener(IncreaseMPRegen);
         currentMPRegen = mpRegen;
     }
@@ -77,7 +80,11 @@ public class GodController : MonoBehaviour
 
     public bool CanUseAbility1()
     {
-        return Action1 != null && canUseAbilities && currentMp >= Action1.manaCost && Action1.IsOffCooldown();
+        //Debug.Log("canUseAbilities: " + canUseAbilities);
+        //Debug.Log("enough mp: " + (currentMp >= Action1.manaCost));
+        //Debug.Log("off cooldown: " + Action1.IsOffCooldown());
+        //Debug.Log("time ticking: " + TimeManager.GetTimeRunning());
+        return Action1 != null && canUseAbilities && currentMp >= Action1.manaCost && Action1.IsOffCooldown() && TimeManager.GetTimeRunning();
     }
 
     public void UseAbility2()
@@ -90,7 +97,7 @@ public class GodController : MonoBehaviour
 
     public bool CanUseAbility2()
     {
-        return Action2 != null && canUseAbilities && currentMp >= Action2.manaCost && Action2.IsOffCooldown();
+        return Action2 != null && canUseAbilities && currentMp >= Action2.manaCost && Action2.IsOffCooldown() && TimeManager.GetTimeRunning();
     }
 
     public void UseAbility3()
@@ -103,7 +110,7 @@ public class GodController : MonoBehaviour
 
     public bool CanUseAbility3()
     {
-        return Action3 != null && canUseAbilities && currentMp >= Action3.manaCost && TimeManager.GetElapsedTime() >= Action3UnlockTime && Action3.IsOffCooldown();
+        return Action3 != null && canUseAbilities && currentMp >= Action3.manaCost && TimeManager.GetElapsedTime() >= Action3UnlockTime && Action3.IsOffCooldown() && TimeManager.GetTimeRunning();
     }
 
     public void UseAbility4()
@@ -116,7 +123,7 @@ public class GodController : MonoBehaviour
 
     public bool CanUseAbility4()
     {
-        return Action4 != null && canUseAbilities && currentMp >= Action4.manaCost && TimeManager.GetElapsedTime() >= Action4UnlockTime && Action4.IsOffCooldown();
+        return Action4 != null && canUseAbilities && currentMp >= Action4.manaCost && TimeManager.GetElapsedTime() >= Action4UnlockTime && Action4.IsOffCooldown() && TimeManager.GetTimeRunning();
     }
 
     public void UseAbility5()
@@ -129,7 +136,7 @@ public class GodController : MonoBehaviour
 
     public bool CanUseAbility5()
     {
-        return Action5 != null && canUseAbilities && currentMp >= Action5.manaCost && TimeManager.GetElapsedTime() >= Action5UnlockTime && Action5.IsOffCooldown();
+        return Action5 != null && canUseAbilities && currentMp >= Action5.manaCost && TimeManager.GetElapsedTime() >= Action5UnlockTime && Action5.IsOffCooldown() && TimeManager.GetTimeRunning();
     }
 
     public void UseAbility6()

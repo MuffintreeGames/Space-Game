@@ -24,7 +24,7 @@ public class GodSpawnHostilePlanetAbility : GodAbilityTemplate
         Vector2 mouseCoords = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         GameObject createdOutline;
         /*if (PhotonNetwork.IsConnected) createdOutline = PhotonNetwork.Instantiate(spawnOutline.name, mouseCoords, Quaternion.identity);
-        else */createdOutline = Instantiate(spawnOutline, mouseCoords, Quaternion.identity);
+        else*/ createdOutline = Instantiate(spawnOutline, mouseCoords, Quaternion.identity);
         createdOutline.GetComponent<PlaceOnClick>().parentAbility = this;
     }
 }

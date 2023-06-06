@@ -19,7 +19,7 @@ public class TitleScreenController : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadScene("MainGame");
     }
 
     public void Online()

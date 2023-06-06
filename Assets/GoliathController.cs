@@ -693,6 +693,11 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
 
     private void FixedUpdate()  //set rotation here to avoid updating rotation faster than physics engine allows
     {
+        if (!TimeManager.GetTimeRunning())   //game paused
+        {
+            return;
+        }
+
         SetGoliathRotation();
         if (performingBasicAttack)
         {
@@ -714,6 +719,12 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
     void Update()
     {
         if (PhotonNetwork.IsConnected && !RoleManager.isGoliath) return;
+
+        if (!TimeManager.GetTimeRunning())   //game paused
+        {
+            return;
+        }
+
         if (!abilitySelectionMode)
         {
             CheckAbilityUsage();
@@ -728,7 +739,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
         MoveGoliath();
 
 
-        goliathCamera.updateCamera();   //now that we've moved, set new camera position
+        //goliathCamera.updateCamera();   //now that we've moved, set new camera position
 
         if (holdingBasicAttack)
         {

@@ -14,58 +14,70 @@ public class GoliathCameraController : MonoBehaviour
     public float hardFollowVertDistance = 4f;
 
     private float targetZoom = 12f;  //zoom distance on the camera. Increases as goliath grows
+    private float godMultiplier = 2f;   //if playing as god, use god multiplier
     private float zoomSpeed = 0.5f;   //speed at which camera zooms out
+
+    private float zoomMultiplier = 1f;
 
     private Camera thisCamera;
 
     public void Start()
     {
         thisCamera = GetComponent<Camera>();
+        if (!RoleManager.isGoliath)
+        {
+            zoomMultiplier = godMultiplier;
+        }
+    }
+
+    public void Update()
+    {
+        updateCamera();
     }
 
     public void updateCamera()
     {
-        thisCamera.orthographicSize = Mathf.Lerp(thisCamera.orthographicSize, targetZoom, zoomSpeed * Time.deltaTime);
+        thisCamera.orthographicSize = Mathf.Lerp(thisCamera.orthographicSize, targetZoom * zoomMultiplier, zoomSpeed * zoomMultiplier * Time.deltaTime);
         Vector3 distanceToTarget = target.position - transform.position;
         Vector3 smoothTarget = new Vector3(target.position.x, target.position.y, 0);
         float newXPosition = transform.position.x;
         float newYPosition = transform.position.y;
-        if (distanceToTarget.x > hardFollowHorDistance)
+        if (distanceToTarget.x > (hardFollowHorDistance * zoomMultiplier))
         {
-            newXPosition = target.position.x - hardFollowHorDistance;
+            newXPosition = target.position.x - (hardFollowHorDistance * zoomMultiplier);
         }
-        else if (distanceToTarget.x < -hardFollowHorDistance)
+        else if (distanceToTarget.x < (-hardFollowHorDistance * zoomMultiplier))
         {
-            newXPosition = target.position.x + hardFollowHorDistance;
-        } else if (distanceToTarget.x > smoothFollowHorDistance) {
-            smoothTarget.x -= smoothFollowHorDistance;
-            Vector3 smoothCameraVector = Vector3.Lerp(transform.position, smoothTarget, smoothSpeed);
+            newXPosition = target.position.x + (hardFollowHorDistance * zoomMultiplier);
+        } else if (distanceToTarget.x > (smoothFollowHorDistance * zoomMultiplier)) {
+            smoothTarget.x -= (smoothFollowHorDistance * zoomMultiplier);
+            Vector3 smoothCameraVector = Vector3.Lerp(transform.position, smoothTarget, smoothSpeed * zoomMultiplier);
             newXPosition = smoothCameraVector.x;
-        } else if (distanceToTarget.y < -smoothFollowHorDistance)
+        } else if (distanceToTarget.y < -(smoothFollowHorDistance * zoomMultiplier))
         {
-            smoothTarget.x += smoothFollowHorDistance;
-            Vector3 smoothCameraVector = Vector3.Lerp(transform.position, smoothTarget, smoothSpeed);
+            smoothTarget.x += (smoothFollowHorDistance * zoomMultiplier);
+            Vector3 smoothCameraVector = Vector3.Lerp(transform.position, smoothTarget, smoothSpeed * zoomMultiplier);
             newXPosition = smoothCameraVector.x;
         }
 
-        if (distanceToTarget.y > hardFollowVertDistance)
+        if (distanceToTarget.y > hardFollowVertDistance * zoomMultiplier)
         {
-            newYPosition = target.position.y - hardFollowVertDistance;
+            newYPosition = target.position.y - (hardFollowVertDistance * zoomMultiplier);
         }
-        else if (distanceToTarget.y < -hardFollowVertDistance)
+        else if (distanceToTarget.y < -hardFollowVertDistance * zoomMultiplier)
         {
-            newYPosition = target.position.y + hardFollowVertDistance;
+            newYPosition = target.position.y + (hardFollowVertDistance * zoomMultiplier);
         }
-        else if (distanceToTarget.y > smoothFollowVertDistance)
+        else if (distanceToTarget.y > smoothFollowVertDistance * zoomMultiplier)
         {
-            smoothTarget.y -= smoothFollowVertDistance;
-            Vector3 smoothCameraVector = Vector3.Lerp(transform.position, smoothTarget, smoothSpeed);
+            smoothTarget.y -= smoothFollowVertDistance * zoomMultiplier;
+            Vector3 smoothCameraVector = Vector3.Lerp(transform.position, smoothTarget, smoothSpeed * zoomMultiplier);
             newYPosition = smoothCameraVector.y;
         }
-        else if (distanceToTarget.y < -smoothFollowVertDistance)
+        else if (distanceToTarget.y < -smoothFollowVertDistance * zoomMultiplier)
         {
-            smoothTarget.y += smoothFollowVertDistance;
-            Vector3 smoothCameraVector = Vector3.Lerp(transform.position, smoothTarget, smoothSpeed);
+            smoothTarget.y += smoothFollowVertDistance * zoomMultiplier;
+            Vector3 smoothCameraVector = Vector3.Lerp(transform.position, smoothTarget, smoothSpeed * zoomMultiplier);
             newYPosition = smoothCameraVector.y;
         }
 

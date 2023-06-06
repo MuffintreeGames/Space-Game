@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Photon.Pun;
+
 
 public class SpeedAttackObject : AttackObject   //variant of attack object that does damage relative to current speed
 {
@@ -63,12 +65,33 @@ public class SpeedAttackObject : AttackObject   //variant of attack object that 
     {
         if (enabled)
         {
+            /*if (PhotonNetwork.IsConnected)
+            {
+                GetComponent<PhotonView>().Synchronization = ViewSynchronization.ReliableDeltaCompressed;
+            }*/
             SpeedAttackObject collidedAttackObject = collision.gameObject.GetComponent<SpeedAttackObject>();
             if (collidedAttackObject)
             {
                 collidedAttackObject.enabled = true;
             }
             base.OnCollisionStay2D(collision);
+        }
+    }
+
+    [PunRPC]
+    public void ActivateSpeedAttackObject()
+    {
+        enabled = true;
+    }
+
+    [PunRPC]
+    public void LaunchSpeedAttackObject(Vector2 force)
+    {
+        ActivateSpeedAttackObject();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            gameObject.GetComponent<Rigidbody2D>().AddForce(force, ForceMode2D.Impulse);
+            //GetComponent<PhotonView>().Synchronization = ViewSynchronization.Off;
         }
     }
 }

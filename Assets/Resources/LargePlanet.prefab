@@ -17,8 +17,8 @@ GameObject:
   - component: {fileID: 7892795342798359596}
   - component: {fileID: 6465655314327632375}
   - component: {fileID: 7666982166918921685}
-  - component: {fileID: 6621050291250864722}
   - component: {fileID: 2425651100049730671}
+  - component: {fileID: 6196074430973727440}
   m_Layer: 8
   m_Name: LargePlanet
   m_TagString: Untagged
@@ -219,26 +219,10 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 6621050291250864722}
+  - {fileID: 6196074430973727440}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6621050291250864722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6088609408505885020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!114 &2425651100049730671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,3 +235,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a1f1400fb5c1a419092fe9f406e4c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6196074430973727440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6088609408505885020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e7cb724808c322458aa4d15f5035fa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 1
+  m_TeleportIfDistanceGreaterThan: 3

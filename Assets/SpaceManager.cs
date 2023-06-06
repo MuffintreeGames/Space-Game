@@ -52,7 +52,13 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
 
     private void Awake()
     {
-
+        Debug.Log("awake");
+        if (PhotonNetwork.IsConnected)
+        {
+            RoleManager.isGoliath = (bool)PhotonNetwork.LocalPlayer.CustomProperties["isGoliath"];
+            //Debug.Log("setting isGoliath to " + RoleManager.isGoliath);
+            Random.InitState((int)PhotonNetwork.LocalPlayer.CustomProperties["Seed"]);
+        }
     }
 
     // Start is called before the first frame update
@@ -60,8 +66,6 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
     {
         if (PhotonNetwork.IsConnected)
         {
-            RoleManager.isGoliath = (bool)PhotonNetwork.LocalPlayer.CustomProperties["isGoliath"];
-            Random.InitState((int)PhotonNetwork.LocalPlayer.CustomProperties["Seed"]);
             if (!PhotonNetwork.IsMasterClient)
             {
                 WorldMap = new GameObject[worldSize][][][];
@@ -196,6 +200,7 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
             roomProperties.Add("Map", stringMap);
             PhotonNetwork.CurrentRoom.SetCustomProperties(roomProperties);
             Debug.Log("host sent message!");
+            PhotonNetwork.Instantiate("FinishedLoadingObject", Vector3.zero, Quaternion.identity);  //once this is loaded, game starts
         }
     }
 
