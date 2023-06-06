@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,6 +34,10 @@ public class DamageDashAbility : DashAbility
 
     public override void UseNormalAbility()
     {
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
         base.UseNormalAbility();
         if (currentlyDashing)   //used to check for success in activating ability
         {

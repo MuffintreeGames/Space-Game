@@ -27,6 +27,10 @@ public class RangedAttackAbility : AbilityTemplate  //fire a projectile
 
     public override void UseNormalAbility()
     {
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
         GameObject firedShot;
         if (PhotonNetwork.IsConnected) firedShot = PhotonNetwork.Instantiate(GoliathShot.name, parentGoliath.transform.position, Quaternion.identity);
         else firedShot = Instantiate(GoliathShot, parentGoliath.transform.position, Quaternion.identity);

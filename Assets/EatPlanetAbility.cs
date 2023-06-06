@@ -67,6 +67,10 @@ public class EatPlanetAbility : AbilityTemplate  //melee attack on planet; if it
 
     public override void UseNormalAbility()
     {
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
         parentGoliath.StartComboAttack();
         BiteHitbox.SetActive(true);
         biting = true;

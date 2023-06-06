@@ -35,7 +35,10 @@ public class PoisonSprayAbility : AbilityTemplate  //fire several pellets which 
 
     public override void UseNormalAbility()
     {
-
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
         for (int n = 0; n < projectileCount; n++)
         {
             GameObject firedShot;

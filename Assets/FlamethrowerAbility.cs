@@ -70,6 +70,10 @@ public class FlamethrowerAbility : AbilityTemplate  //fire several pellets which
 
     public override void UseNormalAbility()
     {
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
         firing = true;
         fireTimeElapsed = 0f;
         timeUntilShot = 0f;

@@ -29,6 +29,10 @@ public class ExplosiveShotAbility : AbilityTemplate  //fire a projectile that do
 
     public override void UseNormalAbility()
     {
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
         GameObject firedShot;
         if (PhotonNetwork.IsConnected) firedShot = PhotonNetwork.Instantiate(ExplosiveShot.name, parentGoliath.transform.position, Quaternion.identity);
         else firedShot = Instantiate(ExplosiveShot, parentGoliath.transform.position, Quaternion.identity);

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,6 +38,10 @@ public class DashAbility : AbilityTemplate  //dash a short distance, maintaining
 
     public override void UseNormalAbility()
     {
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
         parentGoliath.LockMovement();   //need to prevent goliath from doing manual movement
         dashDirectionX = Input.GetAxisRaw("Horizontal");
         dashDirectionY = Input.GetAxisRaw("Vertical");
