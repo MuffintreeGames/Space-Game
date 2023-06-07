@@ -474,6 +474,16 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
         return returnList;
     }
 
+    public static AbilityTemplate GetAbilityTemplateInSector(int sectorX, int sectorY)
+    {
+        GameObject abilityPlanet = AbilityMap[sectorX][sectorY];
+        if (abilityPlanet != null)
+        {
+            return abilityPlanet.GetComponent<GrantAbility>().GrantedAbility;
+        }
+        return null;
+    }
+
     /*void DeactivateWorld()  //disable everything outside of the initial sectors
     {
         int distanceToCenter = (worldSize / 2) - 1;

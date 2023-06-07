@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class AbilityGainEvent : UnityEvent<AbilityTemplate>
 {
@@ -15,7 +16,7 @@ public class GrantAbility : MonoBehaviour, IPunInstantiateMagicCallback
 
     public AbilityTemplate GrantedAbility;
 
-    private SpriteRenderer childSprite;
+    private Image childSprite;
     private bool spriteSet = false;
 
     object[] instantiationData;
@@ -33,7 +34,7 @@ public class GrantAbility : MonoBehaviour, IPunInstantiateMagicCallback
         GameObject childImage = transform.GetChild(0).gameObject;
         if (childImage)
         {
-            childSprite = childImage.GetComponent<SpriteRenderer>();
+            childSprite = childImage.GetComponent<Image>();
         }
     }
 
