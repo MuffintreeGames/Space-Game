@@ -127,7 +127,7 @@ MonoBehaviour:
     m_Bits: 73924544
   DamagedLayers:
     serializedVersion: 2
-    m_Bits: 2105408
+    m_Bits: 69214272
   DestroyOnHit: 0
   RepeatedDamage: 0
   OverTime: 0
@@ -233,3 +233,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c453362c837794f863d0894be19cd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisableAttack: 0
