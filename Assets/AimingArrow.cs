@@ -42,13 +42,19 @@ public class AimingArrow : MonoBehaviourPun
         }
 
         Vector3 mouseCoords = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 targetDirection;
+        Vector3 targetDirection = Vector3.zero;
         if (shootingObject)
         {
-            targetDirection = mouseCoords - aimedObject.transform.position;
+            if (aimedObject != null)
+            {
+                targetDirection = mouseCoords - aimedObject.transform.position;
+            }
         } else
         {
-            targetDirection = mouseCoords - transform.position;
+            if (aimedObject != null)
+            {
+                targetDirection = mouseCoords - transform.position;
+            }
         }
 
         float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
