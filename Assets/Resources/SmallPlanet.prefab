@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 5408751222123880913}
   - component: {fileID: 7562911630341664406}
   - component: {fileID: 748819978758949195}
-  - component: {fileID: 2995121319149844875}
+  - component: {fileID: 412460739907910573}
   m_Layer: 6
   m_Name: SmallPlanet
   m_TagString: Untagged
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d137e40825b70c41808026f0c02b084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExpAmount: 5
+  ExpAmount: 200
 --- !u!114 &1248889369602796152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,7 +219,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 2995121319149844875}
+  - {fileID: 412460739907910573}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a1f1400fb5c1a419092fe9f406e4c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2995121319149844875
+--- !u!114 &412460739907910573
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

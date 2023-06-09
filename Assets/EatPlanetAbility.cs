@@ -96,12 +96,21 @@ public class EatPlanetAbility : AbilityTemplate  //melee attack on planet; if it
         chewing = false;
         for (int n = 0; n < projectileCount; n++)
         {
-            GameObject firedShot;
-            if (PhotonNetwork.IsConnected) firedShot = PhotonNetwork.Instantiate(SprayShot.name, parentGoliath.transform.position, Quaternion.identity);
-            else firedShot = Instantiate(SprayShot, parentGoliath.transform.position, Quaternion.identity);
             float shotAngle = parentGoliath.transform.eulerAngles.z + ((n - projectileCount / 2) * spread);
-            //float randomDecel = deceleration + Random.Range(-decelVariance, decelVariance);
-            firedShot.GetComponent<Projectile>().SetProjectileParameters(projectileSpeed, shotAngle, projectileDuration);
+            if (PhotonNetwork.IsConnected)
+            {
+                object[] instantiationData = new object[3];
+                instantiationData[0] = projectileSpeed;
+                instantiationData[1] = shotAngle;
+                instantiationData[2] = projectileDuration;
+                PhotonNetwork.Instantiate(SprayShot.name, parentGoliath.transform.position, Quaternion.identity, 0, instantiationData);
+            }
+            else
+            {
+                GameObject firedShot = Instantiate(SprayShot, parentGoliath.transform.position, Quaternion.identity);
+                //float randomDecel = deceleration + Random.Range(-decelVariance, decelVariance);
+                firedShot.GetComponent<Projectile>().SetProjectileParameters(projectileSpeed, shotAngle, projectileDuration);
+            }
         }
         CancelAbility();
     }

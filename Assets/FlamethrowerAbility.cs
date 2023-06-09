@@ -49,16 +49,27 @@ public class FlamethrowerAbility : AbilityTemplate  //fire several pellets which
             if (timeUntilShot < 0 )
             {
                 timeUntilShot = timeBetweenShots;
-                GameObject firedShot;
-                if (PhotonNetwork.IsConnected) firedShot = PhotonNetwork.Instantiate(GoliathShot.name, parentGoliath.transform.position, Quaternion.identity);
-                else firedShot = Instantiate(GoliathShot, parentGoliath.transform.position + (Quaternion.AngleAxis(parentGoliath.transform.eulerAngles.z, Vector3.forward) * projectileOffset), Quaternion.identity);
                 int adjustedShotsFired = shotsFired;
                 if (adjustedShotsFired >= shotsPerSweep)
                 {
                     adjustedShotsFired = shotsPerSweep - (adjustedShotsFired - shotsPerSweep);  //results in firing in the opposite order of before
                 }
                 float shotAngle = parentGoliath.transform.eulerAngles.z + ((adjustedShotsFired - shotsPerSweep / 2) * spread);
-                firedShot.GetComponent<Projectile>().SetProjectileParameters(projectileSpeed, shotAngle, projectileDuration);
+
+                if (PhotonNetwork.IsConnected)
+                {
+                    object[] instantiationData = new object[3];
+                    instantiationData[0] = projectileSpeed;
+                    instantiationData[1] = shotAngle;
+                    instantiationData[2] = projectileDuration;
+                    PhotonNetwork.Instantiate(GoliathShot.name, parentGoliath.transform.position + (Quaternion.AngleAxis(parentGoliath.transform.eulerAngles.z, Vector3.forward) * projectileOffset), Quaternion.identity, 0, instantiationData);
+                }
+                else
+                {
+                    GameObject firedShot = Instantiate(GoliathShot, parentGoliath.transform.position + (Quaternion.AngleAxis(parentGoliath.transform.eulerAngles.z, Vector3.forward) * projectileOffset), Quaternion.identity);
+
+                    firedShot.GetComponent<Projectile>().SetProjectileParameters(projectileSpeed, shotAngle, projectileDuration);
+                }
                 shotsFired += 1;
                 if (shotsFired >= (shotsPerSweep * 2))
                 {

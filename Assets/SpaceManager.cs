@@ -64,6 +64,7 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
     // Start is called before the first frame update
     void Start()    //divide space up into several sectors, which are then broken up into smaller chunks which can each contain a max of 1 object
     {
+        SectorWall.UnlockSector.AddListener(ActivateSector);
         if (PhotonNetwork.IsConnected)
         {
             if (!PhotonNetwork.IsMasterClient)
@@ -152,7 +153,7 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
                 }
             }
         }
-        SectorWall.UnlockSector.AddListener(ActivateSector);
+        
         //set up edge of world
         for (int y = -1; y < worldSize + 1; y++)
         {
@@ -259,7 +260,11 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
             for (int y = 0; y < sectorDimensions; y++)
             {
                 GameObject chunkContents = sectorMap[x][y];
-                chunkContents.SetActive(true);   //enable any object not behind a barrier
+                
+                if (chunkContents != null)
+                {
+                    chunkContents.SetActive(true);   //enable any object not behind a barrier
+                }
             }
         }
     }
@@ -351,17 +356,20 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
         float planetYCoords = Random.Range(bottomChunkLimit, topChunkLimit);
         Vector3 planetCoords = new Vector3(planetXCoords + (sectorSize * sectorX), planetYCoords + (sectorSize * sectorY), 0);
         GameObject newPlanet;
+        int colorNumber = 0;
+        Color newPlanetColor = PickPlanetColor(ref colorNumber); ;
         if (PhotonNetwork.IsConnected)
         {
-            object[] instantiateParameters = new object[4];
+            object[] instantiateParameters = new object[5];
             instantiateParameters[0] = sectorX + (worldSize/2);
             instantiateParameters[1] = sectorY + (worldSize / 2);
             instantiateParameters[2] = chunkX;
             instantiateParameters[3] = chunkY;
+            instantiateParameters[4] = colorNumber;
             newPlanet = PhotonNetwork.Instantiate(planetTemplate.name, planetCoords, Quaternion.identity, 0, instantiateParameters);
         }
         else newPlanet = Instantiate(planetTemplate, planetCoords, Quaternion.identity);
-        newPlanet.GetComponent<SpriteRenderer>().color = PickPlanetColor();
+        newPlanet.GetComponent<SpriteRenderer>().color = newPlanetColor;
         sectorMap[chunkX][chunkY] = newPlanet;
     }
 
@@ -369,17 +377,39 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
     {
         Vector3 barrierCoords = new Vector3(sectorSize / 2 + (sectorSize * sectorX), sectorSize / 2 + (sectorSize * sectorY), 0);
         GameObject newBarrier;
-        if (PhotonNetwork.IsConnected) newBarrier = PhotonNetwork.Instantiate(barrier.name, barrierCoords, Quaternion.identity);
-        else newBarrier = Instantiate(barrier, barrierCoords, Quaternion.identity);
+        if (PhotonNetwork.IsConnected) {
+            object[] instantiationData = new object[2];
+            instantiationData[0] = sectorX;
+            instantiationData[1] = sectorY;
+            newBarrier = PhotonNetwork.Instantiate(barrier.name, barrierCoords, Quaternion.identity, 0, instantiationData); 
+        } else newBarrier = Instantiate(barrier, barrierCoords, Quaternion.identity);
         newBarrier.GetComponent<SectorWall>().SetParameters(sectorX, sectorY);
     }
 
-    Color PickPlanetColor()
+    Color PickPlanetColor(ref int colorNumber)
     {
-        int colorNumber = 0;
-        if (PhotonNetwork.IsConnected) { colorNumber = Random.Range(1, 6); }
-        else colorNumber = Random.Range(1, 6);
+        colorNumber = Random.Range(1, 6);
         switch (colorNumber) {
+            case 1:
+                return Color.blue;
+            case 2:
+                return Color.green;
+            case 3:
+                return Color.yellow;
+            case 4:
+                return new Color(156, 0, 255, 255);
+            case 5:
+                return Color.cyan;
+            case 6:
+                return Color.magenta;
+        }
+        return Color.white;
+    }
+
+    public static Color GetColor(int colorNumber) //user provides number to get color
+    {
+        switch (colorNumber)
+        {
             case 1:
                 return Color.blue;
             case 2:

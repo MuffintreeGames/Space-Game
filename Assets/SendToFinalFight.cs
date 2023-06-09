@@ -25,7 +25,6 @@ public class SendToFinalFight : MonoBehaviour
 
     public static void GoToFinalFight()
     {
-        goliath.transform.position = Vector3.zero;
         goliath.GetComponent<GoliathController>().ResetState();
         if (PhotonNetwork.IsConnected) PhotonNetwork.LoadLevel("FinalFight");
         else SceneManager.LoadSceneAsync(4);

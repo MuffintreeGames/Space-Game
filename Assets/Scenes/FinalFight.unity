@@ -894,7 +894,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7192721937990158954, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7192721937990158954, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: m_LocalScale.x
@@ -1048,7 +1048,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7192721937990158954, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7192721937990158954, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: m_LocalScale.x
@@ -2452,11 +2452,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 443782977}
   m_CullTransparentMesh: 1
---- !u!4 &462747098 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5125687541653416771, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-  m_PrefabInstance: {fileID: 1470606790}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &465480725
 GameObject:
   m_ObjectHideFlags: 0
@@ -4028,6 +4023,7 @@ GameObject:
   - component: {fileID: 916159652}
   - component: {fileID: 916159651}
   - component: {fileID: 916159650}
+  - component: {fileID: 916159653}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -4085,6 +4081,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &916159653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916159649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fd09e8a317d32f4ba464e307a94f1df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &943575057
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4182,7 +4190,7 @@ Transform:
   - {fileID: 400164726}
   - {fileID: 1530793821}
   m_Father: {fileID: 1497565863}
-  m_RootOrder: 8
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &971950199
 MonoBehaviour:
@@ -5278,6 +5286,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 06d3565506e90574abb67d2d05f79681, type: 3}
   displayName: Berserk
   numOfCopies: 0
+  ID: 0
   effectDuration: 6
   damageMultiplier: 2
 --- !u!114 &1148164979
@@ -5296,6 +5305,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 4f35f34c4c4f7b9418a75565f5eeab1d, type: 3}
   displayName: Bubble Shield
   numOfCopies: 0
+  ID: 0
   effectDuration: 4
   shield: {fileID: 1453649857}
 --- !u!114 &1148164980
@@ -5314,6 +5324,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 335b1dd03a408f1419cb4398e120a3c3, type: 3}
   displayName: Energy Barrier
   numOfCopies: 0
+  ID: 0
   effectDuration: 1.5
   shield: {fileID: 120234318}
 --- !u!114 &1148164981
@@ -5332,6 +5343,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 8025837bc2a2bd04cad9d62254c814da, type: 3}
   displayName: Burst Shard
   numOfCopies: 0
+  ID: 0
   baseProjectileSpeed: 5
   projectileDuration: 2
   baseProjectileDamage: 5
@@ -5355,6 +5367,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: af10dd29dd1d7574a9ee019b3f35b001, type: 3}
   displayName: Stab Flurry
   numOfCopies: 0
+  ID: 0
   minStabLength: 2
   maxStabLength: 5
 --- !u!114 &1148164983
@@ -5373,6 +5386,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: b37ea4813193ec140b76645199b562d7, type: 3}
   displayName: Frenzy Swing
   numOfCopies: 0
+  ID: 0
   swingTime: 0.1
 --- !u!114 &1148164984
 MonoBehaviour:
@@ -5390,6 +5404,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: aad9f1cb27a06f149bbd3db8a2a8c714, type: 3}
   displayName: Ram
   numOfCopies: 0
+  ID: 0
   dashSpeed: 25
   dashDuration: 0.4
   exitSpeed: 6
@@ -5411,6 +5426,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 227c147d40291d2438e5e6d21b277d28, type: 3}
   displayName: Spray Goo
   numOfCopies: 0
+  ID: 0
   baseProjectileSpeed: 15
   projectileDuration: 3
   baseProjectileDamage: 2
@@ -5436,6 +5452,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: aad9f1cb27a06f149bbd3db8a2a8c714, type: 3}
   displayName: Shed Skin
   numOfCopies: 0
+  ID: 0
   effectDuration: 4
   speedMultiplier: 2
   damageMultiplier: 1.2
@@ -5455,6 +5472,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 227c147d40291d2438e5e6d21b277d28, type: 3}
   displayName: Shot
   numOfCopies: 1
+  ID: 0
   baseProjectileSpeed: 20
   projectileDuration: 1.5
   baseProjectileDamage: 10
@@ -5476,6 +5494,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: aad9f1cb27a06f149bbd3db8a2a8c714, type: 3}
   displayName: Dash
   numOfCopies: 2
+  ID: 0
   dashSpeed: 25
   dashDuration: 0.4
   exitSpeed: 6
@@ -5533,6 +5552,7 @@ MonoBehaviour:
   damagableLayers:
     serializedVersion: 2
     m_Bits: 2105408
+  goliathPhoton: {fileID: 0}
 --- !u!212 &1148164992
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6655,7 +6675,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7192721937990158954, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7192721937990158954, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: m_LocalScale.x
@@ -7179,6 +7199,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1497565863}
     m_Modifications:
+    - target: {fileID: -3870835759722494029, guid: 87c93d704cc1f214baa6841ac3296958, type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 950341768418902669, guid: 87c93d704cc1f214baa6841ac3296958, type: 3}
       propertyPath: m_Name
       value: SectorWallWeak
@@ -7582,71 +7606,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1463818546}
   m_CullTransparentMesh: 1
---- !u!1001 &1470606790
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1497565863}
-    m_Modifications:
-    - target: {fileID: 4163616721154348905, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-      propertyPath: m_DrawMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 10000
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5125687541653416771, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6088609408505885020, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-      propertyPath: m_Name
-      value: AbilityPlanet
-      objectReference: {fileID: 0}
-    - target: {fileID: 9010290756549033354, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
-      propertyPath: sceneViewId
-      value: 99988
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 509077d00eedd4c4c91a2df57a79ed6a, type: 3}
 --- !u!1 &1483326383
 GameObject:
   m_ObjectHideFlags: 0
@@ -7896,11 +7855,10 @@ Transform:
   - {fileID: 1196576774}
   - {fileID: 1381718858}
   - {fileID: 1020538139}
-  - {fileID: 462747098}
+  - {fileID: 971950198}
   - {fileID: 1317244354}
   - {fileID: 1776160456}
   - {fileID: 2012016652}
-  - {fileID: 971950198}
   - {fileID: 209434632}
   - {fileID: 177108975}
   - {fileID: 1353945974}
@@ -8328,6 +8286,10 @@ PrefabInstance:
     - target: {fileID: 6088609408505885020, guid: 18cdc0d4eab3b0d42b5d636de93b6b6d, type: 3}
       propertyPath: m_Name
       value: ExplodingPlanet
+      objectReference: {fileID: 0}
+    - target: {fileID: 7705981857484438748, guid: 18cdc0d4eab3b0d42b5d636de93b6b6d, type: 3}
+      propertyPath: sceneViewId
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18cdc0d4eab3b0d42b5d636de93b6b6d, type: 3}
@@ -9441,7 +9403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7192721937990158954, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7192721937990158954, guid: f5633eb9715c71f419ad83be7be999b5, type: 3}
       propertyPath: m_LocalScale.x

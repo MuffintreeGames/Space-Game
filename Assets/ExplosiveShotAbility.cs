@@ -33,11 +33,20 @@ public class ExplosiveShotAbility : AbilityTemplate  //fire a projectile that do
         {
             return;
         }
-        GameObject firedShot;
-        if (PhotonNetwork.IsConnected) firedShot = PhotonNetwork.Instantiate(ExplosiveShot.name, parentGoliath.transform.position, Quaternion.identity);
-        else firedShot = Instantiate(ExplosiveShot, parentGoliath.transform.position, Quaternion.identity);
-        Debug.Log("checking shot damage: " + firedShot.GetComponent<AttackObject>().Damage);
-        firedShot.GetComponent<ExplosiveProjectile>().SetProjectileParameters(projectileSpeed, parentGoliath.transform.eulerAngles.z, projectileDuration);
+        if (PhotonNetwork.IsConnected)
+        {
+            object[] instantiationData = new object[3];
+            instantiationData[0] = projectileSpeed;
+            instantiationData[1] = parentGoliath.transform.eulerAngles.z;
+            instantiationData[2] = projectileDuration;
+            PhotonNetwork.Instantiate(ExplosiveShot.name, parentGoliath.transform.position, Quaternion.identity, 0, instantiationData);
+        }
+        else
+        {
+            GameObject firedShot = Instantiate(ExplosiveShot, parentGoliath.transform.position, Quaternion.identity);
+            Debug.Log("checking shot damage: " + firedShot.GetComponent<AttackObject>().Damage);
+            firedShot.GetComponent<ExplosiveProjectile>().SetProjectileParameters(projectileSpeed, parentGoliath.transform.eulerAngles.z, projectileDuration);
+        }
     }
 
     public override void UpgradeSelf(int goliathLevel)

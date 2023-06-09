@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class Projectile : MonoBehaviour, IPunInstantiateMagicCallback
 {
     public enum directionChoices
     {
@@ -29,6 +30,22 @@ public class Projectile : MonoBehaviour
         if (slowComponent == null)
         {
             Debug.LogError("Projectile object without a slowable component!");
+        }
+    }
+
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        object[] instantiationData = info.photonView.InstantiationData;
+        if (instantiationData == null) {
+            return;
+        }
+
+        if (instantiationData.Length == 5) {
+            SetProjectileParameters((float)instantiationData[0], (float)instantiationData[1], (float)instantiationData[2], (float)instantiationData[3], (bool)instantiationData[4]);
+        }
+        else
+        {
+            SetProjectileParameters((float)instantiationData[0], (float)instantiationData[1], (float)instantiationData[2]);
         }
     }
 
@@ -64,10 +81,18 @@ public class Projectile : MonoBehaviour
 
     public void SetProjectileParameters(float targetSpeed, float targetAngle, float targetTime, float acceleration = 0f, bool canStop = false)
     {
-        Speed = targetSpeed;
+        if (targetSpeed >= 0f)
+        {
+            Speed = targetSpeed;
+        }
+
         angle = targetAngle;
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, angle);
-        LifeTime = targetTime;
+
+        if (targetTime >= 0f)
+        {
+            LifeTime = targetTime;
+        }
         Acceleration = acceleration;
         CanStop = canStop;
     }

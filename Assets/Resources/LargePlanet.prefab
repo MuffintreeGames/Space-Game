@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 6465655314327632375}
   - component: {fileID: 7666982166918921685}
   - component: {fileID: 2425651100049730671}
-  - component: {fileID: 6196074430973727440}
+  - component: {fileID: 2842539254142272668}
   m_Layer: 8
   m_Name: LargePlanet
   m_TagString: Untagged
@@ -219,7 +219,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 6196074430973727440}
+  - {fileID: 2842539254142272668}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a1f1400fb5c1a419092fe9f406e4c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6196074430973727440
+--- !u!114 &2842539254142272668
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -26,6 +26,8 @@ public class PlanetScript : MonoBehaviour, IPunInstantiateMagicCallback //simple
         {
             Debug.Log("trying to set coordinates before world map is available!");
         }
+
+        this.GetComponent<SpriteRenderer>().color = SpaceManager.GetColor((int)instantiationData[4]);
     }
 
     void RegisterCoordinates()
@@ -34,7 +36,7 @@ public class PlanetScript : MonoBehaviour, IPunInstantiateMagicCallback //simple
         int sectorY = (int)instantiationData[1];
         int chunkX = (int)instantiationData[2];
         int chunkY = (int)instantiationData[3];
-        //Debug.Log("registering planet: " + (int)instantiationData[0] + "," + (int)instantiationData[1] + "," + (int)instantiationData[2] + "," + (int)instantiationData[3]);
+        Debug.Log("registering planet " + gameObject + ": " + (int)instantiationData[0] + "," + (int)instantiationData[1] + "," + (int)instantiationData[2] + "," + (int)instantiationData[3]);
         SpaceManager.WorldMap[sectorX][sectorY][chunkX][chunkY] = gameObject;
 
         if (SpaceManager.CoordsInStartingSector(sectorX, sectorY))

@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AimingArrow : MonoBehaviourPun
@@ -28,7 +29,7 @@ public class AimingArrow : MonoBehaviourPun
     {
         if (shootingObject)
         {
-            if (!aimedObject)
+            if (aimedObject == null)
             {
                 Destroy(gameObject);
             }
@@ -51,10 +52,7 @@ public class AimingArrow : MonoBehaviourPun
             }
         } else
         {
-            if (aimedObject != null)
-            {
-                targetDirection = mouseCoords - transform.position;
-            }
+            targetDirection = mouseCoords - transform.position;
         }
 
         float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
@@ -88,22 +86,37 @@ public class AimingArrow : MonoBehaviourPun
                 }
             } else
             {
-                GameObject firedShot;
-                if (PhotonNetwork.IsConnected) firedShot = PhotonNetwork.Instantiate(projectile.name, transform.position, Quaternion.identity);
-                else firedShot = Instantiate(projectile, transform.position, Quaternion.identity);
-                Projectile shotScript = firedShot.GetComponent<Projectile>();
-                shotScript.SetProjectileParameters(shotScript.Speed, targetRotation.eulerAngles.z, shotScript.LifeTime);
+                if (PhotonNetwork.IsConnected)
+                {
+                    object[] instantiationData = new object[3];
+                    instantiationData[0] = (float)-1;
+                    instantiationData[1] = targetRotation.eulerAngles.z;
+                    instantiationData[2] = (float)-1;
+                    PhotonNetwork.Instantiate(projectile.name, transform.position, Quaternion.identity, 0, instantiationData);
+                }
+                else
+                {
+                    GameObject firedShot = Instantiate(projectile, transform.position, Quaternion.identity);
+                    Projectile shotScript = firedShot.GetComponent<Projectile>();
+                    shotScript.SetProjectileParameters(shotScript.Speed, targetRotation.eulerAngles.z, shotScript.LifeTime);
+                }
             }
             
-            god.SetAbilityUsage(true);
-            HUDManager.UpdateGodAbilityHelpText.Invoke("");
+            //god.SetAbilityUsage(true);
+            //HUDManager.UpdateGodAbilityHelpText.Invoke("");
             Destroy(gameObject);
         }
         else if (Input.GetMouseButtonUp(1))
         {
-            god.SetAbilityUsage(true);
-            HUDManager.UpdateGodAbilityHelpText.Invoke("");
+            //god.SetAbilityUsage(true);
+            //HUDManager.UpdateGodAbilityHelpText.Invoke("");
             Destroy(gameObject);
         }
+    }
+
+    private void OnDestroy()
+    {
+        god.SetAbilityUsage(true);
+        HUDManager.UpdateGodAbilityHelpText.Invoke("");
     }
 }

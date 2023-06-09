@@ -41,12 +41,24 @@ public class PoisonSprayAbility : AbilityTemplate  //fire several pellets which 
         }
         for (int n = 0; n < projectileCount; n++)
         {
-            GameObject firedShot;
-            if (PhotonNetwork.IsConnected) firedShot = PhotonNetwork.Instantiate(GoliathShot.name, parentGoliath.transform.position, Quaternion.identity);
-            else firedShot = Instantiate(GoliathShot, parentGoliath.transform.position, Quaternion.identity);
             float shotAngle = parentGoliath.transform.eulerAngles.z + ((n - projectileCount / 2) * spread);
             float randomDecel = deceleration + Random.Range(-decelVariance, decelVariance);
-            firedShot.GetComponent<Projectile>().SetProjectileParameters(projectileSpeed, shotAngle, projectileDuration, -randomDecel, true);
+
+            if (PhotonNetwork.IsConnected)
+            {
+                object[] instantiationData = new object[5];
+                instantiationData[0] = projectileSpeed;
+                instantiationData[1] = shotAngle;
+                instantiationData[2] = projectileDuration;
+                instantiationData[3] = -randomDecel;
+                instantiationData[4] = true;
+                PhotonNetwork.Instantiate(GoliathShot.name, parentGoliath.transform.position, Quaternion.identity, 0, instantiationData);
+            }
+            else
+            {
+                GameObject firedShot = Instantiate(GoliathShot, parentGoliath.transform.position, Quaternion.identity);
+                firedShot.GetComponent<Projectile>().SetProjectileParameters(projectileSpeed, shotAngle, projectileDuration, -randomDecel, true);
+            }
         }
     }
 
@@ -55,5 +67,8 @@ public class PoisonSprayAbility : AbilityTemplate  //fire several pellets which 
         AttackObject attackScript = GoliathShot.GetComponent<AttackObject>();
         attackScript.Damage = baseProjectileDamage + (goliathLevel * damagePerLevel);
         attackScript.DamagedLayers = parentGoliath.damagableLayers;
+        projectileSpeed = baseProjectileSpeed + (1f * goliathLevel);
+        deceleration = baseDeceleration;
+        decelVariance = baseDecelVariance;
     }
 }

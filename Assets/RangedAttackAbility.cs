@@ -31,11 +31,19 @@ public class RangedAttackAbility : AbilityTemplate  //fire a projectile
         {
             return;
         }
-        GameObject firedShot;
-        if (PhotonNetwork.IsConnected) firedShot = PhotonNetwork.Instantiate(GoliathShot.name, parentGoliath.transform.position, Quaternion.identity);
-        else firedShot = Instantiate(GoliathShot, parentGoliath.transform.position, Quaternion.identity);
-        Debug.Log("checking shot damage: " + firedShot.GetComponent<AttackObject>().Damage);
-        firedShot.GetComponent<Projectile>().SetProjectileParameters(projectileSpeed, parentGoliath.transform.eulerAngles.z, projectileDuration);
+        if (PhotonNetwork.IsConnected)
+        {
+            object[] instantiationData = new object[3];
+            instantiationData[0] = projectileSpeed;
+            instantiationData[1] = parentGoliath.transform.eulerAngles.z;
+            instantiationData[2] = projectileDuration;
+            PhotonNetwork.Instantiate(GoliathShot.name, parentGoliath.transform.position, Quaternion.identity, 0, instantiationData);
+        }
+        else
+        {
+            GameObject firedShot = Instantiate(GoliathShot, parentGoliath.transform.position, Quaternion.identity);
+            firedShot.GetComponent<Projectile>().SetProjectileParameters(projectileSpeed, parentGoliath.transform.eulerAngles.z, projectileDuration);
+        }
     }
 
     public override void UpgradeSelf(int goliathLevel)
