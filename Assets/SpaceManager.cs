@@ -64,6 +64,8 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
     // Start is called before the first frame update
     void Start()    //divide space up into several sectors, which are then broken up into smaller chunks which can each contain a max of 1 object
     {
+        TimeManager.ResetTime();
+        bigBangSpawned = false;
         SectorWall.UnlockSector.AddListener(ActivateSector);
         if (PhotonNetwork.IsConnected)
         {

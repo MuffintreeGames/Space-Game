@@ -1174,10 +1174,10 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
         if (PhotonNetwork.IsConnected) GameManager.Instance.LeaveRoom();
         if (RoleManager.isGoliath)  //go to lose screen if goliath, otherwise go to win screen
         {
-            SceneManager.LoadSceneAsync(6);
+            SceneManager.LoadScene("LoseScreen");
         } else
         {
-            SceneManager.LoadSceneAsync(5);
+            SceneManager.LoadScene("WinScreen");
         }
     }
 

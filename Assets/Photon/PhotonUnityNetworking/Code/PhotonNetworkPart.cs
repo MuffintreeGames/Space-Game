@@ -428,7 +428,7 @@ namespace Photon.Pun
 
             if (PhotonNetwork.LogLevel >= PunLogLevel.Full)
             {
-                Debug.Log("Received RPC: " + inMethodName);
+                //Debug.Log("Received RPC: " + inMethodName);
             }
 
 
@@ -650,8 +650,8 @@ namespace Photon.Pun
                 else
                 {
                     // multiple components have the same method
-                    Debug.LogErrorFormat(context, "RPC method '{0}({2})' found {3}x on object with PhotonView {1}. Only one component should implement it." +
-                            "Return type must be void or IEnumerator (if you enable RunRpcCoroutines).", inMethodName, netViewID, argsString, foundMethods);
+                    //Debug.LogErrorFormat(context, "RPC method '{0}({2})' found {3}x on object with PhotonView {1}. Only one component should implement it." +
+                    //        "Return type must be void or IEnumerator (if you enable RunRpcCoroutines).", inMethodName, netViewID, argsString, foundMethods);
                 }
             }
         }

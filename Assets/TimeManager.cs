@@ -48,4 +48,9 @@ public class TimeManager : MonoBehaviour
             Time.timeScale = 0f;
         }
     }
+
+    public static void ResetTime()
+    {
+        timeElapsed = 0f;
+    }
 }

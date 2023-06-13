@@ -81,7 +81,8 @@ public class HUDManager : MonoBehaviourPun
     private Text expCurrentText;
 
     private float timeSinceHpChange = 0f;  
-    private float timeToChangeHp = 0.2f;   
+    private float timeToChangeHp = 0.2f;
+    private float currentHp = 0f;
     private float lastReadHpCount = 0f;
     private float lastReadMaxHpCount = 0f;
     private float oldHpScale = 0f;
@@ -419,7 +420,12 @@ public class HUDManager : MonoBehaviourPun
     }
     void Start()
     {
-        
+        if (RoleManager.isGoliath)
+        {
+            GameObject.Find("MpBar").SetActive(false);
+            GameObject.Find("GodAbilityBar").SetActive(false);
+            GameObject.Find("FreeCameraButton").SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -487,16 +493,33 @@ public class HUDManager : MonoBehaviourPun
 
     void UpdateHpBar()
     {
-        float currentHp;
-        float maxHp;
+        if (!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient)
+        {
+            float currentHp;
 
+            if (playerGoliath != null)
+            {
+                currentHp = playerGoliath.GetHealth();
+            }
+            else
+            {
+                currentHp = 0;
+            }
+            gameObject.GetComponent<PhotonView>().RPC("ReceiveHpBarUpdate", RpcTarget.All, currentHp);
+        }
+
+        ScaleHpBar();
+    }
+
+    void ScaleHpBar()
+    {
+        float maxHp;
         if (playerGoliath != null)
         {
-            currentHp = playerGoliath.GetHealth();
             maxHp = playerGoliath.GetMaxHealth();
-        } else
+        }
+        else
         {
-            currentHp = 0;
             maxHp = lastReadMaxHpCount;
         }
 
@@ -516,9 +539,10 @@ public class HUDManager : MonoBehaviourPun
 
         if (timeSinceHpChange < timeToChangeHp)
         {
-            hpScale = Mathf.Lerp(oldHpScale, hpPercentage, timeSinceHpChange / timeToChangeHp);            
+            hpScale = Mathf.Lerp(oldHpScale, hpPercentage, timeSinceHpChange / timeToChangeHp);
             timeSinceHpChange += Time.deltaTime;
-        } else
+        }
+        else
         {
             hpScale = hpPercentage;
         }
@@ -528,8 +552,19 @@ public class HUDManager : MonoBehaviourPun
         hpMaxText.text = maxHp.ToString("F0");
     }
 
+    [PunRPC]
+    public void ReceiveHpBarUpdate(float providedCurrentHp) //used so that master client can inform non-master client of what hp should be
+    {
+        currentHp = providedCurrentHp;
+    }
+
     void UpdateMpBar()
     {
+        if (PhotonNetwork.IsConnected && RoleManager.isGoliath)
+        {
+            return;
+        }
+
         float currentMp;
         float maxMp;
 
@@ -695,6 +730,11 @@ public class HUDManager : MonoBehaviourPun
 
     void UpdateGodAbilityBar()
     {
+        if (PhotonNetwork.IsConnected && RoleManager.isGoliath)
+        {
+            return;
+        }
+
         if (playerGod.Action1 != null)
         {
             godAbilityIcon1.enabled = true;

@@ -121,13 +121,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 335b45a523558b544b9419aa5b171c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 7
+  Damage: 3
   TargetLayers:
     serializedVersion: 2
     m_Bits: 73923520
   DamagedLayers:
     serializedVersion: 2
-    m_Bits: 69706176
+    m_Bits: 69214272
   DestroyOnHit: 1
   RepeatedDamage: 0
   OverTime: 0

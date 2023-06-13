@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -65,7 +66,16 @@ public class AttackObject : MonoBehaviour
             }
             if (DestroyOnHit)
             {
-                Destroy(this.gameObject);
+                if (PhotonNetwork.IsConnected)
+                {
+                    if (PhotonNetwork.IsMasterClient)
+                    {
+                        PhotonNetwork.Destroy(gameObject);
+                    }
+                } else
+                {
+                    Destroy(this.gameObject);
+                }
             }
         }
     }
@@ -115,7 +125,17 @@ public class AttackObject : MonoBehaviour
             }
             if (DestroyOnHit)
             {
-                Destroy(this.gameObject);
+                if (PhotonNetwork.IsConnected)
+                {
+                    if (PhotonNetwork.IsMasterClient)
+                    {
+                        PhotonNetwork.Destroy(gameObject);
+                    }
+                }
+                else
+                {
+                    Destroy(this.gameObject);
+                }
             }
         }
     }
