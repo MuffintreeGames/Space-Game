@@ -3097,7 +3097,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e079f85608fe97c44a8f5b0c893231dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goliathTarget: {fileID: 1445052267}
+  goliathTarget: {fileID: 2066654982}
   freeTarget: {fileID: 519420032}
   smoothSpeed: 0.01
   freeCameraSpeed: 12
