@@ -100,7 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2361b88bacddfb941a4cc38c09fff1ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GrowthRate: 0.7
+  BaseGrowthRate: 0.7
+  Acceleration: 0.0001
 --- !u!114 &116952493038145958
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -105,7 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 14
-  LifeTime: 0.5
+  LifeTime: 2.5
   direction: 0
   Acceleration: 0
   CanStop: 0

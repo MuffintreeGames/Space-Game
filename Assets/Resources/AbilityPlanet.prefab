@@ -89,7 +89,6 @@ GameObject:
   - component: {fileID: 4208081899312209058}
   - component: {fileID: 5058544344452411807}
   - component: {fileID: 1601247718672788740}
-  - component: {fileID: 4422917790989804597}
   - component: {fileID: 1959794554611402597}
   - component: {fileID: -9074586135957924855}
   - component: {fileID: 5453980076893931339}
@@ -231,19 +230,6 @@ MonoBehaviour:
   blockableHits: 0
   SpawnedOnDeath: {fileID: 0}
   SpawnedOnGoliathKill: {fileID: 0}
---- !u!114 &4422917790989804597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6088609408505885020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d137e40825b70c41808026f0c02b084, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ExpAmount: 50
 --- !u!114 &1959794554611402597
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -187,6 +187,7 @@ public class Killable : MonoBehaviourPun
     [PunRPC]
     void Killed(bool fromGoliath)
     {
+        Debug.Log("calling killed via RPC for " + gameObject);
         if (fromGoliath && expScript != null)
         {
             expScript.KilledByGoliath();    //used to grant exp to the goliath if killed by something controlled by the goliath

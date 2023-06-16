@@ -35,4 +35,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoadingScreen.unity
     guid: e27413ffaff8a654290a080b7f297781
+  - enabled: 1
+    path: Assets/Scenes/DisconnectedScreen.unity
+    guid: e02042d4d2148d943aebc0ba308f758a
+  - enabled: 1
+    path: Assets/Scenes/SelfDisconnectScreen.unity
+    guid: 6246db5ee5ab9514bb4047d0a53d9475
   m_configObjects: {}

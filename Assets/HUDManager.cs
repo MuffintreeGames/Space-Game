@@ -26,15 +26,19 @@ public class HUDManager : MonoBehaviourPun
     private Image abilityIcon1;
     private Text abilityTimer1;
     private Text abilityName1;
+    private Image abilityOverlay1;
     private Image abilityIcon2;
     private Text abilityTimer2;
     private Text abilityName2;
+    private Image abilityOverlay2;
     private Image abilityIcon3;
     private Text abilityTimer3;
     private Text abilityName3;
+    private Image abilityOverlay3;
     private Image abilityIcon4;
     private Text abilityTimer4;
     private Text abilityName4;
+    private Image abilityOverlay4;
 
     private Image godAbilityIcon1;
     private Text godAbilityTimer1;
@@ -95,6 +99,11 @@ public class HUDManager : MonoBehaviourPun
     private float lastReadMpCount = 0f;
     private float mpCountBeforeSpending = 0f;   //mp value before it was spent on an ability
     private float oldMpScale = 1f;
+
+    private float flashCycleTime = 1.5f;
+    private float pointInFlashCycle = 0f;
+    private float abilityOverlayTransparency = 137f;
+    private float percentageTransparency;
     // Start is called before the first frame update
 
     private void Awake()
@@ -168,6 +177,12 @@ public class HUDManager : MonoBehaviourPun
             Debug.LogError("Couldn't find ability name 1!");
         }
 
+        abilityOverlay1 = GameObject.Find("Ability1Overlay").GetComponent<Image>();
+        if (!abilityOverlay1)
+        {
+            Debug.LogError("Couldn't find ability overlay 1!");
+        }
+
         abilityIcon2 = GameObject.Find("Ability2Icon").GetComponent<Image>();
         if (!abilityIcon2)
         {
@@ -184,6 +199,12 @@ public class HUDManager : MonoBehaviourPun
         if (!abilityName2)
         {
             Debug.LogError("Couldn't find ability name 2!");
+        }
+
+        abilityOverlay2 = GameObject.Find("Ability2Overlay").GetComponent<Image>();
+        if (!abilityOverlay2)
+        {
+            Debug.LogError("Couldn't find ability overlay 2!");
         }
 
         abilityIcon3 = GameObject.Find("Ability3Icon").GetComponent<Image>();
@@ -204,6 +225,12 @@ public class HUDManager : MonoBehaviourPun
             Debug.LogError("Couldn't find ability name 3!");
         }
 
+        abilityOverlay3 = GameObject.Find("Ability3Overlay").GetComponent<Image>();
+        if (!abilityOverlay3)
+        {
+            Debug.LogError("Couldn't find ability overlay 3!");
+        }
+
         abilityIcon4 = GameObject.Find("Ability4Icon").GetComponent<Image>();
         if (!abilityIcon4)
         {
@@ -220,6 +247,12 @@ public class HUDManager : MonoBehaviourPun
         if (!abilityName4)
         {
             Debug.LogError("Couldn't find ability name 4!");
+        }
+
+        abilityOverlay4 = GameObject.Find("Ability4Overlay").GetComponent<Image>();
+        if (!abilityOverlay4)
+        {
+            Debug.LogError("Couldn't find ability overlay 4!");
         }
 
         newIcon = GameObject.Find("NewIcon").GetComponent<Image>();
@@ -425,7 +458,12 @@ public class HUDManager : MonoBehaviourPun
             GameObject.Find("MpBar").SetActive(false);
             GameObject.Find("GodAbilityBar").SetActive(false);
             GameObject.Find("FreeCameraButton").SetActive(false);
+        } else
+        {
+            abilitySelectionDisplay.SetActive(false);
         }
+
+        percentageTransparency = abilityOverlayTransparency / 255f;
     }
 
     // Update is called once per frame
@@ -628,11 +666,20 @@ public class HUDManager : MonoBehaviourPun
                 abilityIcon1.color = Color.white;
                 abilityTimer1.text = "";
             }
+
+            if (playerGoliath.Action1.numOfCopies > 1)
+            {
+                abilityOverlay1.enabled = true;
+            } else
+            {
+                abilityOverlay1.enabled = false;
+            }
         } else
         {
             abilityIcon1.enabled = false;
             abilityTimer1.enabled = false;
             abilityName1.enabled = false;
+            abilityOverlay1.enabled = false;
         }
 
         if (playerGoliath.Action2 != null)
@@ -653,12 +700,22 @@ public class HUDManager : MonoBehaviourPun
                 abilityIcon2.color = Color.white;
                 abilityTimer2.text = "";
             }
+
+            if (playerGoliath.Action2.numOfCopies > 1)
+            {
+                abilityOverlay2.enabled = true;
+            }
+            else
+            {
+                abilityOverlay2.enabled = false;
+            }
         }
         else
         {
             abilityIcon2.enabled = false;
             abilityTimer2.enabled = false;
             abilityName2.enabled = false;
+            abilityOverlay2.enabled = false;
         }
 
         if (playerGoliath.Action3 != null)
@@ -679,11 +736,21 @@ public class HUDManager : MonoBehaviourPun
                 abilityIcon3.color = Color.white;
                 abilityTimer3.text = "";
             }
+
+            if (playerGoliath.Action3.numOfCopies > 1)
+            {
+                abilityOverlay3.enabled = true;
+            }
+            else
+            {
+                abilityOverlay3.enabled = false;
+            }
         } else
         {
             abilityIcon3.enabled = false;
             abilityTimer3.enabled = false;
             abilityName3.enabled = false;
+            abilityOverlay3.enabled = false;
         }
 
         if (playerGoliath.Action4 != null)
@@ -704,11 +771,26 @@ public class HUDManager : MonoBehaviourPun
                 abilityIcon4.color = Color.white;
                 abilityTimer4.text = "";
             }
+
+            if (playerGoliath.Action4.numOfCopies > 1)
+            {
+                abilityOverlay4.enabled = true;
+            }
+            else
+            {
+                abilityOverlay4.enabled = false;
+            }
         } else
         {
             abilityIcon4.enabled = false;
             abilityTimer4.enabled = false;
             abilityName4.enabled = false;
+            abilityOverlay4.enabled = false;
+        }
+
+        if (PhotonNetwork.IsConnected && !RoleManager.isGoliath)
+        {
+            return;
         }
 
         if (playerGoliath.InAbilitySelection()) {
@@ -719,12 +801,49 @@ public class HUDManager : MonoBehaviourPun
             } else
             {
                 newIcon.sprite = newAbility.icon;
+
+                float percentageTransparency = abilityOverlayTransparency / 255f;
+                float currentTransparency = percentageTransparency - (percentageTransparency * 2 * Mathf.Abs(pointInFlashCycle - (flashCycleTime / 2)));
+                if (playerGoliath.Action1.numOfCopies == 1 && playerGoliath.Action1 == newAbility)
+                {
+                    Debug.Log("duplicate found on action 1");
+                    abilityOverlay1.enabled = true;
+                    abilityOverlay1.color = new Color(abilityOverlay1.color.r, abilityOverlay1.color.g, abilityOverlay1.color.b, currentTransparency);
+                } else if (playerGoliath.Action2.numOfCopies == 1 && playerGoliath.Action2 == newAbility)
+                {
+                    Debug.Log("duplicate found on action 2");
+                    abilityOverlay2.enabled = true;
+                    abilityOverlay2.color = new Color(abilityOverlay2.color.r, abilityOverlay2.color.g, abilityOverlay2.color.b, currentTransparency);
+                    Debug.LogError("current overlay color: " + abilityOverlay1.color);
+                }
+                else if (playerGoliath.Action3.numOfCopies == 1 && playerGoliath.Action3 == newAbility)
+                {
+                    Debug.Log("duplicate found on action 3");
+                    abilityOverlay3.enabled = true;
+                    abilityOverlay3.color = new Color(abilityOverlay3.color.r, abilityOverlay3.color.g, abilityOverlay3.color.b, currentTransparency);
+                }
+                else if (playerGoliath.Action4.numOfCopies == 1 && playerGoliath.Action4 == newAbility)
+                {
+                    Debug.Log("duplicate found on action 4");
+                    abilityOverlay4.enabled = true;
+                    abilityOverlay4.color = new Color(abilityOverlay4.color.r, abilityOverlay4.color.g, abilityOverlay4.color.b, currentTransparency);
+                }
+                pointInFlashCycle += Time.deltaTime;
+                if (pointInFlashCycle > flashCycleTime)
+                {
+                    pointInFlashCycle -= flashCycleTime;
+                }
             }
 
             abilitySelectionDisplay.SetActive(true);
         } else
         {
             abilitySelectionDisplay.SetActive(false);
+            pointInFlashCycle = 0f;
+            abilityOverlay1.color = new Color(abilityOverlay1.color.r, abilityOverlay1.color.g, abilityOverlay1.color.b, percentageTransparency);
+            abilityOverlay2.color = new Color(abilityOverlay2.color.r, abilityOverlay2.color.g, abilityOverlay2.color.b, percentageTransparency);
+            abilityOverlay3.color = new Color(abilityOverlay3.color.r, abilityOverlay3.color.g, abilityOverlay3.color.b, percentageTransparency);
+            abilityOverlay4.color = new Color(abilityOverlay4.color.r, abilityOverlay4.color.g, abilityOverlay4.color.b, percentageTransparency);
         }
     }
 

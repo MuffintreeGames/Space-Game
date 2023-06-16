@@ -2632,8 +2632,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e079f85608fe97c44a8f5b0c893231dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1148164975}
+  goliathTarget: {fileID: 0}
+  freeTarget: {fileID: 0}
   smoothSpeed: 0.01
+  freeCameraSpeed: 800
   smoothFollowHorDistance: 7
   hardFollowHorDistance: 8
   smoothFollowVertDistance: 3
@@ -7613,6 +7615,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1196733939491324808, guid: fe1f381faf639a7498f89bc4ff175c62, type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3599689867015913228, guid: fe1f381faf639a7498f89bc4ff175c62, type: 3}
       propertyPath: m_Name
       value: GodAvatar

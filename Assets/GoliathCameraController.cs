@@ -38,6 +38,10 @@ public class GoliathCameraController : MonoBehaviour
     public void Update()
     {
         updateCamera();
+        if (!RoleManager.isGoliath && Input.GetButtonDown("ToggleCamera"))
+        {
+            ToggleFollowMode();
+        }
     }
 
     public void updateCamera()
@@ -114,6 +118,11 @@ public class GoliathCameraController : MonoBehaviour
 
     public void ToggleFollowMode()
     {
+        if (RoleManager.isGoliath)
+        {
+            return;
+        }
+
         if (freeCameraMode)
         {
             freeCameraMode = false;

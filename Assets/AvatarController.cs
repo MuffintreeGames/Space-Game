@@ -52,7 +52,7 @@ public class AvatarController : Killable    //script to manage AI for god avatar
     {
         avatarRb = GetComponent<Rigidbody2D>();
         goliathRb = GameObject.Find("Goliath").GetComponent<Rigidbody2D>();
-        assumedGoliathPosition = goliathRb.position;
+        assumedGoliathPosition = Vector2.zero;
         base.Start();
         //targetPosition = new Vector2(goliathRb.position.x, goliathRb.position.y + circlingDistance);
     }
@@ -60,6 +60,11 @@ public class AvatarController : Killable    //script to manage AI for god avatar
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (PhotonNetwork.IsConnected && !RoleManager.isGoliath)
+        {
+            return;
+        }
+
         CalculateGoliathPosition();
         bool movementDone = false;
         if (damageTakenInPattern >= damageLimit)    //took too much damage in current pattern; swapping
@@ -381,14 +386,31 @@ public class AvatarController : Killable    //script to manage AI for god avatar
 
     private void OnDestroy()
     {
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (sceneIndex != 1 && sceneIndex != 4)    //not in game anymore. Update this if any extra scenes get added to the main game
+        {
+            return;
+        }
+
         if (PhotonNetwork.IsConnected) GameManager.Instance.LeaveRoom();
         if (RoleManager.isGoliath)  //go to win screen if goliath, otherwise go to lose screen
         {
-            SceneManager.LoadSceneAsync(5);
+            SceneManager.LoadScene("WinScreen");
         }
         else
         {
-            SceneManager.LoadSceneAsync(6);
+            SceneManager.LoadScene("LoseScreen");
+        }
+    }
+
+    [PunRPC]
+    void Killed(bool fromGoliath)   //this is on Killable too, but needs to be separately implemented here to work properly
+    {
+        Debug.Log("calling killed via RPC for " + gameObject);
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.Destroy(PhotonView.Get(this));
         }
     }
 }

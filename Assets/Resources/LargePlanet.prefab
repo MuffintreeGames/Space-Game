@@ -178,10 +178,10 @@ MonoBehaviour:
   Damage: 0
   TargetLayers:
     serializedVersion: 2
-    m_Bits: 1088
+    m_Bits: 1024
   DamagedLayers:
     serializedVersion: 2
-    m_Bits: 1088
+    m_Bits: 1024
   DestroyOnHit: 0
   RepeatedDamage: 0
   OverTime: 0
