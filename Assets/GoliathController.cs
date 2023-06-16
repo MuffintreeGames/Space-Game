@@ -82,7 +82,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
     private float currentGrappleTime;
 
     private int currentExp = 0; //current exp of the goliath
-    private int neededExp = 70;    //needed exp to level up; initial value is amount needed to reach level 2
+    private int neededExp = 100;    //needed exp to level up; initial value is amount needed to reach level 2
 
     private int level3Exp = 300;    //exp to reach level 3
     private int level4Exp = 700;    //exp to reach level 4
@@ -824,6 +824,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
                 goliathTransform.localScale = new Vector3(2f, 2f, 1f) * currentSizeMultiplier;
                 goliathArmScript.Damage = 15;
                 damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
+                damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
                 tongueDamage = 40;
                 break;
             case 3:
@@ -831,7 +832,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
                 goliathTransform.localScale = new Vector3(3f, 3f, 1f) * currentSizeMultiplier;
                 goliathArmScript.Damage = 20;
                 damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
-                damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
+                damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
                 tongueDamage = 60;
                 break;
             case 4:
@@ -839,7 +840,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
                 goliathTransform.localScale = new Vector3(4f, 4f, 1f) * currentSizeMultiplier;
                 goliathArmScript.Damage = 25;
                 damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
-                damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
+                damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
                 tongueDamage = 80;
                 break;
             case 5:
@@ -847,7 +848,6 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
                 currentExp = -1;
                 goliathTransform.localScale = new Vector3(5f, 5f, 1f) * currentSizeMultiplier;
                 goliathArmScript.Damage = 30;
-                damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
                 tongueDamage = 100;
                 break;
         }
