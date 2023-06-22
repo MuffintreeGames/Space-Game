@@ -10,6 +10,11 @@ public class ExplosiveProjectile : Projectile {     //like a normal projectile, 
 
     protected override void ProjectileExpire()
     {
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+
         if (PhotonNetwork.IsConnected) PhotonNetwork.Instantiate(Explosion.name, transform.position, Quaternion.identity);
         else Instantiate(Explosion, transform.position, Quaternion.identity);
         Destroy(this.gameObject);

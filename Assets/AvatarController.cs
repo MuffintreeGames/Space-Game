@@ -2,6 +2,7 @@ using Online;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,6 +17,12 @@ public class AvatarController : Killable    //script to manage AI for god avatar
     private int previousMovementPattern = 10;
     private float damageTakenInPattern = 0f;
     private float damageLimit = 100f;
+
+    private float timeBetweenAttacks = 5f;
+    private float timeUntilAttack = 5f;
+    private int currentAttackPattern = -1;  //-1 means unset, 0 = circle attack, 1 = aimed laser, 2 = random circles, 3 = donut
+    private int previousAttackPattern = 10;
+    private float explosionRange = 20f; //maximum range at which avatar will perform explosion
 
     private float maxSpeed = 13f;
     private float minSpeed = 5f;
@@ -47,6 +54,9 @@ public class AvatarController : Killable    //script to manage AI for god avatar
     private float hideDistance = 30f;
     private float hideVariance = 5f;
     private float hideTime = 20f;
+
+    public GameObject Explosion;
+    public GameObject Cyclone;
     // Start is called before the first frame update
     new void Start()
     {
@@ -87,14 +97,34 @@ public class AvatarController : Killable    //script to manage AI for god avatar
                     PerformMovementPatternFlee(); ApplyMovement();  movementDone = true; break;
             }
         }
+        if (timeUntilAttack <= 0f)
+        {
+            SelectAttackPattern();
+            switch (currentAttackPattern)
+            {
+                case 0:
+                    PerformExplosionAttack();
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    PerformCycloneAttack();
+                    break;
+            }
+        } else
+        {
+            timeUntilAttack -= Time.deltaTime;
+        }
     }
 
     private void SelectMovementPattern()    //pick one of the 4 movement patterns, excluding the last one chosen
     {
-        currentMovementPattern = Random.Range(0, 1);
+        currentMovementPattern = Random.Range(0, 3);
         if (currentMovementPattern >= previousMovementPattern)
         {
-            //currentMovementPattern += 1;
+            currentMovementPattern += 1;
             if (currentMovementPattern > 3)
             {
                 currentMovementPattern = 0;
@@ -104,7 +134,48 @@ public class AvatarController : Killable    //script to manage AI for god avatar
         damageTakenInPattern = 0f;
         patternRunTime = 0f;
         targetPositionInitialized = false;
-        Debug.Log("chosen: " + currentMovementPattern);
+        Debug.Log("chosen movement: " + currentMovementPattern);
+    }
+
+    private void SelectAttackPattern()    //pick one of the 4 attack patterns, excluding the last one chosen. Only do circle if goliath is close, only do donut if goliath is far
+    {
+        if (Mathf.Abs(goliathRb.position.x - avatarRb.position.x) < explosionRange && Mathf.Abs(goliathRb.position.y - avatarRb.position.y) < explosionRange)
+        {
+            currentAttackPattern = 0;
+        } else
+        {
+            currentAttackPattern = 3;
+        }
+        /*currentAttackPattern = Random.Range(0, 3);
+        if (currentAttackPattern >= previousAttackPattern)
+        {
+            currentAttackPattern += 1;
+            if (currentAttackPattern > 3)
+            {
+                currentAttackPattern = 0;
+            }
+        }*/
+        previousAttackPattern = currentAttackPattern;
+        timeUntilAttack = timeBetweenAttacks;
+        Debug.Log("chosen attack: " + currentAttackPattern);
+    }
+
+    private void PerformExplosionAttack()
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            if (PhotonNetwork.IsConnected) PhotonNetwork.Instantiate(Explosion.name, transform.position, Quaternion.identity);
+            else Instantiate(Explosion, transform.position, Quaternion.identity);
+        }
+    }
+
+    private void PerformCycloneAttack()
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            if (PhotonNetwork.IsConnected) PhotonNetwork.Instantiate(Cyclone.name, transform.position, Quaternion.identity);
+            else Instantiate(Cyclone, transform.position, Quaternion.identity);
+        }
     }
 
     void CalculateGoliathPosition()

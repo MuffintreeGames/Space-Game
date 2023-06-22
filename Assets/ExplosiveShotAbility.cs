@@ -40,6 +40,7 @@ public class ExplosiveShotAbility : AbilityTemplate  //fire a projectile that do
             instantiationData[1] = parentGoliath.transform.eulerAngles.z;
             instantiationData[2] = projectileDuration;
             PhotonNetwork.Instantiate(ExplosiveShot.name, parentGoliath.transform.position, Quaternion.identity, 0, instantiationData);
+            return;
         }
         else
         {
