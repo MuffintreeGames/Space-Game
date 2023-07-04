@@ -104,6 +104,12 @@ public class Killable : MonoBehaviourPun
         currentHealth += amount;
     }
 
+    public void Heal(float amount)
+    {
+        currentHealth += amount;
+        currentHealth = Mathf.Min(currentHealth, MaxHealth);
+    }
+
     public virtual bool TakeDamage(float damage, bool fromGoliath, float invincibilityDuration) //returns true if damage was taken, false otherwise
     {
         Debug.Log("base killable");
@@ -198,7 +204,7 @@ public class Killable : MonoBehaviourPun
             abilityScript.KilledByGoliath();    //used to grant ability to the goliath if killed by something controlled by the goliath. Note that objects that grant abilities shouldn't be killable by non-goliath things
         }
 
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonView.Get(this).AmOwner)
         {
             PhotonNetwork.Destroy(PhotonView.Get(this));
         }

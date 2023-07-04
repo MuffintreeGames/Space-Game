@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ExitGames.Client.Photon;
+using System.Runtime.CompilerServices;
 
 public struct SectorCoordinates
 {
@@ -25,6 +26,10 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
     public GameObject LargePlanet;
     public GameObject MassivePlanet;
     public GameObject AbilityPlanet;
+    public GameObject Sun;
+    public GameObject BlackHole;
+    public GameObject ExplosivePlanet;
+    public GameObject MonsterEgg;
 
     public GameObject Level1Barrier;
     public GameObject Level2Barrier;
@@ -139,19 +144,19 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
                 int totalDistance = distanceX + distanceY;
                 if (totalDistance <= 2) //starting sectors
                 {
-                    WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, null);
+                    WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, null, 0, 1, 0, 1, 0, 2, 0, 0);
                 }
                 else if (totalDistance <= 3)
                 {
-                    WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, Level1Barrier);
+                    WorldMap[x][y] = BuildSector(15, 20, 10, 13, 1, 2, sectorX, sectorY, x, y, Level1Barrier, 0, 2, 0, 2, 0, 2, 0, 1);
                 }
                 else if (totalDistance <= 5)
                 {
-                    WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, Level2Barrier);
+                    WorldMap[x][y] = BuildSector(20, 25, 13, 16, 2, 3, sectorX, sectorY, x, y, Level2Barrier, 1, 2, 1, 2, 1, 2, 0, 2);
                 }
                 else
                 {
-                    WorldMap[x][y] = BuildSector(10, 15, 7, 10, 0, 0, sectorX, sectorY, x, y, Level3Barrier);
+                    WorldMap[x][y] = BuildSector(25, 28, 16, 19, 3, 5, sectorX, sectorY, x, y, Level3Barrier, 1, 3, 1, 3, 1, 3, 1, 2);
                 }
             }
         }
@@ -214,7 +219,7 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
         else Instantiate(EdgeOfWorld, teleCoords, Quaternion.identity);
     }
 
-    GameObject[][] BuildSector(int MediumMin, int MediumMax, int LargeMin, int LargeMax, int MassiveMin, int MassiveMax, int sectorX, int sectorY, int arrayX, int arrayY, GameObject barrier)
+    GameObject[][] BuildSector(int MediumMin, int MediumMax, int LargeMin, int LargeMax, int MassiveMin, int MassiveMax, int sectorX, int sectorY, int arrayX, int arrayY, GameObject barrier, int SunMin, int SunMax, int BlackMin, int BlackMax, int ExplodeMin, int ExplodeMax, int EggMin, int EggMax)
     {
         GameObject[][] sectorMap = new GameObject[sectorDimensions][];
         for (int x = 0; x < sectorDimensions; x++)
@@ -227,6 +232,10 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
         SpawnRandomPlanets(MediumMin, MediumMax, MediumPlanet, sectorMap, sectorX, sectorY);
         SpawnRandomPlanets(LargeMin, LargeMax, LargePlanet, sectorMap, sectorX, sectorY);
         SpawnRandomPlanets(MassiveMin, MassiveMax, MassivePlanet, sectorMap, sectorX, sectorY);
+        SpawnRandomPlanets(SunMin, SunMax, Sun, sectorMap, sectorX, sectorY, true);
+        SpawnRandomPlanets(BlackMin, BlackMax, BlackHole, sectorMap, sectorX, sectorY, true);
+        SpawnRandomPlanets(ExplodeMin, ExplodeMax, ExplosivePlanet, sectorMap, sectorX, sectorY);
+        SpawnRandomPlanets(EggMin, EggMax, MonsterEgg, sectorMap, sectorX, sectorY);
 
         for (int x = 0; x < sectorDimensions; x++)
         {
@@ -305,7 +314,7 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
         return chosenAbility;
     }
 
-    void SpawnRandomPlanets(int min, int max, GameObject planetTemplate, GameObject[][] sectorMap, int sectorX, int sectorY)
+    void SpawnRandomPlanets(int min, int max, GameObject planetTemplate, GameObject[][] sectorMap, int sectorX, int sectorY, bool special = false)
     {
         int finalNumber = Random.Range(min, max);
         CircleCollider2D templateCollider = planetTemplate.GetComponent<CircleCollider2D>();
@@ -318,7 +327,7 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
                 int randY = Random.Range(0, sectorDimensions - 1);
                 if (sectorMap[randX][randY] == null)
                 {
-                    PlacePlanetInChunk(randX, randY, planetTemplate, templateCollider, sectorMap, sectorX, sectorY);
+                    PlacePlanetInChunk(randX, randY, planetTemplate, templateCollider, sectorMap, sectorX, sectorY, special);
                     planetPlaced = true;
                 } else {
                     attempts += 1;
@@ -338,7 +347,7 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
                             }
                             if (sectorMap[randX][randY] == null)
                             {
-                                PlacePlanetInChunk(randX, randY, planetTemplate, templateCollider, sectorMap, sectorX, sectorY);
+                                PlacePlanetInChunk(randX, randY, planetTemplate, templateCollider, sectorMap, sectorX, sectorY, special);
                                 planetPlaced = true;
                             }
                         }
@@ -347,7 +356,7 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
             }
         }
     }
-    void PlacePlanetInChunk(int chunkX, int chunkY, GameObject planetTemplate, CircleCollider2D templateCollider, GameObject[][] sectorMap, int sectorX, int sectorY)
+    void PlacePlanetInChunk(int chunkX, int chunkY, GameObject planetTemplate, CircleCollider2D templateCollider, GameObject[][] sectorMap, int sectorX, int sectorY, bool special = false)
     {
         float planetRadius = templateCollider.radius * planetTemplate.transform.localScale.x;
         float leftChunkLimit = (chunkX * chunkSize) + planetRadius;   //get coords for furthest left possible place we could put planet in chunk
@@ -362,16 +371,30 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
         Color newPlanetColor = PickPlanetColor(ref colorNumber); ;
         if (PhotonNetwork.IsConnected)
         {
-            object[] instantiateParameters = new object[5];
-            instantiateParameters[0] = sectorX + (worldSize/2);
+            object[] instantiateParameters;
+            if (!special)
+            {
+                instantiateParameters = new object[5];
+            }
+            else
+            {
+                instantiateParameters = new object[4];
+            }
+            instantiateParameters[0] = sectorX + (worldSize / 2);
             instantiateParameters[1] = sectorY + (worldSize / 2);
             instantiateParameters[2] = chunkX;
             instantiateParameters[3] = chunkY;
-            instantiateParameters[4] = colorNumber;
+            if (!special)
+            {
+                instantiateParameters[4] = colorNumber;
+            }
             newPlanet = PhotonNetwork.Instantiate(planetTemplate.name, planetCoords, Quaternion.identity, 0, instantiateParameters);
         }
         else newPlanet = Instantiate(planetTemplate, planetCoords, Quaternion.identity);
-        newPlanet.GetComponent<SpriteRenderer>().color = newPlanetColor;
+        if (!special)
+        {
+            newPlanet.GetComponent<SpriteRenderer>().color = newPlanetColor;
+        }
         sectorMap[chunkX][chunkY] = newPlanet;
     }
 

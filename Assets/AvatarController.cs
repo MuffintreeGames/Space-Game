@@ -4,7 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+
+public class AvatarFinishAttackEvent : UnityEvent<bool>
+{
+
+}
 
 public class AvatarController : Killable    //script to manage AI for god avatar
 {
@@ -55,21 +61,37 @@ public class AvatarController : Killable    //script to manage AI for god avatar
     private float hideVariance = 5f;
     private float hideTime = 20f;
 
+    private bool currentlyAttacking = false;    //used to indicate when avatar is mid-attack, to prevent/modify certain movement behaviours
+    public static AvatarFinishAttackEvent AvatarFinishAttack;
+
     public GameObject Explosion;
     public GameObject Cyclone;
+    public GameObject LaserAiming;
     // Start is called before the first frame update
     new void Start()
     {
         avatarRb = GetComponent<Rigidbody2D>();
         goliathRb = GameObject.Find("Goliath").GetComponent<Rigidbody2D>();
         assumedGoliathPosition = Vector2.zero;
+        currentlyAttacking = false;
+        AvatarFinishAttack = new AvatarFinishAttackEvent();
+        AvatarFinishAttack.AddListener(StopAttacking);
+        
+        
         base.Start();
         //targetPosition = new Vector2(goliathRb.position.x, goliathRb.position.y + circlingDistance);
     }
 
+    bool blockLaserSet = false;
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (!blockLaserSet && BlockableAvatarLaser.AvatarLaserBlocked != null)
+        {
+            BlockableAvatarLaser.AvatarLaserBlocked.AddListener(AdjustBlockedLaser);
+            blockLaserSet = true;
+        }
+
         if (PhotonNetwork.IsConnected && !RoleManager.isGoliath)
         {
             return;
@@ -97,8 +119,15 @@ public class AvatarController : Killable    //script to manage AI for god avatar
                     PerformMovementPatternFlee(); ApplyMovement();  movementDone = true; break;
             }
         }
+
+        if (aiming)
+        {
+            AimLaserSight();
+        }
+
         if (timeUntilAttack <= 0f)
         {
+            currentlyAttacking = true;
             SelectAttackPattern();
             switch (currentAttackPattern)
             {
@@ -106,6 +135,7 @@ public class AvatarController : Killable    //script to manage AI for god avatar
                     PerformExplosionAttack();
                     break;
                 case 1:
+                    PerformAimedLaserAttack();
                     break;
                 case 2:
                     break;
@@ -113,10 +143,26 @@ public class AvatarController : Killable    //script to manage AI for god avatar
                     PerformCycloneAttack();
                     break;
             }
-        } else
+        }
+        if (currentlyAttacking && gracePeriod > 0f)
+        {
+            gracePeriod -= Time.deltaTime;
+            if (gracePeriod <= 0f)
+            {
+                currentlyAttacking = false;
+            }
+        }
+
+        if (!currentlyAttacking)
         {
             timeUntilAttack -= Time.deltaTime;
         }
+    }
+
+    private float gracePeriod = 0f; //time after attack where avatar is still limited
+    private void StopAttacking(bool placeholder)
+    {
+        gracePeriod = 0.5f;
     }
 
     private void SelectMovementPattern()    //pick one of the 4 movement patterns, excluding the last one chosen
@@ -139,15 +185,8 @@ public class AvatarController : Killable    //script to manage AI for god avatar
 
     private void SelectAttackPattern()    //pick one of the 4 attack patterns, excluding the last one chosen. Only do circle if goliath is close, only do donut if goliath is far
     {
-        if (Mathf.Abs(goliathRb.position.x - avatarRb.position.x) < explosionRange && Mathf.Abs(goliathRb.position.y - avatarRb.position.y) < explosionRange)
-        {
-            currentAttackPattern = 0;
-        } else
-        {
-            currentAttackPattern = 3;
-        }
-        /*currentAttackPattern = Random.Range(0, 3);
-        if (currentAttackPattern >= previousAttackPattern)
+        currentAttackPattern = Random.Range(0, 2);
+        /*if (currentAttackPattern >= previousAttackPattern)
         {
             currentAttackPattern += 1;
             if (currentAttackPattern > 3)
@@ -155,6 +194,16 @@ public class AvatarController : Killable    //script to manage AI for god avatar
                 currentAttackPattern = 0;
             }
         }*/
+        if (currentAttackPattern == 0)
+        {
+            if (Mathf.Abs(goliathRb.position.x - avatarRb.position.x) < explosionRange && Mathf.Abs(goliathRb.position.y - avatarRb.position.y) < explosionRange)
+            {
+            }
+            else
+            {
+                currentAttackPattern = 3;
+            }
+        }
         previousAttackPattern = currentAttackPattern;
         timeUntilAttack = timeBetweenAttacks;
         Debug.Log("chosen attack: " + currentAttackPattern);
@@ -178,9 +227,65 @@ public class AvatarController : Killable    //script to manage AI for god avatar
         }
     }
 
+    private bool aiming = false;
+    private Transform laserSightTransform = null;
+    void PerformAimedLaserAttack()
+    {
+        aiming = true;
+        if (PhotonNetwork.IsConnected)
+        {
+            Vector2 targetDirection = assumedGoliathPosition - (Vector2) transform.position;
+            float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
+            Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
+            GameObject instantiatedLaser;
+            if (PhotonNetwork.IsConnected) instantiatedLaser = PhotonNetwork.Instantiate(LaserAiming.name, (Vector2) transform.position + (GetComponent<CircleCollider2D>().radius * transform.localScale * targetDirection.normalized * 1.1f), targetRotation);
+            else instantiatedLaser = Instantiate(LaserAiming, (Vector2)transform.position + (GetComponent<CircleCollider2D>().radius * transform.localScale * targetDirection.normalized * 1.1f), Quaternion.identity);
+
+            laserSightTransform = instantiatedLaser.GetComponent<Transform>();
+        }
+    }
+
+    void AimLaserSight()
+    {
+        if (laserSightTransform == null)
+        {
+            aiming = false;
+            return;
+        }
+
+        
+        Vector2 targetDirection = assumedGoliathPosition - (Vector2)transform.position;
+        laserSightTransform.position = (Vector2)transform.position + (GetComponent<CircleCollider2D>().radius * transform.localScale * targetDirection.normalized * 1.1f);
+        float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
+        laserSightTransform.rotation = targetRotation;
+    }
+
+    private void AdjustBlockedLaser(Vector2 blockingCoords, Transform laserTransform)  //if there's a large enough obstacle touching the laser, it should get blocked. If multiple such objects exist, only the one closest to the goliath should work
+    {
+        //Vector2 currentGrappleTarget = (Vector2)grappledObject.transform.position + relativeGrapplePoint;
+        Vector2 targetDirection = blockingCoords - (Vector2) laserTransform.position;
+        float currentDistance = Mathf.Sqrt(targetDirection.x * targetDirection.x + targetDirection.y * targetDirection.y);
+        //if (laserLength > currentDistance)
+        //{
+            //laserLength = currentDistance;
+            laserTransform.localScale = new Vector2(laserTransform.localScale.x, currentDistance);
+         //   skipFrame = true;
+        //}
+        //float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
+        //Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
+        //goliathTongue.transform.rotation = targetRotation;
+        //goliathTongue.transform.localScale = new Vector3(goliathTongue.transform.localScale.x, currentDistance / goliathTransform.localScale.y, goliathTongue.transform.localScale.z);
+        //goliathRigid.velocity = targetDirection.normalized * grappleSpeed / slowComponent.GetSlowFactor();
+    }
+
     void CalculateGoliathPosition()
     {
         float speedForFrame = Time.deltaTime * goliathPositionChangeSpeed;
+        /*if (currentlyAttacking)
+        {
+            speedForFrame /= 2; //slow down avatar movement during attack
+        }*/
         bool increaseSpeed = false;
 
         if (Mathf.Abs(assumedGoliathPosition.x - goliathRb.position.x) <= speedForFrame)
@@ -254,7 +359,14 @@ public class AvatarController : Killable    //script to manage AI for god avatar
 
         if (!(Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance || Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance)) //when avatar is too far off the path, should pause the pattern until they're back on track
         {
-            circleDistanceCovered += currentSpeed * Time.deltaTime;
+            if (currentlyAttacking)
+            {
+                circleDistanceCovered += currentSpeed * Time.deltaTime / 2;
+            }
+            else
+            {
+                circleDistanceCovered += currentSpeed * Time.deltaTime;
+            }
         }
 
         targetPosition = calculatedPosition;
@@ -290,7 +402,14 @@ public class AvatarController : Killable    //script to manage AI for god avatar
 
         if (!(Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance || Mathf.Abs(calculatedPosition.x - avatarRb.position.x) > circleTolerance)) //when avatar is too far off the path, should pause the pattern until they're back on track
         {
-            circleDistanceCovered += currentSpeed * Time.deltaTime;
+            if (currentlyAttacking)
+            {
+                circleDistanceCovered += currentSpeed * Time.deltaTime / 2;
+            }
+            else
+            {
+                circleDistanceCovered += currentSpeed * Time.deltaTime;
+            }
         }
 
         targetPosition = calculatedPosition;
@@ -299,7 +418,7 @@ public class AvatarController : Killable    //script to manage AI for god avatar
 
     void PerformMovementPatternRapidBlinks()    //teleport repeatedly, including if god takes damage
     {
-        if (patternRunTime > timeBetweenBlinks || currentBlinks == 0 || damageTakenInPattern > 0f)
+        if ((patternRunTime > timeBetweenBlinks || currentBlinks == 0 || damageTakenInPattern > 0f) && !currentlyAttacking) //don't blink while attacking
         {
             patternRunTime = 0;
             damageTakenInPattern = 0;
@@ -412,6 +531,11 @@ public class AvatarController : Killable    //script to manage AI for god avatar
         Vector2 targetDirection = targetPosition - avatarRb.position;
         targetDirection.Normalize();
         float speedForFrame = Time.deltaTime * currentSpeed;
+        if (currentlyAttacking)
+        {
+            speedForFrame /= 2;
+        }
+
         bool increaseSpeed = true;
 
         Vector2 movePosition = avatarRb.position + (targetDirection * speedForFrame);
@@ -457,8 +581,8 @@ public class AvatarController : Killable    //script to manage AI for god avatar
 
     private void OnDestroy()
     {
-        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
-        if (sceneIndex != 1 && sceneIndex != 4)    //not in game anymore. Update this if any extra scenes get added to the main game
+        //int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (TimeManager.gameOver)    //not in game anymore
         {
             return;
         }
@@ -466,10 +590,13 @@ public class AvatarController : Killable    //script to manage AI for god avatar
         if (PhotonNetwork.IsConnected) GameManager.Instance.LeaveRoom();
         if (RoleManager.isGoliath)  //go to win screen if goliath, otherwise go to lose screen
         {
+            TimeManager.gameOver = true;
             SceneManager.LoadScene("WinScreen");
+            
         }
         else
         {
+            TimeManager.gameOver = true;
             SceneManager.LoadScene("LoseScreen");
         }
     }

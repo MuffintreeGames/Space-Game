@@ -6,6 +6,7 @@ using UnityEngine;
 public class CamoAbility : BuffAbility  //turn invisible; goliath player can still see self, god can't
 {
     public SpriteRenderer goliathRenderer;
+    public SpriteRenderer goliathHeadRenderer;
     public float transparency = 0.5f;
 
     private float currentDuration = 0f;
@@ -35,12 +36,14 @@ public class CamoAbility : BuffAbility  //turn invisible; goliath player can sti
     {
         currentDuration = 0f;
         currentlyInvisible = true;
-        if (PhotonNetwork.IsConnected && RoleManager.isGoliath)
+        if (RoleManager.isGoliath)
         {
             goliathRenderer.color = new Color(goliathRenderer.color.r, goliathRenderer.color.g, goliathRenderer.color.b, transparency);
+            goliathHeadRenderer.color = new Color(goliathHeadRenderer.color.r, goliathHeadRenderer.color.g, goliathHeadRenderer.color.b, transparency);
         } else
         {
             goliathRenderer.color = new Color(goliathRenderer.color.r, goliathRenderer.color.g, goliathRenderer.color.b, 0f);
+            goliathHeadRenderer.color = new Color(goliathHeadRenderer.color.r, goliathHeadRenderer.color.g, goliathHeadRenderer.color.b, 0f);
         }
     }
 
@@ -49,5 +52,6 @@ public class CamoAbility : BuffAbility  //turn invisible; goliath player can sti
         PrepareToEndAbility();
         currentlyInvisible = false;
         goliathRenderer.color = new Color(goliathRenderer.color.r, goliathRenderer.color.g, goliathRenderer.color.b, 1f);
+        goliathHeadRenderer.color = new Color(goliathHeadRenderer.color.r, goliathHeadRenderer.color.g, goliathHeadRenderer.color.b, 1f);
     }
 }

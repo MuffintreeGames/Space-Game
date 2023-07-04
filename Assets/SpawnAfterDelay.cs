@@ -7,6 +7,7 @@ public class SpawnAfterDelay : MonoBehaviourPun
 {
     public GameObject spawnedObject;
     public float timeToSpawn = 1f;
+    public bool maintainRotation = false;   //if true, spawned object will have the same rotation as this one
 
     private float timeElapsed = 0f;
     // Start is called before the first frame update
@@ -18,12 +19,29 @@ public class SpawnAfterDelay : MonoBehaviourPun
     // Update is called once per frame
     void Update()
     {
+        if (PhotonNetwork.IsConnected && !PhotonView.Get(this).AmOwner)
+        {
+            return;
+        }
+
         timeElapsed += Time.deltaTime;
         if (timeElapsed > timeToSpawn)
         {
-            if (PhotonNetwork.IsConnected) PhotonNetwork.Instantiate(spawnedObject.name, transform.position, Quaternion.identity);
-            else Instantiate(spawnedObject, transform.position, Quaternion.identity);
-            Destroy(gameObject);
+            Quaternion targetRotation = Quaternion.identity;
+            if (maintainRotation)
+            {
+                targetRotation = transform.rotation;
+            }
+            if (PhotonNetwork.IsConnected)
+            {
+                PhotonNetwork.Instantiate(spawnedObject.name, transform.position, targetRotation);
+                PhotonNetwork.Destroy(gameObject);
+            }
+            else
+            {
+                Instantiate(spawnedObject, transform.position, targetRotation);
+                Destroy(gameObject);
+            }
         }
     }
 }

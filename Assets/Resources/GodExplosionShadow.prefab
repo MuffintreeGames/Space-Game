@@ -102,6 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnedObject: {fileID: 7045386937356173623, guid: 05ab5ad24af09ff4a87570a3a9e38d09, type: 3}
   timeToSpawn: 2.5
+  maintainRotation: 0
 --- !u!114 &2305996202466194821
 MonoBehaviour:
   m_ObjectHideFlags: 0

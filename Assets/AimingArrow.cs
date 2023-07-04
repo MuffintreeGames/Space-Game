@@ -16,12 +16,21 @@ public class AimingArrow : MonoBehaviourPun
     public string helpText; //text displayed while aiming
 
     private bool appliedScale = false;
+    private GameObject placementBlocker;
+    private LayerMask invalidLayers;
+
     // Start is called before the first frame update
     void Start()
     {
         //startingPos = transform.position;
         god = GameObject.Find("GodController").GetComponent<GodController>();
         HUDManager.UpdateGodAbilityHelpText.Invoke(helpText);
+        if (shootingObject)
+        {
+            placementBlocker = GameObject.Find("NoPlacementZone");
+            placementBlocker.GetComponent<SpriteRenderer>().enabled = true;
+        }
+        invalidLayers |= (1 << LayerMask.NameToLayer("BlockPlacement"));
     }
 
     // Update is called once per frame
@@ -30,6 +39,12 @@ public class AimingArrow : MonoBehaviourPun
         if (shootingObject)
         {
             if (aimedObject == null)
+            {
+                Destroy(gameObject);
+            }
+
+            Collider2D invalidObject = Physics2D.OverlapCircle(aimedObject.transform.position, aimedObject.transform.localScale.y, invalidLayers);  //check if object is in no placement zone
+            if (invalidObject != null)
             {
                 Destroy(gameObject);
             }
@@ -118,5 +133,9 @@ public class AimingArrow : MonoBehaviourPun
     {
         god.SetAbilityUsage(true);
         HUDManager.UpdateGodAbilityHelpText.Invoke("");
+        if (placementBlocker != null)
+        {
+            placementBlocker.GetComponent<SpriteRenderer>().enabled = false;
+        }
     }
 }

@@ -158,6 +158,58 @@ public abstract class AbilityTemplate : MonoBehaviour
         }
     }
 
+    [PunRPC]
+    public void SetAction1(string abilityName)
+    {
+        if (abilityName != displayName)
+        {
+            return;
+        }
+        parentGoliath.Action1.numOfCopies -= 1;
+        parentGoliath.Action1.DisableAbility();
+        parentGoliath.Action1 = this;
+        parentGoliath.Action1.numOfCopies += 1;
+    }
+
+    [PunRPC]
+    public void SetAction2(string abilityName)
+    {
+        if (abilityName != displayName)
+        {
+            return;
+        }
+        parentGoliath.Action2.numOfCopies -= 1;
+        parentGoliath.Action2.DisableAbility();
+        parentGoliath.Action2 = this;
+        parentGoliath.Action2.numOfCopies += 1;
+    }
+
+    [PunRPC]
+    public void SetAction3(string abilityName)
+    {
+        if (abilityName != displayName)
+        {
+            return;
+        }
+        parentGoliath.Action3.numOfCopies -= 1;
+        parentGoliath.Action3.DisableAbility();
+        parentGoliath.Action3 = this;
+        parentGoliath.Action3.numOfCopies += 1;
+    }
+
+    [PunRPC]
+    public void SetAction4(string abilityName)
+    {
+        if (abilityName != displayName)
+        {
+            return;
+        }
+        parentGoliath.Action4.numOfCopies -= 1;
+        parentGoliath.Action4.DisableAbility();
+        parentGoliath.Action4 = this;
+        parentGoliath.Action4.numOfCopies += 1;
+    }
+
     public void DisableAbility()
     {
         CancelAbility();

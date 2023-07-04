@@ -76,7 +76,17 @@ public class Projectile : MonoBehaviour, IPunInstantiateMagicCallback
 
     protected virtual void ProjectileExpire()
     {
-        Destroy(this.gameObject);
+        if (PhotonNetwork.IsConnected)
+        {
+            if (PhotonView.Get(this).AmOwner)
+            {
+                PhotonNetwork.Destroy(PhotonView.Get(this));
+            }
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     public void SetProjectileParameters(float targetSpeed, float targetAngle, float targetTime, float acceleration = 0f, bool canStop = false)

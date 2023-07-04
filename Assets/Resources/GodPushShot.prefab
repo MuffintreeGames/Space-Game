@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 173912982641098655}
   - component: {fileID: -3060881728035337611}
   - component: {fileID: 517559323647829298}
-  m_Layer: 20
+  m_Layer: 23
   m_Name: GodPushShot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

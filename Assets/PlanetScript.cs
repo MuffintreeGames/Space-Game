@@ -27,7 +27,10 @@ public class PlanetScript : MonoBehaviour, IPunInstantiateMagicCallback //simple
             Debug.Log("trying to set coordinates before world map is available!");
         }
 
-        this.GetComponent<SpriteRenderer>().color = SpaceManager.GetColor((int)instantiationData[4]);
+        if (instantiationData.Length == 5)
+        {
+            this.GetComponent<SpriteRenderer>().color = SpaceManager.GetColor((int)instantiationData[4]);
+        }
     }
 
     void RegisterCoordinates()

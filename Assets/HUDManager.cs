@@ -806,25 +806,20 @@ public class HUDManager : MonoBehaviourPun
                 float currentTransparency = percentageTransparency - (percentageTransparency * 2 * Mathf.Abs(pointInFlashCycle - (flashCycleTime / 2)));
                 if (playerGoliath.Action1.numOfCopies == 1 && playerGoliath.Action1 == newAbility)
                 {
-                    Debug.Log("duplicate found on action 1");
                     abilityOverlay1.enabled = true;
                     abilityOverlay1.color = new Color(abilityOverlay1.color.r, abilityOverlay1.color.g, abilityOverlay1.color.b, currentTransparency);
                 } else if (playerGoliath.Action2.numOfCopies == 1 && playerGoliath.Action2 == newAbility)
                 {
-                    Debug.Log("duplicate found on action 2");
                     abilityOverlay2.enabled = true;
                     abilityOverlay2.color = new Color(abilityOverlay2.color.r, abilityOverlay2.color.g, abilityOverlay2.color.b, currentTransparency);
-                    Debug.LogError("current overlay color: " + abilityOverlay1.color);
                 }
                 else if (playerGoliath.Action3.numOfCopies == 1 && playerGoliath.Action3 == newAbility)
                 {
-                    Debug.Log("duplicate found on action 3");
                     abilityOverlay3.enabled = true;
                     abilityOverlay3.color = new Color(abilityOverlay3.color.r, abilityOverlay3.color.g, abilityOverlay3.color.b, currentTransparency);
                 }
                 else if (playerGoliath.Action4.numOfCopies == 1 && playerGoliath.Action4 == newAbility)
                 {
-                    Debug.Log("duplicate found on action 4");
                     abilityOverlay4.enabled = true;
                     abilityOverlay4.color = new Color(abilityOverlay4.color.r, abilityOverlay4.color.g, abilityOverlay4.color.b, currentTransparency);
                 }

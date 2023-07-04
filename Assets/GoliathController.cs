@@ -42,6 +42,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
     private GrappleOnTouch goliathTongueGrappleScript;  //script attached to goliath tongue to allow grappling
 
     private float maxSpeed = 7.5f;  //top speed goliath can achieve; maintained separately for horizontal and vertical
+    private float sizeSpeedMultiplier = 1f; //affects acceleration + max speed; increases as goliath size increases
     private float currentHorAcceleration = 0f; //acceleration value that we're currently using
     private float currentVertAcceleration = 0f; //acceleration value that we're currently using
     private float acceleration = 3f;  //rate of acceleration; maintained separately for horizontal and vertical
@@ -334,11 +335,11 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
 
         float horizontalDirection = Input.GetAxisRaw("Horizontal");
         float verticalDirection = Input.GetAxisRaw("Vertical");
-        float currentMaxSpeed = maxSpeed;
+        float currentMaxSpeed = maxSpeed * sizeSpeedMultiplier;
 
         if (horizontalDirection != 0f && verticalDirection != 0f)
         {  //reduce speed/acceleration when moving diagonally
-            currentMaxSpeed = Mathf.Sqrt((maxSpeed * maxSpeed) / 2);
+            currentMaxSpeed = Mathf.Sqrt(2*(maxSpeed * maxSpeed));
             float accelerationMultiplier = Mathf.Sqrt((acceleration * acceleration) / 2) / acceleration;
             currentHorAcceleration *= accelerationMultiplier;
             currentVertAcceleration *= accelerationMultiplier;
@@ -348,12 +349,12 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
         Vector2 currentVelocity = goliathRigid.velocity;
         if (!(currentVelocity.x > (currentMaxSpeed / slowComponent.GetSlowFactor()) && horizontalDirection > 0) && !((currentVelocity.x < -(currentMaxSpeed / slowComponent.GetSlowFactor()) && horizontalDirection < 0)))
         {
-            goliathRigid.AddForce(new Vector2(1, 0) * horizontalDirection * currentHorAcceleration * (1f - paralysisLevel) * goliathRigid.mass / slowComponent.GetSlowFactor());
+            goliathRigid.AddForce(new Vector2(1, 0) * horizontalDirection * currentHorAcceleration * sizeSpeedMultiplier * (1f - paralysisLevel) * goliathRigid.mass / slowComponent.GetSlowFactor());
         }
 
         if (!(currentVelocity.y > (currentMaxSpeed / slowComponent.GetSlowFactor()) && verticalDirection > 0) && !((currentVelocity.y < -(currentMaxSpeed / slowComponent.GetSlowFactor()) && verticalDirection < 0)))
         {
-            goliathRigid.AddForce(new Vector2(0, 1) * verticalDirection * currentVertAcceleration * (1f - paralysisLevel) * goliathRigid.mass / slowComponent.GetSlowFactor());
+            goliathRigid.AddForce(new Vector2(0, 1) * verticalDirection * currentVertAcceleration * sizeSpeedMultiplier * (1f - paralysisLevel) * goliathRigid.mass / slowComponent.GetSlowFactor());
         }
 
         /*Vector2 finalVelocity = goliathRigid.velocity;
@@ -652,31 +653,19 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
     {
         if (Input.GetButtonDown("Action1"))
         {
-            Action1.numOfCopies -= 1;
-            Action1.DisableAbility();
-            Action1 = abilitySelectionOption;
-            abilitySelectionOption.numOfCopies += 1;
+            PhotonView.Get(this).RPC("SetAction1", RpcTarget.All, abilitySelectionOption.displayName);
             abilitySelectionMode = false;
         } else if (Input.GetButtonDown("Action2"))
         {
-            Action2.numOfCopies -= 1;
-            Action2.DisableAbility();
-            Action2 = abilitySelectionOption;
-            abilitySelectionOption.numOfCopies += 1;
+            PhotonView.Get(this).RPC("SetAction2", RpcTarget.All, abilitySelectionOption.displayName);
             abilitySelectionMode = false;
         } else if (Input.GetButtonDown("Action3"))
         {
-            Action3.numOfCopies -= 1;
-            Action3.DisableAbility();
-            Action3 = abilitySelectionOption;
-            abilitySelectionOption.numOfCopies += 1;
+            PhotonView.Get(this).RPC("SetAction3", RpcTarget.All, abilitySelectionOption.displayName);
             abilitySelectionMode = false;
         } else if (Input.GetButtonDown("Action4"))
         {
-            Action4.numOfCopies -= 1;
-            Action4.DisableAbility();
-            Action4 = abilitySelectionOption;
-            abilitySelectionOption.numOfCopies += 1;
+            PhotonView.Get(this).RPC("SetAction4", RpcTarget.All, abilitySelectionOption.displayName);
             abilitySelectionMode = false;
         } else if (Input.GetButtonDown("Cancel"))
         {
@@ -780,10 +769,12 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
 
     }
 
+    private int hpCost = 5;    //amount of exp to convert to 1 point of health
     void GainExp(int exp)   //get exp, check for level up
     {
-        if (level > 4)  //no need for exp at max level
+        if (level > 4)  //at max level, convert exp into healing
         {
+            goliathHealth.Heal(exp / hpCost);
             return;
         }
         currentExp += exp;
@@ -826,6 +817,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
                 damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
                 damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel1"));
                 tongueDamage = 40;
+                sizeSpeedMultiplier = 1.25f;
                 break;
             case 3:
                 neededExp = level4Exp;
@@ -834,6 +826,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
                 damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
                 damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel2"));
                 tongueDamage = 60;
+                sizeSpeedMultiplier = 1.5f;
                 break;
             case 4:
                 neededExp = level5Exp;
@@ -842,6 +835,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
                 damagableLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
                 damagableLayers |= (1 << LayerMask.NameToLayer("BarrierLevel3"));
                 tongueDamage = 80;
+                sizeSpeedMultiplier = 1.75f;
                 break;
             case 5:
                 neededExp = 1;
@@ -849,6 +843,7 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
                 goliathTransform.localScale = new Vector3(5f, 5f, 1f) * currentSizeMultiplier;
                 goliathArmScript.Damage = 30;
                 tongueDamage = 100;
+                sizeSpeedMultiplier = 2f;
                 break;
         }
         goliathArmScript.DamagedLayers = damagableLayers;
@@ -1154,6 +1149,8 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
         currentParalysisDuration = 0f;
     }
 
+    public float GetSizeSpeedMultiplier() { return sizeSpeedMultiplier; }
+
     private void ManageParalysis()
     {
         if (paralysisLevel == 0f)
@@ -1171,8 +1168,8 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
 
     private void OnDestroy()
     {
-        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
-        if (sceneIndex != 1 && sceneIndex != 4)    //not in game anymore. Update this if any extra scenes get added to the main game
+        //int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (TimeManager.gameOver)    //not in game anymore. Update this if any extra scenes get added to the main game
         {
             return;
         }
@@ -1180,9 +1177,11 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
         if (PhotonNetwork.IsConnected) GameManager.Instance.LeaveRoom();
         if (RoleManager.isGoliath)  //go to lose screen if goliath, otherwise go to win screen
         {
+            TimeManager.gameOver = true;
             SceneManager.LoadScene("LoseScreen");
         } else
         {
+            TimeManager.gameOver = true;
             SceneManager.LoadScene("WinScreen");
         }
     }

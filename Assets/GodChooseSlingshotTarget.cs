@@ -10,9 +10,12 @@ public class GodChooseSlingshotTarget : MonoBehaviourPun    //select a planet to
 
     private GodController god;
     private LayerMask validLayers;
+    private LayerMask invalidLayers;
     private bool canPlace = false;
     public GodAbilityTemplate parentAbility;
     private CircleCollider2D hoverCollider;
+
+    private GameObject placementBlocker;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +26,13 @@ public class GodChooseSlingshotTarget : MonoBehaviourPun    //select a planet to
         validLayers |= (1 << LayerMask.NameToLayer("DestructibleSize2"));
         validLayers |= (1 << LayerMask.NameToLayer("DestructibleSize3"));
         validLayers |= (1 << LayerMask.NameToLayer("DestructibleSize4"));
+
+        invalidLayers |= (1 << LayerMask.NameToLayer("BlockPlacement"));
+
         HUDManager.UpdateGodAbilityHelpText.Invoke(helpText);
+
+        placementBlocker = GameObject.Find("NoPlacementZone");
+        placementBlocker.GetComponent<SpriteRenderer>().enabled = true;
     }
 
     // Update is called once per frame
@@ -36,7 +45,13 @@ public class GodChooseSlingshotTarget : MonoBehaviourPun    //select a planet to
         Collider2D validObject = Physics2D.OverlapCircle(mouseCoords, hoverCollider.radius * transform.localScale.y, validLayers);
         if (validObject != null)
         {
-            canPlace = true;
+            Collider2D invalidObject = Physics2D.OverlapCircle(validObject.transform.position, validObject.transform.localScale.y, invalidLayers);  //check if object is in no placement zone
+            if (invalidObject == null) {
+                canPlace = true;
+            } else
+            {
+                canPlace = false;
+            }
         }
         else
         {
@@ -48,12 +63,12 @@ public class GodChooseSlingshotTarget : MonoBehaviourPun    //select a planet to
             if (canPlace)
             {
                 GameObject newArrow;
-                /*if (PhotonNetwork.IsConnected) newArrow = PhotonNetwork.Instantiate(AimingArrow.name, mouseCoords, Quaternion.identity);
-                else */newArrow = Instantiate(AimingArrow, mouseCoords, Quaternion.identity);
+                newArrow = Instantiate(AimingArrow, mouseCoords, Quaternion.identity);
                 AimingArrow arrowScript = newArrow.GetComponent<AimingArrow>();
                 arrowScript.aimedObject = (CircleCollider2D) validObject;
                 arrowScript.parentAbility = parentAbility;
                 HUDManager.UpdateGodAbilityHelpText.Invoke("");
+                placementBlocker.GetComponent<SpriteRenderer>().enabled = false;
                 Destroy(gameObject);
             }
             else
@@ -65,6 +80,7 @@ public class GodChooseSlingshotTarget : MonoBehaviourPun    //select a planet to
         {
             god.SetAbilityUsage(true);
             HUDManager.UpdateGodAbilityHelpText.Invoke("");
+            placementBlocker.GetComponent<SpriteRenderer>().enabled = false;
             Destroy(gameObject);
         }
     }

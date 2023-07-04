@@ -7,6 +7,7 @@ public class TimeManager : MonoBehaviour
 {
     private static float timeElapsed = 0f;
     private static bool timeRunning = false;    //used to pause clock before game starts + if something needs to pause the game
+    public static bool gameOver = false;
 
     // Start is called before the first frame update
     void Start()
@@ -16,6 +17,7 @@ public class TimeManager : MonoBehaviour
             timeRunning = true;
             GameObject.Find("LoadingOverlay").SetActive(false);
         }
+        gameOver = false;
     }
 
     // Update is called once per frame

@@ -9,6 +9,7 @@ public class FinalFightManager : MonoBehaviour  //use to do any things that shou
     {
         GameObject.Find("Goliath").transform.position = Vector3.zero;
         GameObject.Find("GodAvatar").transform.position = new Vector3(0, 15, 0);
+        GameObject.Find("Main Camera").transform.position = new Vector3(0, 0, -10);
     }
 
     // Update is called once per frame

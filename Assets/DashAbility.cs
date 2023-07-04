@@ -49,22 +49,29 @@ public class DashAbility : AbilityTemplate  //dash a short distance, maintaining
         float horizontalSpeed = 0f;
         float verticalSpeed = 0f;
 
+        float adjustedDashSpeed = dashSpeed * parentGoliath.GetSizeSpeedMultiplier();
+        if (dashDirectionX != 0 && dashDirectionY != 0) //reduce dash speed when going diagonally
+        {
+            adjustedDashSpeed = Mathf.Sqrt((adjustedDashSpeed * adjustedDashSpeed)/2);
+        }
+
         if (dashDirectionX > 0)
         {
-            horizontalSpeed = dashSpeed;
+            horizontalSpeed = adjustedDashSpeed;
         } else if (dashDirectionX < 0)
         {
-            horizontalSpeed = -dashSpeed;
+            horizontalSpeed = -adjustedDashSpeed;
         }
 
         if (dashDirectionY > 0)
         {
-            verticalSpeed = dashSpeed;
+            verticalSpeed = adjustedDashSpeed;
         }
         else if (dashDirectionY < 0)
         {
-            verticalSpeed = -dashSpeed;
+            verticalSpeed = -adjustedDashSpeed;
         }
+
         parentGoliath.SetSpeedExternally(horizontalSpeed, verticalSpeed);
         currentDuration = 0f;
         currentlyDashing = true;

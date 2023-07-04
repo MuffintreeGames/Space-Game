@@ -19,7 +19,8 @@ GameObject:
   - component: {fileID: 7239506641563273114}
   - component: {fileID: 3403397993211534316}
   - component: {fileID: 9127853456390896525}
-  m_Layer: 24
+  - component: {fileID: 3722789352274575103}
+  m_Layer: 23
   m_Name: GodExplosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,5 +246,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f9980cb4c23bf441adec5d5ddc672f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3722789352274575103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7045386937356173623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47e89fbd06c63504994ccebe3c3b0081, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

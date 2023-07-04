@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 1168495005155902471}
   - component: {fileID: 6590494237418574998}
   - component: {fileID: 7705981857484438748}
+  - component: {fileID: 424727104957342289}
   m_Layer: 7
   m_Name: ExplodingPlanet
   m_TagString: Untagged
@@ -253,3 +254,15 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &424727104957342289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6088609408505885020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a1f1400fb5c1a419092fe9f406e4c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

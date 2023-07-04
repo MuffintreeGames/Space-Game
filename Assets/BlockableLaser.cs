@@ -29,7 +29,7 @@ public class BlockableLaser : AttackObject
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     new protected void OnTriggerStay2D(Collider2D collision)

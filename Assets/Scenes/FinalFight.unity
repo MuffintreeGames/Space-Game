@@ -1885,6 +1885,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Black Hole
       objectReference: {fileID: 0}
+    - target: {fileID: 7440928540471770829, guid: c837f666eb7847b44a7ac0457e9a93be, type: 3}
+      propertyPath: sceneViewId
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c837f666eb7847b44a7ac0457e9a93be, type: 3}
 --- !u!1 &395966028
@@ -2986,6 +2990,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1497565863}
     m_Modifications:
+    - target: {fileID: -5973009744041836978, guid: 6dd47c621d5997d488a13661d405b11c, type: 3}
+      propertyPath: sceneViewId
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 2174078447654446560, guid: 6dd47c621d5997d488a13661d405b11c, type: 3}
       propertyPath: sceneViewId
       value: 99990
@@ -7631,6 +7639,10 @@ PrefabInstance:
       propertyPath: Explosion
       value: 
       objectReference: {fileID: 7045386937356173623, guid: 863395109d02f6544b8dbe578ee28131, type: 3}
+    - target: {fileID: 3875809614835779299, guid: fe1f381faf639a7498f89bc4ff175c62, type: 3}
+      propertyPath: LaserAiming
+      value: 
+      objectReference: {fileID: 7045386937356173623, guid: 4c5946546bd60524ca78b781fb25d866, type: 3}
     - target: {fileID: 7367889375495636761, guid: fe1f381faf639a7498f89bc4ff175c62, type: 3}
       propertyPath: m_RootOrder
       value: 7

@@ -50,6 +50,10 @@ MonoBehaviour:
   - ActivateSpeedAttackObject
   - LaunchSpeedAttackObject
   - ReceiveHpBarUpdate
+  - SetAction1
+  - SetAction2
+  - SetAction3
+  - SetAction4
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
