@@ -112,7 +112,6 @@ public class Killable : MonoBehaviourPun
 
     public virtual bool TakeDamage(float damage, bool fromGoliath, float invincibilityDuration) //returns true if damage was taken, false otherwise
     {
-        Debug.Log("base killable");
         if (invincible)
         {
             return false;

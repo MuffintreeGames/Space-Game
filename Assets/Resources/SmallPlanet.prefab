@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d137e40825b70c41808026f0c02b084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExpAmount: 15
+  ExpAmount: 1500
 --- !u!114 &1248889369602796152
 MonoBehaviour:
   m_ObjectHideFlags: 0

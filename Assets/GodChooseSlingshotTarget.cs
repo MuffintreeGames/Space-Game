@@ -33,6 +33,7 @@ public class GodChooseSlingshotTarget : MonoBehaviourPun    //select a planet to
 
         placementBlocker = GameObject.Find("NoPlacementZone");
         placementBlocker.GetComponent<SpriteRenderer>().enabled = true;
+        placementBlocker.GetComponent<CircleCollider2D>().enabled = true;
     }
 
     // Update is called once per frame
@@ -81,6 +82,7 @@ public class GodChooseSlingshotTarget : MonoBehaviourPun    //select a planet to
             god.SetAbilityUsage(true);
             HUDManager.UpdateGodAbilityHelpText.Invoke("");
             placementBlocker.GetComponent<SpriteRenderer>().enabled = false;
+            placementBlocker.GetComponent<CircleCollider2D>().enabled = false;
             Destroy(gameObject);
         }
     }

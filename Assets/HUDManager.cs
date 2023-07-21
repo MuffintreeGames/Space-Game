@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using Online;
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 public class UpdateGodAbilityHelpTextEvent : UnityEvent<string>
 {
@@ -22,6 +23,7 @@ public class HUDManager : MonoBehaviourPun
     private Transform expBar;
     private Transform hpBar;
     private Transform mpBar;
+    private Transform avatarHpBar;
 
     private Image abilityIcon1;
     private Text abilityTimer1;
@@ -100,6 +102,15 @@ public class HUDManager : MonoBehaviourPun
     private float mpCountBeforeSpending = 0f;   //mp value before it was spent on an ability
     private float oldMpScale = 1f;
 
+    private GameObject avatarHpBarParent;
+    private AvatarController godAvatar;
+    private float timeSinceAvatarHpChange = 0f;
+    private float timeToChangeAvatarHp = 0.2f;
+    private float currentAvatarHp = 0f;
+    private float lastReadAvatarHpCount = 0f;
+    private float oldAvatarHpScale = 0f;
+    private Text avatarHpText;
+
     private float flashCycleTime = 1.5f;
     private float pointInFlashCycle = 0f;
     private float abilityOverlayTransparency = 137f;
@@ -107,6 +118,10 @@ public class HUDManager : MonoBehaviourPun
     // Start is called before the first frame update
 
     private void Awake()
+    {
+       
+    }
+    void Start()
     {
         UpdateGodAbilityHelpText = new UpdateGodAbilityHelpTextEvent();
         expBar = GameObject.Find("ExpBarFillContainer").transform;
@@ -158,313 +173,350 @@ public class HUDManager : MonoBehaviourPun
             Debug.LogError("Couldn't find mp text!");
         }
 
-
-        abilityIcon1 = GameObject.Find("Ability1Icon").GetComponent<Image>();
-        if (!abilityIcon1)
-        {
-            Debug.LogError("Couldn't find ability icon 1!");
-        }
-
-        abilityTimer1 = GameObject.Find("Ability1Timer").GetComponent<Text>();
-        if (!abilityTimer1)
-        {
-            Debug.LogError("Couldn't find ability timer 1!");
-        }
-
-        abilityName1 = GameObject.Find("Ability1Name").GetComponent<Text>();
-        if (!abilityName1)
-        {
-            Debug.LogError("Couldn't find ability name 1!");
-        }
-
-        abilityOverlay1 = GameObject.Find("Ability1Overlay").GetComponent<Image>();
-        if (!abilityOverlay1)
-        {
-            Debug.LogError("Couldn't find ability overlay 1!");
-        }
-
-        abilityIcon2 = GameObject.Find("Ability2Icon").GetComponent<Image>();
-        if (!abilityIcon2)
-        {
-            Debug.LogError("Couldn't find ability icon 2!");
-        }
-
-        abilityTimer2 = GameObject.Find("Ability2Timer").GetComponent<Text>();
-        if (!abilityTimer2)
-        {
-            Debug.LogError("Couldn't find ability timer 2!");
-        }
-
-        abilityName2 = GameObject.Find("Ability2Name").GetComponent<Text>();
-        if (!abilityName2)
-        {
-            Debug.LogError("Couldn't find ability name 2!");
-        }
-
-        abilityOverlay2 = GameObject.Find("Ability2Overlay").GetComponent<Image>();
-        if (!abilityOverlay2)
-        {
-            Debug.LogError("Couldn't find ability overlay 2!");
-        }
-
-        abilityIcon3 = GameObject.Find("Ability3Icon").GetComponent<Image>();
-        if (!abilityIcon3)
-        {
-            Debug.LogError("Couldn't find ability icon 3!");
-        }
-
-        abilityTimer3 = GameObject.Find("Ability3Timer").GetComponent<Text>();
-        if (!abilityTimer3)
-        {
-            Debug.LogError("Couldn't find ability timer 3!");
-        }
-
-        abilityName3 = GameObject.Find("Ability3Name").GetComponent<Text>();
-        if (!abilityName3)
-        {
-            Debug.LogError("Couldn't find ability name 3!");
-        }
-
-        abilityOverlay3 = GameObject.Find("Ability3Overlay").GetComponent<Image>();
-        if (!abilityOverlay3)
-        {
-            Debug.LogError("Couldn't find ability overlay 3!");
-        }
-
-        abilityIcon4 = GameObject.Find("Ability4Icon").GetComponent<Image>();
-        if (!abilityIcon4)
-        {
-            Debug.LogError("Couldn't find ability icon 4!");
-        }
-
-        abilityTimer4 = GameObject.Find("Ability4Timer").GetComponent<Text>();
-        if (!abilityTimer4)
-        {
-            Debug.LogError("Couldn't find ability timer 4!");
-        }
-
-        abilityName4 = GameObject.Find("Ability4Name").GetComponent<Text>();
-        if (!abilityName4)
-        {
-            Debug.LogError("Couldn't find ability name 4!");
-        }
-
-        abilityOverlay4 = GameObject.Find("Ability4Overlay").GetComponent<Image>();
-        if (!abilityOverlay4)
-        {
-            Debug.LogError("Couldn't find ability overlay 4!");
-        }
-
-        newIcon = GameObject.Find("NewIcon").GetComponent<Image>();
-        if (!newIcon)
-        {
-            Debug.LogError("Couldn't find new icon!");
-        }
-
-        abilitySelectionDisplay = GameObject.Find("AbilitySelection");
-        if (!abilitySelectionDisplay)
-        {
-            Debug.LogError("Couldn't find ability display!");
-        }
-
-        godAbilityIcon1 = GameObject.Find("GodAbility1Icon").GetComponent<Image>();
-        if (!godAbilityIcon1)
-        {
-            Debug.LogError("Couldn't find god ability icon 1!");
-        }
-
-        godAbilityTimer1 = GameObject.Find("GodAbility1Timer").GetComponent<Text>();
-        if (!godAbilityTimer1)
-        {
-            Debug.LogError("Couldn't find god ability timer 1!");
-        }
-
-        godAbilityName1 = GameObject.Find("GodAbility1Name").GetComponent<Text>();
-        if (!godAbilityName1)
-        {
-            Debug.LogError("Couldn't find god ability name 1!");
-        }
-
-        godAbilityCost1 = GameObject.Find("GodAbility1Cost").GetComponent<Text>();
-        if (!godAbilityCost1)
-        {
-            Debug.LogError("Couldn't find god ability cost 1!");
-        }
-
-        godAbilityIcon2 = GameObject.Find("GodAbility2Icon").GetComponent<Image>();
-        if (!godAbilityIcon2)
-        {
-            Debug.LogError("Couldn't find god ability icon 2!");
-        }
-
-        godAbilityTimer2 = GameObject.Find("GodAbility2Timer").GetComponent<Text>();
-        if (!godAbilityTimer2)
-        {
-            Debug.LogError("Couldn't find god ability timer 2!");
-        }
-
-        godAbilityName2 = GameObject.Find("GodAbility2Name").GetComponent<Text>();
-        if (!godAbilityName2)
-        {
-            Debug.LogError("Couldn't find god ability name 2!");
-        }
-
-        godAbilityCost2 = GameObject.Find("GodAbility2Cost").GetComponent<Text>();
-        if (!godAbilityCost2)
-        {
-            Debug.LogError("Couldn't find god ability cost 2!");
-        }
-
-        godAbilityIcon3 = GameObject.Find("GodAbility3Icon").GetComponent<Image>();
-        if (!godAbilityIcon3)
-        {
-            Debug.LogError("Couldn't find god ability icon 3!");
-        }
-
-        godAbilityTimer3 = GameObject.Find("GodAbility3Timer").GetComponent<Text>();
-        if (!godAbilityTimer3)
-        {
-            Debug.LogError("Couldn't find god ability timer 3!");
-        }
-
-        godAbilityName3 = GameObject.Find("GodAbility3Name").GetComponent<Text>();
-        if (!godAbilityName3)
-        {
-            Debug.LogError("Couldn't find god ability name 3!");
-        }
-
-        godAbilityCost3 = GameObject.Find("GodAbility3Cost").GetComponent<Text>();
-        if (!godAbilityCost3)
-        {
-            Debug.LogError("Couldn't find god ability cost 3!");
-        }
-
-        godAbilityIcon4 = GameObject.Find("GodAbility4Icon").GetComponent<Image>();
-        if (!godAbilityIcon4)
-        {
-            Debug.LogError("Couldn't find god ability icon 4!");
-        }
-
-        godAbilityTimer4 = GameObject.Find("GodAbility4Timer").GetComponent<Text>();
-        if (!godAbilityTimer4)
-        {
-            Debug.LogError("Couldn't find god ability timer 4!");
-        }
-
-        godAbilityName4 = GameObject.Find("GodAbility4Name").GetComponent<Text>();
-        if (!godAbilityName4)
-        {
-            Debug.LogError("Couldn't find god ability name 4!");
-        }
-
-        godAbilityCost4 = GameObject.Find("GodAbility4Cost").GetComponent<Text>();
-        if (!godAbilityCost4)
-        {
-            Debug.LogError("Couldn't find god ability cost 4!");
-        }
-
-        godAbilityIcon5 = GameObject.Find("GodAbility5Icon").GetComponent<Image>();
-        if (!godAbilityIcon5)
-        {
-            Debug.LogError("Couldn't find god ability icon 5!");
-        }
-
-        godAbilityTimer5 = GameObject.Find("GodAbility5Timer").GetComponent<Text>();
-        if (!godAbilityTimer5)
-        {
-            Debug.LogError("Couldn't find god ability timer 5!");
-        }
-
-        godAbilityName5 = GameObject.Find("GodAbility5Name").GetComponent<Text>();
-        if (!godAbilityName5)
-        {
-            Debug.LogError("Couldn't find god ability name 5!");
-        }
-
-        godAbilityCost5 = GameObject.Find("GodAbility5Cost").GetComponent<Text>();
-        if (!godAbilityCost5)
-        {
-            Debug.LogError("Couldn't find god ability cost 5!");
-        }
-
-        godAbilityIcon6 = GameObject.Find("GodAbility6Icon").GetComponent<Image>();
-        if (!godAbilityIcon6)
-        {
-            Debug.LogError("Couldn't find god ability icon 6!");
-        }
-
-        godAbilityTimer6 = GameObject.Find("GodAbility6Timer").GetComponent<Text>();
-        if (!godAbilityTimer6)
-        {
-            Debug.LogError("Couldn't find god ability timer 6!");
-        }
-
-        godAbilityName6 = GameObject.Find("GodAbility6Name").GetComponent<Text>();
-        if (!godAbilityName6)
-        {
-            Debug.LogError("Couldn't find god ability name 6!");
-        }
-
-        godAbilityCost6 = GameObject.Find("GodAbility6Cost").GetComponent<Text>();
-        if (!godAbilityCost6)
-        {
-            Debug.LogError("Couldn't find god ability cost 6!");
-        }
-
-        godAbilityIcon7 = GameObject.Find("GodAbility7Icon").GetComponent<Image>();
-        if (!godAbilityIcon7)
-        {
-            Debug.LogError("Couldn't find god ability icon 7!");
-        }
-
-        godAbilityTimer7 = GameObject.Find("GodAbility7Timer").GetComponent<Text>();
-        if (!godAbilityTimer7)
-        {
-            Debug.LogError("Couldn't find god ability timer 7!");
-        }
-
-        godAbilityName7 = GameObject.Find("GodAbility7Name").GetComponent<Text>();
-        if (!godAbilityName7)
-        {
-            Debug.LogError("Couldn't find god ability name 7!");
-        }
-
-        godAbilityCost7 = GameObject.Find("GodAbility7Cost").GetComponent<Text>();
-        if (!godAbilityCost7)
-        {
-            Debug.LogError("Couldn't find god ability cost 7!");
-        }
-
-        godAbilityHelpBackground = GameObject.Find("GodAbilityHelp");
-        if (!godAbilityHelpBackground)
-        {
-            Debug.LogError("Couldn't find god ability help background!");
-        }
-
-        godAbilityHelp = GameObject.Find("GodAbilityHelpText").GetComponent<Text>();
-        if (!godAbilityHelp)
-        {
-            Debug.LogError("Couldn't find god ability help!");
-        }
-
-        UpdateGodAbilityHelpText.AddListener(SetGodHelpText);
-
-        SetGodHelpText("");
-    }
-    void Start()
-    {
         if (RoleManager.isGoliath)
         {
-            GameObject.Find("MpBar").SetActive(false);
-            GameObject.Find("GodAbilityBar").SetActive(false);
-            GameObject.Find("FreeCameraButton").SetActive(false);
-        } else
-        {
-            abilitySelectionDisplay.SetActive(false);
+
+            avatarHpBarParent = GameObject.Find("AvatarHpBarGoliath");
+
+            avatarHpBar = GameObject.Find("AvatarHpBarFillContainerGoliath").transform;
+            if (!avatarHpBar)
+            {
+                Debug.LogError("Couldn't find avatar hp bar!");
+            }
+
+            avatarHpText = GameObject.Find("AvatarHpTextGoliath").GetComponent<Text>();
+            if (!avatarHpText)
+            {
+                Debug.LogError("Couldn't find avatar hp text!");
+            }
+            GameObject.Find("AvatarHpBarGod").SetActive(false);
+        }
+        else {
+            avatarHpBarParent = GameObject.Find("AvatarHpBarGod");
+
+            avatarHpBar = GameObject.Find("AvatarHpBarFillContainerGod").transform;
+            if (!avatarHpBar)
+            {
+                Debug.LogError("Couldn't find avatar hp bar!");
+            }
+
+            avatarHpText = GameObject.Find("AvatarHpTextGod").GetComponent<Text>();
+            if (!avatarHpText)
+            {
+                Debug.LogError("Couldn't find avatar hp text!");
+            }
+            GameObject.Find("AvatarHpBarGoliath").SetActive(false);
         }
 
-        percentageTransparency = abilityOverlayTransparency / 255f;
-    }
+
+            avatarHpBarParent.SetActive(false);
+
+            abilityIcon1 = GameObject.Find("Ability1Icon").GetComponent<Image>();
+            if (!abilityIcon1)
+            {
+                Debug.LogError("Couldn't find ability icon 1!");
+            }
+
+            abilityTimer1 = GameObject.Find("Ability1Timer").GetComponent<Text>();
+            if (!abilityTimer1)
+            {
+                Debug.LogError("Couldn't find ability timer 1!");
+            }
+
+            abilityName1 = GameObject.Find("Ability1Name").GetComponent<Text>();
+            if (!abilityName1)
+            {
+                Debug.LogError("Couldn't find ability name 1!");
+            }
+
+            abilityOverlay1 = GameObject.Find("Ability1Overlay").GetComponent<Image>();
+            if (!abilityOverlay1)
+            {
+                Debug.LogError("Couldn't find ability overlay 1!");
+            }
+
+            abilityIcon2 = GameObject.Find("Ability2Icon").GetComponent<Image>();
+            if (!abilityIcon2)
+            {
+                Debug.LogError("Couldn't find ability icon 2!");
+            }
+
+            abilityTimer2 = GameObject.Find("Ability2Timer").GetComponent<Text>();
+            if (!abilityTimer2)
+            {
+                Debug.LogError("Couldn't find ability timer 2!");
+            }
+
+            abilityName2 = GameObject.Find("Ability2Name").GetComponent<Text>();
+            if (!abilityName2)
+            {
+                Debug.LogError("Couldn't find ability name 2!");
+            }
+
+            abilityOverlay2 = GameObject.Find("Ability2Overlay").GetComponent<Image>();
+            if (!abilityOverlay2)
+            {
+                Debug.LogError("Couldn't find ability overlay 2!");
+            }
+
+            abilityIcon3 = GameObject.Find("Ability3Icon").GetComponent<Image>();
+            if (!abilityIcon3)
+            {
+                Debug.LogError("Couldn't find ability icon 3!");
+            }
+
+            abilityTimer3 = GameObject.Find("Ability3Timer").GetComponent<Text>();
+            if (!abilityTimer3)
+            {
+                Debug.LogError("Couldn't find ability timer 3!");
+            }
+
+            abilityName3 = GameObject.Find("Ability3Name").GetComponent<Text>();
+            if (!abilityName3)
+            {
+                Debug.LogError("Couldn't find ability name 3!");
+            }
+
+            abilityOverlay3 = GameObject.Find("Ability3Overlay").GetComponent<Image>();
+            if (!abilityOverlay3)
+            {
+                Debug.LogError("Couldn't find ability overlay 3!");
+            }
+
+            abilityIcon4 = GameObject.Find("Ability4Icon").GetComponent<Image>();
+            if (!abilityIcon4)
+            {
+                Debug.LogError("Couldn't find ability icon 4!");
+            }
+
+            abilityTimer4 = GameObject.Find("Ability4Timer").GetComponent<Text>();
+            if (!abilityTimer4)
+            {
+                Debug.LogError("Couldn't find ability timer 4!");
+            }
+
+            abilityName4 = GameObject.Find("Ability4Name").GetComponent<Text>();
+            if (!abilityName4)
+            {
+                Debug.LogError("Couldn't find ability name 4!");
+            }
+
+            abilityOverlay4 = GameObject.Find("Ability4Overlay").GetComponent<Image>();
+            if (!abilityOverlay4)
+            {
+                Debug.LogError("Couldn't find ability overlay 4!");
+            }
+
+            newIcon = GameObject.Find("NewIcon").GetComponent<Image>();
+            if (!newIcon)
+            {
+                Debug.LogError("Couldn't find new icon!");
+            }
+
+            abilitySelectionDisplay = GameObject.Find("AbilitySelection");
+            if (!abilitySelectionDisplay)
+            {
+                Debug.LogError("Couldn't find ability display!");
+            }
+
+            godAbilityIcon1 = GameObject.Find("GodAbility1Icon").GetComponent<Image>();
+            if (!godAbilityIcon1)
+            {
+                Debug.LogError("Couldn't find god ability icon 1!");
+            }
+
+            godAbilityTimer1 = GameObject.Find("GodAbility1Timer").GetComponent<Text>();
+            if (!godAbilityTimer1)
+            {
+                Debug.LogError("Couldn't find god ability timer 1!");
+            }
+
+            godAbilityName1 = GameObject.Find("GodAbility1Name").GetComponent<Text>();
+            if (!godAbilityName1)
+            {
+                Debug.LogError("Couldn't find god ability name 1!");
+            }
+
+            godAbilityCost1 = GameObject.Find("GodAbility1Cost").GetComponent<Text>();
+            if (!godAbilityCost1)
+            {
+                Debug.LogError("Couldn't find god ability cost 1!");
+            }
+
+            godAbilityIcon2 = GameObject.Find("GodAbility2Icon").GetComponent<Image>();
+            if (!godAbilityIcon2)
+            {
+                Debug.LogError("Couldn't find god ability icon 2!");
+            }
+
+            godAbilityTimer2 = GameObject.Find("GodAbility2Timer").GetComponent<Text>();
+            if (!godAbilityTimer2)
+            {
+                Debug.LogError("Couldn't find god ability timer 2!");
+            }
+
+            godAbilityName2 = GameObject.Find("GodAbility2Name").GetComponent<Text>();
+            if (!godAbilityName2)
+            {
+                Debug.LogError("Couldn't find god ability name 2!");
+            }
+
+            godAbilityCost2 = GameObject.Find("GodAbility2Cost").GetComponent<Text>();
+            if (!godAbilityCost2)
+            {
+                Debug.LogError("Couldn't find god ability cost 2!");
+            }
+
+            godAbilityIcon3 = GameObject.Find("GodAbility3Icon").GetComponent<Image>();
+            if (!godAbilityIcon3)
+            {
+                Debug.LogError("Couldn't find god ability icon 3!");
+            }
+
+            godAbilityTimer3 = GameObject.Find("GodAbility3Timer").GetComponent<Text>();
+            if (!godAbilityTimer3)
+            {
+                Debug.LogError("Couldn't find god ability timer 3!");
+            }
+
+            godAbilityName3 = GameObject.Find("GodAbility3Name").GetComponent<Text>();
+            if (!godAbilityName3)
+            {
+                Debug.LogError("Couldn't find god ability name 3!");
+            }
+
+            godAbilityCost3 = GameObject.Find("GodAbility3Cost").GetComponent<Text>();
+            if (!godAbilityCost3)
+            {
+                Debug.LogError("Couldn't find god ability cost 3!");
+            }
+
+            godAbilityIcon4 = GameObject.Find("GodAbility4Icon").GetComponent<Image>();
+            if (!godAbilityIcon4)
+            {
+                Debug.LogError("Couldn't find god ability icon 4!");
+            }
+
+            godAbilityTimer4 = GameObject.Find("GodAbility4Timer").GetComponent<Text>();
+            if (!godAbilityTimer4)
+            {
+                Debug.LogError("Couldn't find god ability timer 4!");
+            }
+
+            godAbilityName4 = GameObject.Find("GodAbility4Name").GetComponent<Text>();
+            if (!godAbilityName4)
+            {
+                Debug.LogError("Couldn't find god ability name 4!");
+            }
+
+            godAbilityCost4 = GameObject.Find("GodAbility4Cost").GetComponent<Text>();
+            if (!godAbilityCost4)
+            {
+                Debug.LogError("Couldn't find god ability cost 4!");
+            }
+
+            godAbilityIcon5 = GameObject.Find("GodAbility5Icon").GetComponent<Image>();
+            if (!godAbilityIcon5)
+            {
+                Debug.LogError("Couldn't find god ability icon 5!");
+            }
+
+            godAbilityTimer5 = GameObject.Find("GodAbility5Timer").GetComponent<Text>();
+            if (!godAbilityTimer5)
+            {
+                Debug.LogError("Couldn't find god ability timer 5!");
+            }
+
+            godAbilityName5 = GameObject.Find("GodAbility5Name").GetComponent<Text>();
+            if (!godAbilityName5)
+            {
+                Debug.LogError("Couldn't find god ability name 5!");
+            }
+
+            godAbilityCost5 = GameObject.Find("GodAbility5Cost").GetComponent<Text>();
+            if (!godAbilityCost5)
+            {
+                Debug.LogError("Couldn't find god ability cost 5!");
+            }
+
+            godAbilityIcon6 = GameObject.Find("GodAbility6Icon").GetComponent<Image>();
+            if (!godAbilityIcon6)
+            {
+                Debug.LogError("Couldn't find god ability icon 6!");
+            }
+
+            godAbilityTimer6 = GameObject.Find("GodAbility6Timer").GetComponent<Text>();
+            if (!godAbilityTimer6)
+            {
+                Debug.LogError("Couldn't find god ability timer 6!");
+            }
+
+            godAbilityName6 = GameObject.Find("GodAbility6Name").GetComponent<Text>();
+            if (!godAbilityName6)
+            {
+                Debug.LogError("Couldn't find god ability name 6!");
+            }
+
+            godAbilityCost6 = GameObject.Find("GodAbility6Cost").GetComponent<Text>();
+            if (!godAbilityCost6)
+            {
+                Debug.LogError("Couldn't find god ability cost 6!");
+            }
+
+            godAbilityIcon7 = GameObject.Find("GodAbility7Icon").GetComponent<Image>();
+            if (!godAbilityIcon7)
+            {
+                Debug.LogError("Couldn't find god ability icon 7!");
+            }
+
+            godAbilityTimer7 = GameObject.Find("GodAbility7Timer").GetComponent<Text>();
+            if (!godAbilityTimer7)
+            {
+                Debug.LogError("Couldn't find god ability timer 7!");
+            }
+
+            godAbilityName7 = GameObject.Find("GodAbility7Name").GetComponent<Text>();
+            if (!godAbilityName7)
+            {
+                Debug.LogError("Couldn't find god ability name 7!");
+            }
+
+            godAbilityCost7 = GameObject.Find("GodAbility7Cost").GetComponent<Text>();
+            if (!godAbilityCost7)
+            {
+                Debug.LogError("Couldn't find god ability cost 7!");
+            }
+
+            godAbilityHelpBackground = GameObject.Find("GodAbilityHelp");
+            if (!godAbilityHelpBackground)
+            {
+                Debug.LogError("Couldn't find god ability help background!");
+            }
+
+            godAbilityHelp = GameObject.Find("GodAbilityHelpText").GetComponent<Text>();
+            if (!godAbilityHelp)
+            {
+                Debug.LogError("Couldn't find god ability help!");
+            }
+
+            UpdateGodAbilityHelpText.AddListener(SetGodHelpText);
+
+            SetGodHelpText("");
+
+            SceneManager.activeSceneChanged += PrepareAvatarHp;
+
+            if (RoleManager.isGoliath)
+            {
+                GameObject.Find("MpBar").SetActive(false);
+                GameObject.Find("GodAbilityBar").SetActive(false);
+                GameObject.Find("FreeCameraButton").SetActive(false);
+            } else
+            {
+                abilitySelectionDisplay.SetActive(false);
+            }
+
+            percentageTransparency = abilityOverlayTransparency / 255f;
+        }
 
     // Update is called once per frame
     void Update()
@@ -474,6 +526,10 @@ public class HUDManager : MonoBehaviourPun
         UpdateMpBar();
         UpdateAbilityBar();
         UpdateGodAbilityBar();
+        if (avatarHpBarParent.activeSelf)
+        {
+            UpdateAvatarHpBar();
+        }
     }
 
     void UpdateExpBar()
@@ -596,6 +652,63 @@ public class HUDManager : MonoBehaviourPun
         currentHp = providedCurrentHp;
     }
 
+    void UpdateAvatarHpBar()
+    {
+        if (!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient)
+        {
+            float currentHp;
+
+            if (godAvatar != null)
+            {
+                currentHp = godAvatar.GetHealth();
+            }
+            else
+            {
+                currentHp = 0;
+            }
+            gameObject.GetComponent<PhotonView>().RPC("ReceiveAvatarHpBarUpdate", RpcTarget.All, currentHp);
+        }
+
+        ScaleAvatarHpBar();
+    }
+
+    void ScaleAvatarHpBar()
+    {
+        float maxHp = 1000f;
+
+        if (currentAvatarHp != lastReadAvatarHpCount)
+        {
+            timeSinceAvatarHpChange = 0f;
+            oldAvatarHpScale = avatarHpBar.localScale.y;
+            lastReadAvatarHpCount = currentAvatarHp;
+        }
+        float hpPercentage = currentAvatarHp / maxHp;
+        if (hpPercentage < 0)
+        {
+            hpPercentage = 0;
+        }
+        float hpScale;
+
+        if (timeSinceAvatarHpChange < timeToChangeAvatarHp)
+        {
+            hpScale = Mathf.Lerp(oldAvatarHpScale, hpPercentage, timeSinceAvatarHpChange / timeToChangeAvatarHp);
+            timeSinceAvatarHpChange += Time.deltaTime;
+        }
+        else
+        {
+            hpScale = hpPercentage;
+        }
+
+        avatarHpBar.localScale = new Vector3(hpBar.localScale.x, hpScale, hpBar.localScale.z);
+        avatarHpText.text = currentAvatarHp.ToString("F0") + " / " + maxHp.ToString("F0");
+    }
+
+    [PunRPC]
+    public void ReceiveAvatarHpBarUpdate(float providedCurrentHp) //used so that master client can inform non-master client of what hp should be
+    {
+        currentAvatarHp = providedCurrentHp;
+    }
+
     void UpdateMpBar()
     {
         if (PhotonNetwork.IsConnected && RoleManager.isGoliath)
@@ -658,8 +771,20 @@ public class HUDManager : MonoBehaviourPun
 
             if (!playerGoliath.Action1.IsOffCooldown())
             {
-                abilityIcon1.color = Color.grey;
-                abilityTimer1.text = playerGoliath.Action1.GetCooldown().ToString();
+                if (playerGoliath.Action1.GetAltModeActive())
+                {
+                    abilityIcon1.color = Color.white;
+                    abilityTimer1.text = "";
+                    if (playerGoliath.Action1.altSprite != null)
+                    {
+                        abilityIcon1.sprite = playerGoliath.Action1.altSprite;
+                    }
+                }
+                else
+                {
+                    abilityIcon1.color = Color.grey;
+                    abilityTimer1.text = playerGoliath.Action1.GetCooldown().ToString();
+                }
             }
             else
             {
@@ -692,8 +817,20 @@ public class HUDManager : MonoBehaviourPun
 
             if (!playerGoliath.Action2.IsOffCooldown())
             {
-                abilityIcon2.color = Color.grey;
-                abilityTimer2.text = playerGoliath.Action2.GetCooldown().ToString();
+                if (playerGoliath.Action2.GetAltModeActive())
+                {
+                    abilityIcon2.color = Color.white;
+                    abilityTimer2.text = "";
+                    if (playerGoliath.Action2.altSprite != null)
+                    {
+                        abilityIcon2.sprite = playerGoliath.Action2.altSprite;
+                    }
+                }
+                else
+                {
+                    abilityIcon2.color = Color.grey;
+                    abilityTimer2.text = playerGoliath.Action2.GetCooldown().ToString();
+                }
             }
             else
             {
@@ -728,8 +865,20 @@ public class HUDManager : MonoBehaviourPun
 
             if (!playerGoliath.Action3.IsOffCooldown())
             {
-                abilityIcon3.color = Color.grey;
-                abilityTimer3.text = playerGoliath.Action3.GetCooldown().ToString();
+                if (playerGoliath.Action3.GetAltModeActive())
+                {
+                    abilityIcon3.color = Color.white;
+                    abilityTimer3.text = "";
+                    if (playerGoliath.Action3.altSprite != null)
+                    {
+                        abilityIcon3.sprite = playerGoliath.Action3.altSprite;
+                    }
+                }
+                else
+                {
+                    abilityIcon3.color = Color.grey;
+                    abilityTimer3.text = playerGoliath.Action3.GetCooldown().ToString();
+                }
             }
             else
             {
@@ -763,8 +912,20 @@ public class HUDManager : MonoBehaviourPun
 
             if (!playerGoliath.Action4.IsOffCooldown())
             {
-                abilityIcon4.color = Color.grey;
-                abilityTimer4.text = playerGoliath.Action4.GetCooldown().ToString();
+                if (playerGoliath.Action4.GetAltModeActive())
+                {
+                    abilityIcon4.color = Color.white;
+                    abilityTimer4.text = "";
+                    if (playerGoliath.Action4.altSprite != null)
+                    {
+                        abilityIcon4.sprite = playerGoliath.Action4.altSprite;
+                    }
+                }
+                else
+                {
+                    abilityIcon4.color = Color.grey;
+                    abilityTimer4.text = playerGoliath.Action4.GetCooldown().ToString();
+                }
             }
             else
             {
@@ -1118,5 +1279,17 @@ public class HUDManager : MonoBehaviourPun
         {
             godAbilityHelpBackground.SetActive(true);
         }
+    }
+
+    void PrepareAvatarHp(Scene from, Scene to)
+    {
+        if (to.name != "FinalFight") //should only use when switching to final fight
+        {
+            Debug.LogError("not final fight, skipping");
+            return;
+        }
+        Debug.LogError("is final fight, enabling avatar hp");
+        godAvatar = GameObject.Find("GodAvatar").GetComponent<AvatarController>();
+        avatarHpBarParent.SetActive(true);
     }
 }

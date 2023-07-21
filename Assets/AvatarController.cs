@@ -120,6 +120,8 @@ public class AvatarController : Killable    //script to manage AI for god avatar
             }
         }
 
+        //Debug.DrawLine(transform.position, transform.rotation.eulerAngles, Color.blue);
+
         if (aiming)
         {
             AimLaserSight();
@@ -185,7 +187,8 @@ public class AvatarController : Killable    //script to manage AI for god avatar
 
     private void SelectAttackPattern()    //pick one of the 4 attack patterns, excluding the last one chosen. Only do circle if goliath is close, only do donut if goliath is far
     {
-        currentAttackPattern = Random.Range(0, 2);
+        currentAttackPattern = 1;
+        //currentAttackPattern = Random.Range(0, 2);
         /*if (currentAttackPattern >= previousAttackPattern)
         {
             currentAttackPattern += 1;

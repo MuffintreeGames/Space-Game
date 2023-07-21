@@ -26,4 +26,24 @@ public class ExplosiveProjectile : Projectile {     //like a normal projectile, 
             Destroy(this.gameObject);
         }
     }
+
+    public void TriggerExplosion()
+    {
+        Debug.LogError("triggering explosion!");
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+
+        if (PhotonNetwork.IsConnected) PhotonNetwork.Instantiate(Explosion.name, transform.position, Quaternion.identity);
+        else Instantiate(Explosion, transform.position, Quaternion.identity);
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
 }

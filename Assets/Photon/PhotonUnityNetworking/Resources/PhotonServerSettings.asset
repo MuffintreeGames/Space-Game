@@ -54,6 +54,7 @@ MonoBehaviour:
   - SetAction2
   - SetAction3
   - SetAction4
+  - ReceiveAvatarHpBarUpdate
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

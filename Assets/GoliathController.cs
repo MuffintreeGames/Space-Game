@@ -618,34 +618,34 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
 
         if (Input.GetButtonDown("Action1") && Action1 != null)
         {
-            if (Action1.IsOffCooldown())
-            {
+            //if (Action1.IsOffCooldown())
+            //{
                 Action1.UseAbility();
-            }
+            //}
         }
 
         if (Input.GetButtonDown("Action2") && Action2 != null)
         {
-            if (Action2.IsOffCooldown())
-            {
+            //if (Action2.IsOffCooldown())
+            //{
                 Action2.UseAbility();
-            }
+            //}
         }
 
         if (Input.GetButtonDown("Action3") && Action3 != null)
         {
-            if (Action3.IsOffCooldown())
-            {
+            //if (Action3.IsOffCooldown())
+            //{
                 Action3.UseAbility();
-            }
+            //}
         }
 
         if (Input.GetButtonDown("Action4") && Action4 != null)
         {
-            if (Action4.IsOffCooldown())
-            {
+            //if (Action4.IsOffCooldown())
+            //{
                 Action4.UseAbility();
-            }
+            //}
         }
     }
 
@@ -734,6 +734,8 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
         {
             basicAttackHeldTimer += Time.deltaTime;
         }
+
+        //Debug.DrawLine(transform.position, transform.rotation.eulerAngles, Color.blue);
 
         if (Input.GetButtonDown("Basic Attack") && !performingComboAttack)
         {
@@ -1201,12 +1203,15 @@ public class GoliathController : MonoBehaviour  //responsible for handling of pl
     [PunRPC]
     void EndSwingAttack()
     {
-        goliathArm.transform.GetChild(0).gameObject.GetComponent<AttackObject>().ClearHitTargets();
-        goliathArm.SetActive(false);
-        currentBasicAttackCooldown = basicAttackCooldown;
-        inBasicAttackCooldown = true;
-        performingBasicAttack = false;
-        GoliathFinishAttack.Invoke();
+        if (goliathArm.activeSelf)
+        {
+            goliathArm.transform.GetChild(0).gameObject.GetComponent<AttackObject>().ClearHitTargets();
+            goliathArm.SetActive(false);
+            currentBasicAttackCooldown = basicAttackCooldown;
+            inBasicAttackCooldown = true;
+            performingBasicAttack = false;
+            GoliathFinishAttack.Invoke();
+        }
     }
 
     [PunRPC]

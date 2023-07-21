@@ -15,6 +15,8 @@ public class ExplosiveShotAbility : AbilityTemplate  //fire a projectile that do
 
     private float projectileSpeed;
 
+    GameObject spawnedShot = null;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +27,9 @@ public class ExplosiveShotAbility : AbilityTemplate  //fire a projectile that do
     void Update()
     {
         base.ManageCooldown();
+        if (spawnedShot == null ) {
+            altModeActive = false;
+        }
     }
 
     public override void UseNormalAbility()
@@ -39,7 +44,7 @@ public class ExplosiveShotAbility : AbilityTemplate  //fire a projectile that do
             instantiationData[0] = projectileSpeed;
             instantiationData[1] = parentGoliath.transform.eulerAngles.z;
             instantiationData[2] = projectileDuration;
-            PhotonNetwork.Instantiate(ExplosiveShot.name, parentGoliath.transform.position, Quaternion.identity, 0, instantiationData);
+            spawnedShot = PhotonNetwork.Instantiate(ExplosiveShot.name, parentGoliath.transform.position, Quaternion.identity, 0, instantiationData);
             return;
         }
         else
@@ -47,7 +52,22 @@ public class ExplosiveShotAbility : AbilityTemplate  //fire a projectile that do
             GameObject firedShot = Instantiate(ExplosiveShot, parentGoliath.transform.position, Quaternion.identity);
             Debug.Log("checking shot damage: " + firedShot.GetComponent<AttackObject>().Damage);
             firedShot.GetComponent<ExplosiveProjectile>().SetProjectileParameters(projectileSpeed, parentGoliath.transform.eulerAngles.z, projectileDuration);
+            spawnedShot = firedShot;
         }
+    }
+
+    public override void UseAltMode()
+    {
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+        altModeActive = false;
+        if (spawnedShot == null)
+        {
+            return;
+        }
+        spawnedShot.GetComponent<ExplosiveProjectile>().TriggerExplosion();
     }
 
     public override void UpgradeSelf(int goliathLevel)
@@ -62,24 +82,24 @@ public class ExplosiveShotAbility : AbilityTemplate  //fire a projectile that do
         switch (goliathLevel)
         {
             case 1:
-                ExplosiveShot.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                explosionScript.transform.localScale = new Vector3(3.5f, 3.5f, 3.5f);
+                ExplosiveShot.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+                explosionScript.transform.localScale = new Vector3(9f, 9f, 1f);
                 break;
             case 2:
                 ExplosiveShot.transform.localScale = new Vector3(1f, 1f, 1f);
-                explosionScript.transform.localScale = new Vector3(7f, 7f, 7f);
+                explosionScript.transform.localScale = new Vector3(12f, 12f, 1f);
                 break;
             case 3:
-                ExplosiveShot.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-                explosionScript.transform.localScale = new Vector3(10.5f, 10.5f, 10.5f);
+                ExplosiveShot.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
+                explosionScript.transform.localScale = new Vector3(15f, 15f, 1f);
                 break;
             case 4:
-                ExplosiveShot.transform.localScale = new Vector3(2f, 2f, 2f);
-                explosionScript.transform.localScale = new Vector3(14f, 14f, 14f);
+                ExplosiveShot.transform.localScale = new Vector3(2f, 2f, 1f);
+                explosionScript.transform.localScale = new Vector3(18f, 18f, 1f);
                 break;
             case 5:
-                ExplosiveShot.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
-                explosionScript.transform.localScale = new Vector3(17.5f, 17.5f, 17.5f);
+                ExplosiveShot.transform.localScale = new Vector3(2.5f, 2.5f, 1f);
+                explosionScript.transform.localScale = new Vector3(21f, 21f, 1f);
                 break;
         }
     }

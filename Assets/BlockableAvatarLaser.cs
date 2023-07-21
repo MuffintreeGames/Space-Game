@@ -16,6 +16,8 @@ public class BlockableAvatarLaser : AttackObject
 
     public GameObject testObject;
     bool skipFrame = false;
+    float length = 0f;
+    float speed = 100f;
     private void Awake()
     {
         if (AvatarLaserBlocked == null)
@@ -33,24 +35,34 @@ public class BlockableAvatarLaser : AttackObject
     // Update is called once per frame
     void Update()
     {
+        Vector3 dir = Quaternion.AngleAxis(transform.parent.rotation.eulerAngles.z, Vector3.forward) * Vector3.up;
+        //Debug.Log("line should end at " + transform.parent.position);
+        //Debug.Log("direction vector " + end);
+        //Debug.DrawLine(transform.parent.position, transform.parent.position + (end * 5000f), Color.blue);
+        //Debug.DrawRay(transform.parent.position, transform.forward * 5000f, Color.blue);
         if (skipFrame)
         {
             skipFrame = false;
             return;
         }
 
-        Debug.Log("raycast rotation: " + transform.parent.rotation.eulerAngles);
-        RaycastHit2D[] hit = Physics2D.RaycastAll(transform.parent.position, transform.parent.rotation.eulerAngles, 5000f);
-        Debug.DrawRay(transform.parent.position, transform.parent.rotation.eulerAngles * 5000f, Color.red);
-        Debug.Log("hit " + hit.Length);
-        for (int x = 0; x < hit.Length; x++) {
-            //if (hit.Length > 0 && hit[0].collider != null)
-            //{
+        RaycastHit2D hit = Physics2D.Raycast(transform.parent.position, dir, length + (speed * Time.deltaTime), avatarBlockingLayers);
+        //for (int x = 0; x < hit.Length; x++)
+        //{
+        if (hit.collider != null)
+        {
             //if (avatarBlockingLayers == (avatarBlockingLayers | (1 << hit[x].collider.gameObject.layer)))
             //{
-                Debug.LogError("raycast hit " + hit[x].collider.gameObject.name + " on layer " + LayerMask.LayerToName(hit[x].collider.gameObject.layer) + " at " + hit[x].point);
+            Debug.LogError("raycast hit " + hit.collider.gameObject.name + " on layer " + LayerMask.LayerToName(hit.collider.gameObject.layer) + " at " + hit.point);
+            //transform.parent.position 
+            transform.parent.localScale = new Vector2(transform.parent.localScale.x, hit.distance);
+            //break;
             //}
-            //}
+        }
+        else
+        {
+            length += speed * Time.deltaTime;
+            transform.parent.localScale = new Vector2(transform.parent.localScale.x, length);
         }
         /*else
         {
@@ -59,7 +71,7 @@ public class BlockableAvatarLaser : AttackObject
         }*/
     }
     
-    new protected void OnTriggerStay2D(Collider2D collision)
+    /*new protected void OnTriggerStay2D(Collider2D collision)
     {
         GameObject hitGameObject = collision.gameObject;
         if ((avatarBlockingLayers & (1 << hitGameObject.layer)) != 0)
@@ -82,5 +94,5 @@ public class BlockableAvatarLaser : AttackObject
             AvatarLaserBlocked.Invoke(collision.GetContact(0).point, transform.parent);
         }
         base.OnCollisionStay2D(collision);
-    }
+    }*/
 }

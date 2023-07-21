@@ -29,6 +29,7 @@ public class AimingArrow : MonoBehaviourPun
         {
             placementBlocker = GameObject.Find("NoPlacementZone");
             placementBlocker.GetComponent<SpriteRenderer>().enabled = true;
+            placementBlocker.GetComponent<CircleCollider2D>().enabled = true;
         }
         invalidLayers |= (1 << LayerMask.NameToLayer("BlockPlacement"));
     }
@@ -136,6 +137,7 @@ public class AimingArrow : MonoBehaviourPun
         if (placementBlocker != null)
         {
             placementBlocker.GetComponent<SpriteRenderer>().enabled = false;
+            placementBlocker.GetComponent<CircleCollider2D>().enabled = false;
         }
     }
 }

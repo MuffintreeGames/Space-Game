@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
+using Unity.VisualScripting;
 
 public abstract class AbilityTemplate : MonoBehaviour
 {
@@ -26,6 +27,11 @@ public abstract class AbilityTemplate : MonoBehaviour
 
     public int ID;
 
+    public bool hasAltMode = false;
+    protected bool altModeActive = false;
+    public Sprite altSprite = null;
+
+
     protected void InitializeAbility(AbilityCategory abilityType)
     {
         parentGoliath = GetComponent<GoliathController>();
@@ -33,6 +39,7 @@ public abstract class AbilityTemplate : MonoBehaviour
         enabled = false;
         this.abilityType = abilityType;
         SceneManager.sceneLoaded += ResetListeners;
+        altModeActive = false;
     }
 
     public AbilityCategory GetAbilityType()
@@ -59,6 +66,7 @@ public abstract class AbilityTemplate : MonoBehaviour
             if (tickingCooldown <= 0f)
             {
                 offCooldown = true;
+                altModeActive = false;
             }
         }
     }
@@ -91,8 +99,18 @@ public abstract class AbilityTemplate : MonoBehaviour
         parentGoliath.EndAbility(this);
     }
 
+    public bool GetAltModeActive()
+    {
+        return altModeActive;
+    }
+
     public void UseAbility()
     {
+        if (enabled && altModeActive)
+        {
+            UseAltMode();
+            return;
+        }
         if (!PrepareToUseAbility())
         {
             return;
@@ -118,6 +136,10 @@ public abstract class AbilityTemplate : MonoBehaviour
                 UseNormalAbility();
             }
         }
+        if (hasAltMode)
+        {
+            altModeActive = true;
+        }
     }
 
     private void ResetListeners(Scene scene, LoadSceneMode mode)   //needed in order to reattach listeners on a scene change
@@ -128,6 +150,11 @@ public abstract class AbilityTemplate : MonoBehaviour
     public virtual void UseNormalAbility()
     {
         
+    }
+
+    public virtual void UseAltMode()
+    {
+
     }
 
     [PunRPC]

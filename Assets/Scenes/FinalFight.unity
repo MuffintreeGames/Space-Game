@@ -2992,7 +2992,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -5973009744041836978, guid: 6dd47c621d5997d488a13661d405b11c, type: 3}
       propertyPath: sceneViewId
-      value: 4
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: -5973009744041836978, guid: 6dd47c621d5997d488a13661d405b11c, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5973009744041836978, guid: 6dd47c621d5997d488a13661d405b11c, type: 3}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2174078447654446560, guid: 6dd47c621d5997d488a13661d405b11c, type: 3}
       propertyPath: sceneViewId
@@ -3050,7 +3058,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sun
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -5973009744041836978, guid: 6dd47c621d5997d488a13661d405b11c, type: 3}
+    - {fileID: 6022506238177296220, guid: 6dd47c621d5997d488a13661d405b11c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6dd47c621d5997d488a13661d405b11c, type: 3}
 --- !u!1 &695513233
 GameObject:
