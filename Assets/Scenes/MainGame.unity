@@ -7009,7 +7009,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7192721937990158954, guid: c1c29dc09245f56429a2dba1e8e8695c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10000
+      value: 10000
       objectReference: {fileID: 0}
     - target: {fileID: 7192721937990158954, guid: c1c29dc09245f56429a2dba1e8e8695c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7274,6 +7274,7 @@ MonoBehaviour:
   BlackHole: {fileID: 6088609408505885020, guid: c837f666eb7847b44a7ac0457e9a93be, type: 3}
   ExplosivePlanet: {fileID: 6088609408505885020, guid: 18cdc0d4eab3b0d42b5d636de93b6b6d, type: 3}
   MonsterEgg: {fileID: 6088609408505885020, guid: ba8c78ddb4e5c6c4883255015d2f4802, type: 3}
+  SectorDivision: {fileID: 9068289576733605670, guid: 2ce605ba9a824214a93e4db6669b5fef, type: 3}
   Level1Barrier: {fileID: 950341768418902669, guid: 87c93d704cc1f214baa6841ac3296958, type: 3}
   Level2Barrier: {fileID: 950341768418902669, guid: 47a2be2736c9804448726a8530db0078, type: 3}
   Level3Barrier: {fileID: 950341768418902669, guid: 3451feaf772611940ae7718396ae6806, type: 3}
@@ -9866,14 +9867,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 5037213641140449662, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
-      propertyPath: Action3
-      value: 
-      objectReference: {fileID: 5037213640751781506}
-    - target: {fileID: 5037213641140449662, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
-      propertyPath: Action4
-      value: 
-      objectReference: {fileID: 5037213640751781507}
     - target: {fileID: 5037213641140449662, guid: 4ff72689597491641b327a1b303f9db4, type: 3}
       propertyPath: goliathCamera
       value: 

@@ -31,6 +31,7 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
     public GameObject ExplosivePlanet;
     public GameObject MonsterEgg;
 
+    public GameObject SectorDivision;
     public GameObject Level1Barrier;
     public GameObject Level2Barrier;
     public GameObject Level3Barrier;
@@ -256,6 +257,9 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
         {
             SpawnBarrier(barrier, sectorX, sectorY);
         }
+
+        SpawnSectorDivider(sectorX, sectorY);
+
         return sectorMap;
     }
 
@@ -400,7 +404,7 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
 
     void SpawnBarrier(GameObject barrier, int sectorX, int sectorY)
     {
-        Vector3 barrierCoords = new Vector3(sectorSize / 2 + (sectorSize * sectorX), sectorSize / 2 + (sectorSize * sectorY), 0);
+        Vector3 barrierCoords = new Vector3(sectorSize / 2 + (sectorSize * sectorX), sectorSize / 2 + (sectorSize * sectorY), -2f);
         GameObject newBarrier;
         if (PhotonNetwork.IsConnected) {
             object[] instantiationData = new object[2];
@@ -409,6 +413,16 @@ public class SpaceManager : MonoBehaviourPunCallbacks   //script to generate spa
             newBarrier = PhotonNetwork.Instantiate(barrier.name, barrierCoords, Quaternion.identity, 0, instantiationData); 
         } else newBarrier = Instantiate(barrier, barrierCoords, Quaternion.identity);
         newBarrier.GetComponent<SectorWall>().SetParameters(sectorX, sectorY);
+    }
+
+    void SpawnSectorDivider(int sectorX, int sectorY)
+    {
+        Vector3 dividerCoords = new Vector3(sectorSize / 2 + (sectorSize * sectorX), sectorSize / 2 + (sectorSize * sectorY), 0);
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.Instantiate(SectorDivision.name, dividerCoords, Quaternion.identity);
+        }
+        else Instantiate(SectorDivision, dividerCoords, Quaternion.identity);
     }
 
     Color PickPlanetColor(ref int colorNumber)
